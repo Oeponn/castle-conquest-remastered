@@ -1,0 +1,2641 @@
+{
+  "totalLength": 30748,
+  "totalLength2": 30748,
+  "headerLength": 92,
+  "scriptNumber": 40,
+  "unk20": 4,
+  "parentNumber": -1,
+  "scriptFlags": 0,
+  "unk42": 0,
+  "castID": 196649,
+  "factoryNameID": -1,
+  "handlerVectorsCount": 4,
+  "handlerVectorsOffset": 30740,
+  "handlerVectorsSize": 15,
+  "propertiesCount": 92,
+  "propertiesOffset": 92,
+  "globalsCount": 4,
+  "globalsOffset": 276,
+  "handlersCount": 91,
+  "handlersOffset": 284,
+  "literalsCount": 193,
+  "literalsOffset": 24456,
+  "literalsDataCount": 4740,
+  "literalsDataOffset": 26000,
+  "propertyNameIDs": [
+    63,
+    65,
+    66,
+    67,
+    110,
+    594,
+    575,
+    693,
+    576,
+    493,
+    691,
+    112,
+    115,
+    690,
+    694,
+    568,
+    692,
+    689,
+    131,
+    198,
+    578,
+    579,
+    580,
+    581,
+    163,
+    82,
+    430,
+    129,
+    130,
+    250,
+    253,
+    251,
+    128,
+    429,
+    68,
+    69,
+    70,
+    143,
+    290,
+    71,
+    72,
+    151,
+    73,
+    428,
+    81,
+    427,
+    100,
+    106,
+    89,
+    105,
+    108,
+    124,
+    84,
+    85,
+    196,
+    122,
+    123,
+    426,
+    90,
+    75,
+    132,
+    133,
+    86,
+    87,
+    88,
+    93,
+    340,
+    134,
+    141,
+    142,
+    94,
+    95,
+    99,
+    425,
+    96,
+    97,
+    619,
+    635,
+    636,
+    688,
+    687,
+    424,
+    139,
+    101,
+    135,
+    83,
+    120,
+    121,
+    646,
+    665,
+    566,
+    363
+  ],
+  "globalNameIDs": [
+    60,
+    62,
+    137,
+    200
+  ],
+  "handlers": [
+    {
+      "nameID": 0,
+      "vectorPos": 65535,
+      "compiledLen": 7,
+      "compiledOffset": 4470,
+      "argumentCount": 1,
+      "argumentOffset": 4478,
+      "localsCount": 0,
+      "localsOffset": 4480,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 1709,
+      "unknown2": 42,
+      "lineCount": 1,
+      "lineOffset": 4480,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 1,
+      "vectorPos": 65535,
+      "compiledLen": 282,
+      "compiledOffset": 4482,
+      "argumentCount": 1,
+      "argumentOffset": 4764,
+      "localsCount": 3,
+      "localsOffset": 4766,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 1809,
+      "unknown2": 48,
+      "lineCount": 134,
+      "lineOffset": 4772,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 2,
+      "vectorPos": 65535,
+      "compiledLen": 376,
+      "compiledOffset": 4906,
+      "argumentCount": 1,
+      "argumentOffset": 5282,
+      "localsCount": 0,
+      "localsOffset": 5284,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 5698,
+      "unknown2": 186,
+      "lineCount": 82,
+      "lineOffset": 5284,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 3,
+      "vectorPos": 65535,
+      "compiledLen": 27,
+      "compiledOffset": 5366,
+      "argumentCount": 1,
+      "argumentOffset": 5394,
+      "localsCount": 1,
+      "localsOffset": 5396,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 7600,
+      "unknown2": 271,
+      "lineCount": 5,
+      "lineOffset": 5398,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 4,
+      "vectorPos": 65535,
+      "compiledLen": 525,
+      "compiledOffset": 5404,
+      "argumentCount": 1,
+      "argumentOffset": 5930,
+      "localsCount": 11,
+      "localsOffset": 5932,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 7918,
+      "unknown2": 281,
+      "lineCount": 102,
+      "lineOffset": 5954,
+      "stackHeight": 9
+    },
+    {
+      "nameID": 5,
+      "vectorPos": 65535,
+      "compiledLen": 41,
+      "compiledOffset": 6056,
+      "argumentCount": 0,
+      "argumentOffset": 6098,
+      "localsCount": 2,
+      "localsOffset": 6098,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 10830,
+      "unknown2": 386,
+      "lineCount": 13,
+      "lineOffset": 6102,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 6,
+      "vectorPos": 65535,
+      "compiledLen": 143,
+      "compiledOffset": 6116,
+      "argumentCount": 1,
+      "argumentOffset": 6260,
+      "localsCount": 3,
+      "localsOffset": 6262,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 11077,
+      "unknown2": 402,
+      "lineCount": 13,
+      "lineOffset": 6268,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 546,
+      "vectorPos": 0,
+      "compiledLen": 19,
+      "compiledOffset": 6282,
+      "argumentCount": 1,
+      "argumentOffset": 6302,
+      "localsCount": 0,
+      "localsOffset": 6304,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 11623,
+      "unknown2": 421,
+      "lineCount": 3,
+      "lineOffset": 6304,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 515,
+      "vectorPos": 1,
+      "compiledLen": 39,
+      "compiledOffset": 6308,
+      "argumentCount": 1,
+      "argumentOffset": 6348,
+      "localsCount": 0,
+      "localsOffset": 6350,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 11775,
+      "unknown2": 428,
+      "lineCount": 7,
+      "lineOffset": 6350,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 7,
+      "vectorPos": 2,
+      "compiledLen": 32,
+      "compiledOffset": 6358,
+      "argumentCount": 1,
+      "argumentOffset": 6390,
+      "localsCount": 2,
+      "localsOffset": 6392,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 12030,
+      "unknown2": 440,
+      "lineCount": 13,
+      "lineOffset": 6396,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 8,
+      "vectorPos": 3,
+      "compiledLen": 379,
+      "compiledOffset": 6410,
+      "argumentCount": 1,
+      "argumentOffset": 6790,
+      "localsCount": 2,
+      "localsOffset": 6792,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 12380,
+      "unknown2": 457,
+      "lineCount": 63,
+      "lineOffset": 6796,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 9,
+      "vectorPos": 65535,
+      "compiledLen": 29,
+      "compiledOffset": 6860,
+      "argumentCount": 2,
+      "argumentOffset": 6890,
+      "localsCount": 0,
+      "localsOffset": 6894,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 14056,
+      "unknown2": 525,
+      "lineCount": 3,
+      "lineOffset": 6894,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 10,
+      "vectorPos": 65535,
+      "compiledLen": 254,
+      "compiledOffset": 6898,
+      "argumentCount": 5,
+      "argumentOffset": 7152,
+      "localsCount": 1,
+      "localsOffset": 7162,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 14289,
+      "unknown2": 533,
+      "lineCount": 48,
+      "lineOffset": 7164,
+      "stackHeight": 6
+    },
+    {
+      "nameID": 11,
+      "vectorPos": 65535,
+      "compiledLen": 366,
+      "compiledOffset": 7212,
+      "argumentCount": 1,
+      "argumentOffset": 7578,
+      "localsCount": 0,
+      "localsOffset": 7580,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 15485,
+      "unknown2": 584,
+      "lineCount": 42,
+      "lineOffset": 7580,
+      "stackHeight": 7
+    },
+    {
+      "nameID": 12,
+      "vectorPos": 65535,
+      "compiledLen": 177,
+      "compiledOffset": 7622,
+      "argumentCount": 1,
+      "argumentOffset": 7800,
+      "localsCount": 1,
+      "localsOffset": 7802,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 17035,
+      "unknown2": 631,
+      "lineCount": 39,
+      "lineOffset": 7804,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 516,
+      "vectorPos": 65535,
+      "compiledLen": 140,
+      "compiledOffset": 7844,
+      "argumentCount": 1,
+      "argumentOffset": 7984,
+      "localsCount": 0,
+      "localsOffset": 7986,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 18209,
+      "unknown2": 674,
+      "lineCount": 19,
+      "lineOffset": 7986,
+      "stackHeight": 9
+    },
+    {
+      "nameID": 13,
+      "vectorPos": 65535,
+      "compiledLen": 83,
+      "compiledOffset": 8006,
+      "argumentCount": 1,
+      "argumentOffset": 8090,
+      "localsCount": 2,
+      "localsOffset": 8092,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 18879,
+      "unknown2": 697,
+      "lineCount": 19,
+      "lineOffset": 8096,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 14,
+      "vectorPos": 65535,
+      "compiledLen": 33,
+      "compiledOffset": 8116,
+      "argumentCount": 1,
+      "argumentOffset": 8150,
+      "localsCount": 0,
+      "localsOffset": 8152,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 19582,
+      "unknown2": 720,
+      "lineCount": 5,
+      "lineOffset": 8152,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 16,
+      "vectorPos": 65535,
+      "compiledLen": 43,
+      "compiledOffset": 8158,
+      "argumentCount": 1,
+      "argumentOffset": 8202,
+      "localsCount": 2,
+      "localsOffset": 8204,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 19828,
+      "unknown2": 729,
+      "lineCount": 5,
+      "lineOffset": 8208,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 17,
+      "vectorPos": 65535,
+      "compiledLen": 41,
+      "compiledOffset": 8214,
+      "argumentCount": 1,
+      "argumentOffset": 8256,
+      "localsCount": 2,
+      "localsOffset": 8258,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 20164,
+      "unknown2": 738,
+      "lineCount": 6,
+      "lineOffset": 8262,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 18,
+      "vectorPos": 65535,
+      "compiledLen": 37,
+      "compiledOffset": 8268,
+      "argumentCount": 1,
+      "argumentOffset": 8306,
+      "localsCount": 1,
+      "localsOffset": 8308,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 20442,
+      "unknown2": 748,
+      "lineCount": 3,
+      "lineOffset": 8310,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 19,
+      "vectorPos": 65535,
+      "compiledLen": 22,
+      "compiledOffset": 8314,
+      "argumentCount": 3,
+      "argumentOffset": 8336,
+      "localsCount": 1,
+      "localsOffset": 8342,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 20711,
+      "unknown2": 755,
+      "lineCount": 4,
+      "lineOffset": 8344,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 20,
+      "vectorPos": 65535,
+      "compiledLen": 90,
+      "compiledOffset": 8348,
+      "argumentCount": 2,
+      "argumentOffset": 8438,
+      "localsCount": 1,
+      "localsOffset": 8442,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 20920,
+      "unknown2": 764,
+      "lineCount": 9,
+      "lineOffset": 8444,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 21,
+      "vectorPos": 65535,
+      "compiledLen": 614,
+      "compiledOffset": 8454,
+      "argumentCount": 2,
+      "argumentOffset": 9068,
+      "localsCount": 14,
+      "localsOffset": 9072,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 21312,
+      "unknown2": 777,
+      "lineCount": 107,
+      "lineOffset": 9100,
+      "stackHeight": 8
+    },
+    {
+      "nameID": 22,
+      "vectorPos": 65535,
+      "compiledLen": 132,
+      "compiledOffset": 9208,
+      "argumentCount": 2,
+      "argumentOffset": 9340,
+      "localsCount": 5,
+      "localsOffset": 9344,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 24261,
+      "unknown2": 887,
+      "lineCount": 22,
+      "lineOffset": 9354,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 23,
+      "vectorPos": 65535,
+      "compiledLen": 80,
+      "compiledOffset": 9376,
+      "argumentCount": 2,
+      "argumentOffset": 9456,
+      "localsCount": 0,
+      "localsOffset": 9460,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 24891,
+      "unknown2": 911,
+      "lineCount": 8,
+      "lineOffset": 9460,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 29,
+      "vectorPos": 65535,
+      "compiledLen": 98,
+      "compiledOffset": 9468,
+      "argumentCount": 1,
+      "argumentOffset": 9566,
+      "localsCount": 1,
+      "localsOffset": 9568,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 25268,
+      "unknown2": 924,
+      "lineCount": 48,
+      "lineOffset": 9570,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 24,
+      "vectorPos": 65535,
+      "compiledLen": 134,
+      "compiledOffset": 9618,
+      "argumentCount": 1,
+      "argumentOffset": 9752,
+      "localsCount": 1,
+      "localsOffset": 9754,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 26594,
+      "unknown2": 976,
+      "lineCount": 34,
+      "lineOffset": 9756,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 550,
+      "vectorPos": 65535,
+      "compiledLen": 358,
+      "compiledOffset": 9790,
+      "argumentCount": 1,
+      "argumentOffset": 10148,
+      "localsCount": 7,
+      "localsOffset": 10150,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 27586,
+      "unknown2": 1014,
+      "lineCount": 80,
+      "lineOffset": 10164,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 26,
+      "vectorPos": 65535,
+      "compiledLen": 270,
+      "compiledOffset": 10244,
+      "argumentCount": 1,
+      "argumentOffset": 10514,
+      "localsCount": 5,
+      "localsOffset": 10516,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 29996,
+      "unknown2": 1099,
+      "lineCount": 88,
+      "lineOffset": 10526,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 27,
+      "vectorPos": 65535,
+      "compiledLen": 54,
+      "compiledOffset": 10614,
+      "argumentCount": 3,
+      "argumentOffset": 10668,
+      "localsCount": 3,
+      "localsOffset": 10674,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 32969,
+      "unknown2": 1195,
+      "lineCount": 5,
+      "lineOffset": 10680,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 551,
+      "vectorPos": 65535,
+      "compiledLen": 103,
+      "compiledOffset": 10686,
+      "argumentCount": 1,
+      "argumentOffset": 10790,
+      "localsCount": 0,
+      "localsOffset": 10792,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 33315,
+      "unknown2": 1206,
+      "lineCount": 14,
+      "lineOffset": 10792,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 552,
+      "vectorPos": 65535,
+      "compiledLen": 31,
+      "compiledOffset": 10806,
+      "argumentCount": 1,
+      "argumentOffset": 10838,
+      "localsCount": 0,
+      "localsOffset": 10840,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 33762,
+      "unknown2": 1223,
+      "lineCount": 3,
+      "lineOffset": 10840,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 553,
+      "vectorPos": 65535,
+      "compiledLen": 11,
+      "compiledOffset": 10844,
+      "argumentCount": 2,
+      "argumentOffset": 10856,
+      "localsCount": 0,
+      "localsOffset": 10860,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 33904,
+      "unknown2": 1229,
+      "lineCount": 3,
+      "lineOffset": 10860,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 28,
+      "vectorPos": 65535,
+      "compiledLen": 234,
+      "compiledOffset": 10864,
+      "argumentCount": 1,
+      "argumentOffset": 11098,
+      "localsCount": 9,
+      "localsOffset": 11100,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 34665,
+      "unknown2": 1259,
+      "lineCount": 31,
+      "lineOffset": 11118,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 554,
+      "vectorPos": 65535,
+      "compiledLen": 23,
+      "compiledOffset": 11150,
+      "argumentCount": 1,
+      "argumentOffset": 11174,
+      "localsCount": 0,
+      "localsOffset": 11176,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 35882,
+      "unknown2": 1303,
+      "lineCount": 6,
+      "lineOffset": 11176,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 30,
+      "vectorPos": 65535,
+      "compiledLen": 351,
+      "compiledOffset": 11182,
+      "argumentCount": 1,
+      "argumentOffset": 11534,
+      "localsCount": 4,
+      "localsOffset": 11536,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 36073,
+      "unknown2": 1314,
+      "lineCount": 70,
+      "lineOffset": 11544,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 31,
+      "vectorPos": 65535,
+      "compiledLen": 492,
+      "compiledOffset": 11614,
+      "argumentCount": 1,
+      "argumentOffset": 12106,
+      "localsCount": 19,
+      "localsOffset": 12108,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 39154,
+      "unknown2": 1410,
+      "lineCount": 111,
+      "lineOffset": 12146,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 32,
+      "vectorPos": 65535,
+      "compiledLen": 229,
+      "compiledOffset": 12258,
+      "argumentCount": 1,
+      "argumentOffset": 12488,
+      "localsCount": 11,
+      "localsOffset": 12490,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 42624,
+      "unknown2": 1530,
+      "lineCount": 46,
+      "lineOffset": 12512,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 33,
+      "vectorPos": 65535,
+      "compiledLen": 230,
+      "compiledOffset": 12558,
+      "argumentCount": 1,
+      "argumentOffset": 12788,
+      "localsCount": 12,
+      "localsOffset": 12790,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 43888,
+      "unknown2": 1580,
+      "lineCount": 35,
+      "lineOffset": 12814,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 34,
+      "vectorPos": 65535,
+      "compiledLen": 80,
+      "compiledOffset": 12850,
+      "argumentCount": 1,
+      "argumentOffset": 12930,
+      "localsCount": 0,
+      "localsOffset": 12932,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 45060,
+      "unknown2": 1621,
+      "lineCount": 10,
+      "lineOffset": 12932,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 36,
+      "vectorPos": 65535,
+      "compiledLen": 6,
+      "compiledOffset": 12942,
+      "argumentCount": 1,
+      "argumentOffset": 12948,
+      "localsCount": 0,
+      "localsOffset": 12950,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 45485,
+      "unknown2": 1636,
+      "lineCount": 1,
+      "lineOffset": 12950,
+      "stackHeight": 1
+    },
+    {
+      "nameID": 37,
+      "vectorPos": 65535,
+      "compiledLen": 193,
+      "compiledOffset": 12952,
+      "argumentCount": 2,
+      "argumentOffset": 13146,
+      "localsCount": 2,
+      "localsOffset": 13150,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 45606,
+      "unknown2": 1643,
+      "lineCount": 18,
+      "lineOffset": 13154,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 38,
+      "vectorPos": 65535,
+      "compiledLen": 244,
+      "compiledOffset": 13172,
+      "argumentCount": 3,
+      "argumentOffset": 13416,
+      "localsCount": 2,
+      "localsOffset": 13422,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 46251,
+      "unknown2": 1666,
+      "lineCount": 24,
+      "lineOffset": 13426,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 39,
+      "vectorPos": 65535,
+      "compiledLen": 245,
+      "compiledOffset": 13450,
+      "argumentCount": 3,
+      "argumentOffset": 13696,
+      "localsCount": 2,
+      "localsOffset": 13702,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 47031,
+      "unknown2": 1693,
+      "lineCount": 22,
+      "lineOffset": 13706,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 40,
+      "vectorPos": 65535,
+      "compiledLen": 244,
+      "compiledOffset": 13728,
+      "argumentCount": 3,
+      "argumentOffset": 13972,
+      "localsCount": 2,
+      "localsOffset": 13978,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 47752,
+      "unknown2": 1718,
+      "lineCount": 26,
+      "lineOffset": 13982,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 41,
+      "vectorPos": 65535,
+      "compiledLen": 627,
+      "compiledOffset": 14008,
+      "argumentCount": 3,
+      "argumentOffset": 14636,
+      "localsCount": 3,
+      "localsOffset": 14642,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 48463,
+      "unknown2": 1747,
+      "lineCount": 69,
+      "lineOffset": 14648,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 42,
+      "vectorPos": 65535,
+      "compiledLen": 51,
+      "compiledOffset": 14718,
+      "argumentCount": 1,
+      "argumentOffset": 14770,
+      "localsCount": 1,
+      "localsOffset": 14772,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 50312,
+      "unknown2": 1819,
+      "lineCount": 8,
+      "lineOffset": 14774,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 43,
+      "vectorPos": 65535,
+      "compiledLen": 22,
+      "compiledOffset": 14782,
+      "argumentCount": 1,
+      "argumentOffset": 14804,
+      "localsCount": 1,
+      "localsOffset": 14806,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 50549,
+      "unknown2": 1832,
+      "lineCount": 2,
+      "lineOffset": 14808,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 44,
+      "vectorPos": 65535,
+      "compiledLen": 1154,
+      "compiledOffset": 14810,
+      "argumentCount": 2,
+      "argumentOffset": 15964,
+      "localsCount": 2,
+      "localsOffset": 15968,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 50720,
+      "unknown2": 1839,
+      "lineCount": 213,
+      "lineOffset": 15972,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 45,
+      "vectorPos": 65535,
+      "compiledLen": 71,
+      "compiledOffset": 16186,
+      "argumentCount": 2,
+      "argumentOffset": 16258,
+      "localsCount": 4,
+      "localsOffset": 16262,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 60653,
+      "unknown2": 2056,
+      "lineCount": 13,
+      "lineOffset": 16270,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 46,
+      "vectorPos": 65535,
+      "compiledLen": 255,
+      "compiledOffset": 16284,
+      "argumentCount": 1,
+      "argumentOffset": 16540,
+      "localsCount": 3,
+      "localsOffset": 16542,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 61039,
+      "unknown2": 2074,
+      "lineCount": 24,
+      "lineOffset": 16548,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 47,
+      "vectorPos": 65535,
+      "compiledLen": 76,
+      "compiledOffset": 16572,
+      "argumentCount": 1,
+      "argumentOffset": 16648,
+      "localsCount": 0,
+      "localsOffset": 16650,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 61928,
+      "unknown2": 2102,
+      "lineCount": 22,
+      "lineOffset": 16650,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 48,
+      "vectorPos": 65535,
+      "compiledLen": 74,
+      "compiledOffset": 16672,
+      "argumentCount": 1,
+      "argumentOffset": 16746,
+      "localsCount": 4,
+      "localsOffset": 16748,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 62572,
+      "unknown2": 2127,
+      "lineCount": 13,
+      "lineOffset": 16756,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 49,
+      "vectorPos": 65535,
+      "compiledLen": 40,
+      "compiledOffset": 16770,
+      "argumentCount": 4,
+      "argumentOffset": 16810,
+      "localsCount": 1,
+      "localsOffset": 16818,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 62940,
+      "unknown2": 2143,
+      "lineCount": 8,
+      "lineOffset": 16820,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 50,
+      "vectorPos": 65535,
+      "compiledLen": 15,
+      "compiledOffset": 16828,
+      "argumentCount": 1,
+      "argumentOffset": 16844,
+      "localsCount": 0,
+      "localsOffset": 16846,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 63184,
+      "unknown2": 2154,
+      "lineCount": 1,
+      "lineOffset": 16846,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 51,
+      "vectorPos": 65535,
+      "compiledLen": 75,
+      "compiledOffset": 16848,
+      "argumentCount": 2,
+      "argumentOffset": 16924,
+      "localsCount": 1,
+      "localsOffset": 16928,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 63265,
+      "unknown2": 2159,
+      "lineCount": 14,
+      "lineOffset": 16930,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 555,
+      "vectorPos": 65535,
+      "compiledLen": 99,
+      "compiledOffset": 16944,
+      "argumentCount": 1,
+      "argumentOffset": 17044,
+      "localsCount": 0,
+      "localsOffset": 17046,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 63791,
+      "unknown2": 2177,
+      "lineCount": 21,
+      "lineOffset": 17046,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 556,
+      "vectorPos": 65535,
+      "compiledLen": 74,
+      "compiledOffset": 17068,
+      "argumentCount": 1,
+      "argumentOffset": 17142,
+      "localsCount": 4,
+      "localsOffset": 17144,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 64508,
+      "unknown2": 2201,
+      "lineCount": 16,
+      "lineOffset": 17152,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 526,
+      "vectorPos": 65535,
+      "compiledLen": 48,
+      "compiledOffset": 17168,
+      "argumentCount": 3,
+      "argumentOffset": 17216,
+      "localsCount": 0,
+      "localsOffset": 17222,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 64939,
+      "unknown2": 2220,
+      "lineCount": 3,
+      "lineOffset": 17222,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 529,
+      "vectorPos": 65535,
+      "compiledLen": 45,
+      "compiledOffset": 17226,
+      "argumentCount": 1,
+      "argumentOffset": 17272,
+      "localsCount": 0,
+      "localsOffset": 17274,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 65201,
+      "unknown2": 2226,
+      "lineCount": 3,
+      "lineOffset": 17274,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 531,
+      "vectorPos": 65535,
+      "compiledLen": 15,
+      "compiledOffset": 17278,
+      "argumentCount": 2,
+      "argumentOffset": 17294,
+      "localsCount": 0,
+      "localsOffset": 17298,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 65409,
+      "unknown2": 2232,
+      "lineCount": 1,
+      "lineOffset": 17298,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 534,
+      "vectorPos": 65535,
+      "compiledLen": 15,
+      "compiledOffset": 17300,
+      "argumentCount": 2,
+      "argumentOffset": 17316,
+      "localsCount": 0,
+      "localsOffset": 17320,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 65493,
+      "unknown2": 2235,
+      "lineCount": 1,
+      "lineOffset": 17320,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 557,
+      "vectorPos": 65535,
+      "compiledLen": 23,
+      "compiledOffset": 17322,
+      "argumentCount": 2,
+      "argumentOffset": 17346,
+      "localsCount": 0,
+      "localsOffset": 17350,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 65586,
+      "unknown2": 2239,
+      "lineCount": 1,
+      "lineOffset": 17350,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 558,
+      "vectorPos": 65535,
+      "compiledLen": 16,
+      "compiledOffset": 17352,
+      "argumentCount": 1,
+      "argumentOffset": 17368,
+      "localsCount": 0,
+      "localsOffset": 17370,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 65702,
+      "unknown2": 2243,
+      "lineCount": 1,
+      "lineOffset": 17370,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 54,
+      "vectorPos": 65535,
+      "compiledLen": 88,
+      "compiledOffset": 17372,
+      "argumentCount": 2,
+      "argumentOffset": 17460,
+      "localsCount": 0,
+      "localsOffset": 17464,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 65786,
+      "unknown2": 2247,
+      "lineCount": 17,
+      "lineOffset": 17464,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 55,
+      "vectorPos": 65535,
+      "compiledLen": 64,
+      "compiledOffset": 17482,
+      "argumentCount": 2,
+      "argumentOffset": 17546,
+      "localsCount": 0,
+      "localsOffset": 17550,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 66664,
+      "unknown2": 2267,
+      "lineCount": 4,
+      "lineOffset": 17550,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 559,
+      "vectorPos": 65535,
+      "compiledLen": 233,
+      "compiledOffset": 17554,
+      "argumentCount": 2,
+      "argumentOffset": 17788,
+      "localsCount": 1,
+      "localsOffset": 17792,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 66893,
+      "unknown2": 2275,
+      "lineCount": 34,
+      "lineOffset": 17794,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 52,
+      "vectorPos": 65535,
+      "compiledLen": 233,
+      "compiledOffset": 17828,
+      "argumentCount": 2,
+      "argumentOffset": 18062,
+      "localsCount": 1,
+      "localsOffset": 18066,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 68120,
+      "unknown2": 2312,
+      "lineCount": 34,
+      "lineOffset": 18068,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 560,
+      "vectorPos": 65535,
+      "compiledLen": 259,
+      "compiledOffset": 18102,
+      "argumentCount": 2,
+      "argumentOffset": 18362,
+      "localsCount": 1,
+      "localsOffset": 18366,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 69305,
+      "unknown2": 2349,
+      "lineCount": 39,
+      "lineOffset": 18368,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 528,
+      "vectorPos": 65535,
+      "compiledLen": 180,
+      "compiledOffset": 18408,
+      "argumentCount": 4,
+      "argumentOffset": 18588,
+      "localsCount": 5,
+      "localsOffset": 18596,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 70384,
+      "unknown2": 2391,
+      "lineCount": 34,
+      "lineOffset": 18606,
+      "stackHeight": 8
+    },
+    {
+      "nameID": 533,
+      "vectorPos": 65535,
+      "compiledLen": 649,
+      "compiledOffset": 18640,
+      "argumentCount": 2,
+      "argumentOffset": 19290,
+      "localsCount": 6,
+      "localsOffset": 19294,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 71539,
+      "unknown2": 2428,
+      "lineCount": 99,
+      "lineOffset": 19306,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 561,
+      "vectorPos": 65535,
+      "compiledLen": 352,
+      "compiledOffset": 19406,
+      "argumentCount": 1,
+      "argumentOffset": 19758,
+      "localsCount": 9,
+      "localsOffset": 19760,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 75304,
+      "unknown2": 2532,
+      "lineCount": 47,
+      "lineOffset": 19778,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 154,
+      "vectorPos": 65535,
+      "compiledLen": 332,
+      "compiledOffset": 19826,
+      "argumentCount": 1,
+      "argumentOffset": 20158,
+      "localsCount": 9,
+      "localsOffset": 20160,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 76594,
+      "unknown2": 2582,
+      "lineCount": 48,
+      "lineOffset": 20178,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 53,
+      "vectorPos": 65535,
+      "compiledLen": 208,
+      "compiledOffset": 20226,
+      "argumentCount": 2,
+      "argumentOffset": 20434,
+      "localsCount": 11,
+      "localsOffset": 20438,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 77722,
+      "unknown2": 2633,
+      "lineCount": 18,
+      "lineOffset": 20460,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 562,
+      "vectorPos": 65535,
+      "compiledLen": 46,
+      "compiledOffset": 20478,
+      "argumentCount": 1,
+      "argumentOffset": 20524,
+      "localsCount": 1,
+      "localsOffset": 20526,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 78369,
+      "unknown2": 2654,
+      "lineCount": 8,
+      "lineOffset": 20528,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 563,
+      "vectorPos": 65535,
+      "compiledLen": 128,
+      "compiledOffset": 20536,
+      "argumentCount": 1,
+      "argumentOffset": 20664,
+      "localsCount": 5,
+      "localsOffset": 20666,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 78592,
+      "unknown2": 2665,
+      "lineCount": 15,
+      "lineOffset": 20676,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 57,
+      "vectorPos": 65535,
+      "compiledLen": 9,
+      "compiledOffset": 20692,
+      "argumentCount": 1,
+      "argumentOffset": 20702,
+      "localsCount": 0,
+      "localsOffset": 20704,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 79356,
+      "unknown2": 2683,
+      "lineCount": 2,
+      "lineOffset": 20704,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 549,
+      "vectorPos": 65535,
+      "compiledLen": 23,
+      "compiledOffset": 20706,
+      "argumentCount": 1,
+      "argumentOffset": 20730,
+      "localsCount": 0,
+      "localsOffset": 20732,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 79538,
+      "unknown2": 2688,
+      "lineCount": 5,
+      "lineOffset": 20732,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 536,
+      "vectorPos": 65535,
+      "compiledLen": 128,
+      "compiledOffset": 20738,
+      "argumentCount": 1,
+      "argumentOffset": 20866,
+      "localsCount": 1,
+      "localsOffset": 20868,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 79678,
+      "unknown2": 2696,
+      "lineCount": 15,
+      "lineOffset": 20870,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 545,
+      "vectorPos": 65535,
+      "compiledLen": 85,
+      "compiledOffset": 20886,
+      "argumentCount": 1,
+      "argumentOffset": 20972,
+      "localsCount": 0,
+      "localsOffset": 20974,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 80208,
+      "unknown2": 2714,
+      "lineCount": 17,
+      "lineOffset": 20974,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 157,
+      "vectorPos": 65535,
+      "compiledLen": 307,
+      "compiledOffset": 20992,
+      "argumentCount": 1,
+      "argumentOffset": 21300,
+      "localsCount": 8,
+      "localsOffset": 21302,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 80706,
+      "unknown2": 2734,
+      "lineCount": 34,
+      "lineOffset": 21318,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 537,
+      "vectorPos": 65535,
+      "compiledLen": 1212,
+      "compiledOffset": 21352,
+      "argumentCount": 1,
+      "argumentOffset": 22564,
+      "localsCount": 13,
+      "localsOffset": 22566,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 82198,
+      "unknown2": 2771,
+      "lineCount": 166,
+      "lineOffset": 22592,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 538,
+      "vectorPos": 65535,
+      "compiledLen": 67,
+      "compiledOffset": 22758,
+      "argumentCount": 1,
+      "argumentOffset": 22826,
+      "localsCount": 1,
+      "localsOffset": 22828,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 87809,
+      "unknown2": 2942,
+      "lineCount": 12,
+      "lineOffset": 22830,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 156,
+      "vectorPos": 65535,
+      "compiledLen": 117,
+      "compiledOffset": 22842,
+      "argumentCount": 1,
+      "argumentOffset": 22960,
+      "localsCount": 1,
+      "localsOffset": 22962,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 88091,
+      "unknown2": 2957,
+      "lineCount": 19,
+      "lineOffset": 22964,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 158,
+      "vectorPos": 65535,
+      "compiledLen": 410,
+      "compiledOffset": 22984,
+      "argumentCount": 1,
+      "argumentOffset": 23394,
+      "localsCount": 7,
+      "localsOffset": 23396,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 88660,
+      "unknown2": 2979,
+      "lineCount": 53,
+      "lineOffset": 23410,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 160,
+      "vectorPos": 65535,
+      "compiledLen": 195,
+      "compiledOffset": 23464,
+      "argumentCount": 1,
+      "argumentOffset": 23660,
+      "localsCount": 4,
+      "localsOffset": 23662,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 90572,
+      "unknown2": 3036,
+      "lineCount": 30,
+      "lineOffset": 23670,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 162,
+      "vectorPos": 65535,
+      "compiledLen": 507,
+      "compiledOffset": 23700,
+      "argumentCount": 1,
+      "argumentOffset": 24208,
+      "localsCount": 7,
+      "localsOffset": 24210,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 91511,
+      "unknown2": 3071,
+      "lineCount": 72,
+      "lineOffset": 24224,
+      "stackHeight": 4
+    },
+    {
+      "nameID": 56,
+      "vectorPos": 65535,
+      "compiledLen": 29,
+      "compiledOffset": 24296,
+      "argumentCount": 2,
+      "argumentOffset": 24326,
+      "localsCount": 0,
+      "localsOffset": 24330,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 93857,
+      "unknown2": 3146,
+      "lineCount": 7,
+      "lineOffset": 24330,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 564,
+      "vectorPos": 65535,
+      "compiledLen": 79,
+      "compiledOffset": 24338,
+      "argumentCount": 2,
+      "argumentOffset": 24418,
+      "localsCount": 4,
+      "localsOffset": 24422,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 94014,
+      "unknown2": 3156,
+      "lineCount": 16,
+      "lineOffset": 24430,
+      "stackHeight": 5
+    },
+    {
+      "nameID": 565,
+      "vectorPos": 65535,
+      "compiledLen": 1,
+      "compiledOffset": 24446,
+      "argumentCount": 1,
+      "argumentOffset": 24448,
+      "localsCount": 0,
+      "localsOffset": 24450,
+      "globalsCount": 0,
+      "globalsOffset": 276,
+      "unknown1": 94290,
+      "unknown2": 3176,
+      "lineCount": 6,
+      "lineOffset": 24450,
+      "stackHeight": 0
+    }
+  ],
+  "literals": [
+    {
+      "type": 1,
+      "offset": 0,
+      "value": "gameWorld"
+    },
+    {
+      "type": 1,
+      "offset": 14,
+      "value": "gameWorld_Havok"
+    },
+    {
+      "type": 1,
+      "offset": 34,
+      "value": "simClass"
+    },
+    {
+      "type": 1,
+      "offset": 48,
+      "value": "castleBuilderClass"
+    },
+    {
+      "type": 1,
+      "offset": 72,
+      "value": "aiClass"
+    },
+    {
+      "type": 1,
+      "offset": 84,
+      "value": "mathClass"
+    },
+    {
+      "type": 1,
+      "offset": 98,
+      "value": "SharedObject"
+    },
+    {
+      "type": 1,
+      "offset": 116,
+      "value": "cstlcnqst20"
+    },
+    {
+      "type": 9,
+      "offset": 132,
+      "value": 0.01
+    },
+    {
+      "type": 9,
+      "offset": 144,
+      "value": 0.97999999999999998
+    },
+    {
+      "type": 1,
+      "offset": 156,
+      "value": "gameScore_txt"
+    },
+    {
+      "type": 1,
+      "offset": 174,
+      "value": ""
+    },
+    {
+      "type": 1,
+      "offset": 180,
+      "value": "ball"
+    },
+    {
+      "type": 1,
+      "offset": 190,
+      "value": "pivot_camBall"
+    },
+    {
+      "type": 1,
+      "offset": 208,
+      "value": "ballShadow"
+    },
+    {
+      "type": 1,
+      "offset": 224,
+      "value": "ballShadowShape"
+    },
+    {
+      "type": 1,
+      "offset": 244,
+      "value": "p_ground"
+    },
+    {
+      "type": 1,
+      "offset": 258,
+      "value": "p_playPLane_1"
+    },
+    {
+      "type": 1,
+      "offset": 276,
+      "value": "p_playPLane_2"
+    },
+    {
+      "type": 1,
+      "offset": 294,
+      "value": "pivot_camAim"
+    },
+    {
+      "type": 1,
+      "offset": 312,
+      "value": "aim"
+    },
+    {
+      "type": 1,
+      "offset": 320,
+      "value": "Use Arrow Keys To Aim The Cannon. Hold Down Spacebar To Set Power Level."
+    },
+    {
+      "type": 1,
+      "offset": 398,
+      "value": "- Computer Player Turn -"
+    },
+    {
+      "type": 9,
+      "offset": 428,
+      "value": 1.30000000000000004
+    },
+    {
+      "type": 9,
+      "offset": 440,
+      "value": 0.29999999999999999
+    },
+    {
+      "type": 1,
+      "offset": 452,
+      "value": "p_isectPlane"
+    },
+    {
+      "type": 1,
+      "offset": 470,
+      "value": "front1"
+    },
+    {
+      "type": 1,
+      "offset": 482,
+      "value": "castle1"
+    },
+    {
+      "type": 1,
+      "offset": 494,
+      "value": "side1"
+    },
+    {
+      "type": 1,
+      "offset": 504,
+      "value": "top1"
+    },
+    {
+      "type": 1,
+      "offset": 514,
+      "value": "front2"
+    },
+    {
+      "type": 1,
+      "offset": 526,
+      "value": "castle2"
+    },
+    {
+      "type": 1,
+      "offset": 538,
+      "value": "side2"
+    },
+    {
+      "type": 1,
+      "offset": 548,
+      "value": "top2"
+    },
+    {
+      "type": 1,
+      "offset": 558,
+      "value": "start"
+    },
+    {
+      "type": 1,
+      "offset": 568,
+      "value": "intro"
+    },
+    {
+      "type": 1,
+      "offset": 578,
+      "value": "cam_"
+    },
+    {
+      "type": 1,
+      "offset": 588,
+      "value": "Shape"
+    },
+    {
+      "type": 1,
+      "offset": 598,
+      "value": "cam_aimShape"
+    },
+    {
+      "type": 1,
+      "offset": 616,
+      "value": "crank_sound"
+    },
+    {
+      "type": 9,
+      "offset": 632,
+      "value": 0.90000000000000002
+    },
+    {
+      "type": 9,
+      "offset": 644,
+      "value": 1.69999999999999996
+    },
+    {
+      "type": 9,
+      "offset": 656,
+      "value": 0.69999999999999996
+    },
+    {
+      "type": 9,
+      "offset": 668,
+      "value": 3.39999999999999991
+    },
+    {
+      "type": 1,
+      "offset": 680,
+      "value": "cannonB"
+    },
+    {
+      "type": 1,
+      "offset": 692,
+      "value": "tRandX = "
+    },
+    {
+      "type": 1,
+      "offset": 706,
+      "value": "   tRandY = "
+    },
+    {
+      "type": 1,
+      "offset": 724,
+      "value": "    tRandZ = "
+    },
+    {
+      "type": 1,
+      "offset": 742,
+      "value": "boompoof_sound"
+    },
+    {
+      "type": 1,
+      "offset": 762,
+      "value": "cannon"
+    },
+    {
+      "type": 1,
+      "offset": 774,
+      "value": "rockHit_sound"
+    },
+    {
+      "type": 1,
+      "offset": 792,
+      "value": "groundHit_sound"
+    },
+    {
+      "type": 9,
+      "offset": 812,
+      "value": 0.80000000000000004
+    },
+    {
+      "type": 1,
+      "offset": 824,
+      "value": "computerCastleNumId = "
+    },
+    {
+      "type": 9,
+      "offset": 852,
+      "value": 0.0025
+    },
+    {
+      "type": 1,
+      "offset": 864,
+      "value": "hitGreat_sound"
+    },
+    {
+      "type": 1,
+      "offset": 884,
+      "value": "YOU WON! Enemy Cannon Destroyed!"
+    },
+    {
+      "type": 1,
+      "offset": 922,
+      "value": "\r"
+    },
+    {
+      "type": 1,
+      "offset": 928,
+      "value": "- Press Any Key To Continue -"
+    },
+    {
+      "type": 1,
+      "offset": 962,
+      "value": "YOU WON! All Enemy Flags Captured!"
+    },
+    {
+      "type": 1,
+      "offset": 1002,
+      "value": "PLAYER 1 WINS!"
+    },
+    {
+      "type": 1,
+      "offset": 1022,
+      "value": "hitBad_sound"
+    },
+    {
+      "type": 1,
+      "offset": 1040,
+      "value": "YOU LOST! Player Cannon Destroyed!"
+    },
+    {
+      "type": 1,
+      "offset": 1080,
+      "value": "YOU LOST! All PLayer Flags Captured!"
+    },
+    {
+      "type": 1,
+      "offset": 1122,
+      "value": "PLAYER 2 WINS!"
+    },
+    {
+      "type": 1,
+      "offset": 1142,
+      "value": "flag"
+    },
+    {
+      "type": 1,
+      "offset": 1152,
+      "value": "Flags "
+    },
+    {
+      "type": 1,
+      "offset": 1164,
+      "value": "/"
+    },
+    {
+      "type": 1,
+      "offset": 1170,
+      "value": "Game Over"
+    },
+    {
+      "type": 1,
+      "offset": 1184,
+      "value": "boomSource"
+    },
+    {
+      "type": 1,
+      "offset": 1200,
+      "value": "boom"
+    },
+    {
+      "type": 9,
+      "offset": 1210,
+      "value": 0.10000000000000001
+    },
+    {
+      "type": 1,
+      "offset": 1222,
+      "value": "smokeSource"
+    },
+    {
+      "type": 1,
+      "offset": 1238,
+      "value": "smoke"
+    },
+    {
+      "type": 1,
+      "offset": 1248,
+      "value": "streamSmokeSource"
+    },
+    {
+      "type": 1,
+      "offset": 1270,
+      "value": "streamSmoke"
+    },
+    {
+      "type": 9,
+      "offset": 1286,
+      "value": 0.40000000000000002
+    },
+    {
+      "type": 1,
+      "offset": 1298,
+      "value": "crosshair_texture"
+    },
+    {
+      "type": 1,
+      "offset": 1320,
+      "value": "crosshair"
+    },
+    {
+      "type": 1,
+      "offset": 1334,
+      "value": "gameWorldOverlay"
+    },
+    {
+      "type": 1,
+      "offset": 1356,
+      "value": "blinn4"
+    },
+    {
+      "type": 1,
+      "offset": 1368,
+      "value": "asplode_texture"
+    },
+    {
+      "type": 1,
+      "offset": 1388,
+      "value": "brick_bmp"
+    },
+    {
+      "type": 1,
+      "offset": 1402,
+      "value": "Level "
+    },
+    {
+      "type": 1,
+      "offset": 1414,
+      "value": "Select Your Castle"
+    },
+    {
+      "type": 1,
+      "offset": 1438,
+      "value": " Unlocks At "
+    },
+    {
+      "type": 1,
+      "offset": 1456,
+      "value": " Gold."
+    },
+    {
+      "type": 1,
+      "offset": 1468,
+      "value": "Click On a Castle Piece To Edit Or Shop Icon To Buy. When Done Click NEXT ROUND."
+    },
+    {
+      "type": 1,
+      "offset": 1554,
+      "value": "$"
+    },
+    {
+      "type": 1,
+      "offset": 1560,
+      "value": "Click On Shop Item To Purchase And Place On Map."
+    },
+    {
+      "type": 1,
+      "offset": 1614,
+      "value": "Select Item"
+    },
+    {
+      "type": 1,
+      "offset": 1630,
+      "value": "Below To Buy"
+    },
+    {
+      "type": 1,
+      "offset": 1648,
+      "value": "Castle Piece"
+    },
+    {
+      "type": 1,
+      "offset": 1666,
+      "value": "Gold:"
+    },
+    {
+      "type": 1,
+      "offset": 1676,
+      "value": "Score:"
+    },
+    {
+      "type": 1,
+      "offset": 1688,
+      "value": "Player "
+    },
+    {
+      "type": 1,
+      "offset": 1700,
+      "value": "wallA"
+    },
+    {
+      "type": 1,
+      "offset": 1710,
+      "value": "Wall Thin"
+    },
+    {
+      "type": 1,
+      "offset": 1724,
+      "value": "wallB"
+    },
+    {
+      "type": 1,
+      "offset": 1734,
+      "value": "Wall Thick"
+    },
+    {
+      "type": 1,
+      "offset": 1750,
+      "value": "towerA"
+    },
+    {
+      "type": 1,
+      "offset": 1762,
+      "value": "Tower Piece"
+    },
+    {
+      "type": 1,
+      "offset": 1778,
+      "value": "wallTopA"
+    },
+    {
+      "type": 1,
+      "offset": 1792,
+      "value": "Wall Top Thin"
+    },
+    {
+      "type": 1,
+      "offset": 1810,
+      "value": "wallTopB"
+    },
+    {
+      "type": 1,
+      "offset": 1824,
+      "value": "Wall Top Thick"
+    },
+    {
+      "type": 1,
+      "offset": 1844,
+      "value": "towerTopA"
+    },
+    {
+      "type": 1,
+      "offset": 1858,
+      "value": "Tower Top"
+    },
+    {
+      "type": 1,
+      "offset": 1872,
+      "value": "drawbridgeA"
+    },
+    {
+      "type": 1,
+      "offset": 1888,
+      "value": "Drawbridge"
+    },
+    {
+      "type": 1,
+      "offset": 1904,
+      "value": "archA"
+    },
+    {
+      "type": 1,
+      "offset": 1914,
+      "value": "Archway"
+    },
+    {
+      "type": 1,
+      "offset": 1926,
+      "value": "towerTopB"
+    },
+    {
+      "type": 1,
+      "offset": 1940,
+      "value": "Platform"
+    },
+    {
+      "type": 1,
+      "offset": 1954,
+      "value": "wallPieceA"
+    },
+    {
+      "type": 1,
+      "offset": 1970,
+      "value": "Wall Piece"
+    },
+    {
+      "type": 1,
+      "offset": 1986,
+      "value": "supportA"
+    },
+    {
+      "type": 1,
+      "offset": 2000,
+      "value": "Wedge Small"
+    },
+    {
+      "type": 1,
+      "offset": 2016,
+      "value": "supportB"
+    },
+    {
+      "type": 1,
+      "offset": 2030,
+      "value": "Wedge Large"
+    },
+    {
+      "type": 1,
+      "offset": 2046,
+      "value": "cannonA"
+    },
+    {
+      "type": 1,
+      "offset": 2058,
+      "value": "Cannon Small"
+    },
+    {
+      "type": 1,
+      "offset": 2076,
+      "value": "Cannon Large"
+    },
+    {
+      "type": 1,
+      "offset": 2094,
+      "value": "flagPoleC"
+    },
+    {
+      "type": 1,
+      "offset": 2108,
+      "value": "Flag"
+    },
+    {
+      "type": 1,
+      "offset": 2118,
+      "value": "removeCannon"
+    },
+    {
+      "type": 1,
+      "offset": 2136,
+      "value": "rotate"
+    },
+    {
+      "type": 1,
+      "offset": 2148,
+      "value": "Cannons can NOT be rotated."
+    },
+    {
+      "type": 1,
+      "offset": 2180,
+      "value": "raise"
+    },
+    {
+      "type": 1,
+      "offset": 2190,
+      "value": "Cannons can NOT be raised."
+    },
+    {
+      "type": 1,
+      "offset": 2222,
+      "value": "lower"
+    },
+    {
+      "type": 1,
+      "offset": 2232,
+      "value": "remove"
+    },
+    {
+      "type": 1,
+      "offset": 2244,
+      "value": "Cannons Can Only Be Replaced By Other Cannons.They Can NOT Be Removed."
+    },
+    {
+      "type": 1,
+      "offset": 2320,
+      "value": "Flag NOT Deleted. At Least One Flag Must Remain On The Castle."
+    },
+    {
+      "type": 1,
+      "offset": 2388,
+      "value": "Select Piece"
+    },
+    {
+      "type": 1,
+      "offset": 2406,
+      "value": "Plane"
+    },
+    {
+      "type": 1,
+      "offset": 2416,
+      "value": ","
+    },
+    {
+      "type": 1,
+      "offset": 2422,
+      "value": "http://www.dluxproductions.com/submitCastle.php?"
+    },
+    {
+      "type": 1,
+      "offset": 2476,
+      "value": "castleName="
+    },
+    {
+      "type": 1,
+      "offset": 2492,
+      "value": "&password="
+    },
+    {
+      "type": 1,
+      "offset": 2508,
+      "value": "&gold="
+    },
+    {
+      "type": 1,
+      "offset": 2520,
+      "value": "&castleData="
+    },
+    {
+      "type": 1,
+      "offset": 2538,
+      "value": "&"
+    },
+    {
+      "type": 1,
+      "offset": 2544,
+      "value": "Saving Castle Data ... Please Wait."
+    },
+    {
+      "type": 1,
+      "offset": 2584,
+      "value": "default"
+    },
+    {
+      "type": 1,
+      "offset": 2596,
+      "value": "Enter a Castle Name And Password. Then Press SUBMIT."
+    },
+    {
+      "type": 1,
+      "offset": 2654,
+      "value": "OK"
+    },
+    {
+      "type": 1,
+      "offset": 2662,
+      "value": "Sending Challenge ... FAILED."
+    },
+    {
+      "type": 1,
+      "offset": 2696,
+      "value": "Please Check All Infortmation And Try Again."
+    },
+    {
+      "type": 1,
+      "offset": 2746,
+      "value": "Sending Challenge ... SUCCESFUL!"
+    },
+    {
+      "type": 1,
+      "offset": 2784,
+      "value": "Send Another Challenge Or Click Cancel."
+    },
+    {
+      "type": 1,
+      "offset": 2828,
+      "value": "Please Enter Your Name And Submit Again."
+    },
+    {
+      "type": 1,
+      "offset": 2874,
+      "value": "Please Enter Your Email And Submit Again."
+    },
+    {
+      "type": 1,
+      "offset": 2920,
+      "value": "Please Enter Friend Name And Submit Again."
+    },
+    {
+      "type": 1,
+      "offset": 2968,
+      "value": "Please Enter Friend Email And Submit Again."
+    },
+    {
+      "type": 1,
+      "offset": 3016,
+      "value": "Please Enter Castle Name And Submit Again."
+    },
+    {
+      "type": 1,
+      "offset": 3064,
+      "value": "http://www.dluxproductions.com/sendCastleChallenge.php?"
+    },
+    {
+      "type": 1,
+      "offset": 3124,
+      "value": "yourName="
+    },
+    {
+      "type": 1,
+      "offset": 3138,
+      "value": "&yourEmail="
+    },
+    {
+      "type": 1,
+      "offset": 3154,
+      "value": "&friendName="
+    },
+    {
+      "type": 1,
+      "offset": 3172,
+      "value": "&friendEmail="
+    },
+    {
+      "type": 1,
+      "offset": 3190,
+      "value": "&castleName="
+    },
+    {
+      "type": 1,
+      "offset": 3208,
+      "value": "&rand="
+    },
+    {
+      "type": 1,
+      "offset": 3220,
+      "value": "Sending Challenge ... Please Wait."
+    },
+    {
+      "type": 1,
+      "offset": 3260,
+      "value": "submit"
+    },
+    {
+      "type": 1,
+      "offset": 3272,
+      "value": "Please Enter a Castle Name And Submit Again."
+    },
+    {
+      "type": 1,
+      "offset": 3322,
+      "value": "Please Enter a Password And Submit Again."
+    },
+    {
+      "type": 1,
+      "offset": 3368,
+      "value": "&"
+    },
+    {
+      "type": 1,
+      "offset": 3374,
+      "value": "="
+    },
+    {
+      "type": 1,
+      "offset": 3380,
+      "value": "%"
+    },
+    {
+      "type": 1,
+      "offset": 3386,
+      "value": "Castle Name Contains Invalid Characters. Please Enter a New Name."
+    },
+    {
+      "type": 1,
+      "offset": 3456,
+      "value": "Password Contains Invalid Characters. Please Enter a Password."
+    },
+    {
+      "type": 1,
+      "offset": 3524,
+      "value": "http://www.dluxproductions.com/loadCastle.php?"
+    },
+    {
+      "type": 1,
+      "offset": 3576,
+      "value": "&mode=challenge&"
+    },
+    {
+      "type": 1,
+      "offset": 3598,
+      "value": "Loading Castle(s) Data ... Please Wait."
+    },
+    {
+      "type": 1,
+      "offset": 3642,
+      "value": "Player 1 Please Enter a Castle Name And Submit Again."
+    },
+    {
+      "type": 1,
+      "offset": 3700,
+      "value": "Player 1 Please Enter a Password And Submit Again."
+    },
+    {
+      "type": 1,
+      "offset": 3756,
+      "value": "Player 2 Please Enter a Castle Name And Submit Again."
+    },
+    {
+      "type": 1,
+      "offset": 3814,
+      "value": "Player 2 Please Enter a Password And Submit Again."
+    },
+    {
+      "type": 1,
+      "offset": 3870,
+      "value": "Save Failed. Please Try Again Later."
+    },
+    {
+      "type": 1,
+      "offset": 3912,
+      "value": "Saving Castle Data ... SUCCESFUL!"
+    },
+    {
+      "type": 1,
+      "offset": 3950,
+      "value": "Save Failed. Castle Name Taken or Wrong Password."
+    },
+    {
+      "type": 1,
+      "offset": 4004,
+      "value": "Load Failed. Please Try Again Later or Click Next Round to Use Default Castles."
+    },
+    {
+      "type": 1,
+      "offset": 4088,
+      "value": "Loading Castle Data ... SUCCESFUL!"
+    },
+    {
+      "type": 1,
+      "offset": 4128,
+      "value": "Challenge Code Failed. Try Another Code or Leave Blank"
+    },
+    {
+      "type": 1,
+      "offset": 4188,
+      "value": "Load Failed. Castle Name And Password Do Not Match. Try Again or Click Next Round"
+    },
+    {
+      "type": 1,
+      "offset": 4274,
+      "value": "Loading Challenge Data ... SUCCESFUL!"
+    },
+    {
+      "type": 1,
+      "offset": 4316,
+      "value": "Player 1 Load Failed. Please Try Again or Leave Blank For Default Castle."
+    },
+    {
+      "type": 1,
+      "offset": 4394,
+      "value": "Player 1 Load Failed. Castle Name And Password Do Not Match. Try Again or Leave Blank For Default Castle"
+    },
+    {
+      "type": 1,
+      "offset": 4504,
+      "value": "Player 2 Load Failed. Please Try Again or Leave Blank For Default Castle."
+    },
+    {
+      "type": 1,
+      "offset": 4582,
+      "value": "Player 2 Load Failed. Castle Name And Password Do Not Match. Try Again or Leave Blank For Default Castle"
+    },
+    {
+      "type": 1,
+      "offset": 4692,
+      "value": "Loading Castle(s) Data ... SUCCESFUL!"
+    },
+    {
+      "type": 1,
+      "offset": 4734,
+      "value": "|"
+    }
+  ]
+}

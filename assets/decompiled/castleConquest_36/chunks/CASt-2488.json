@@ -1,0 +1,15 @@
+{
+  "type": 15,
+  "infoLen": 131,
+  "specificDataLen": 444,
+  "info": {
+    "dataOffset": 20,
+    "unk1": 0,
+    "unk2": 0,
+    "flags": 0,
+    "scriptId": 0,
+    "scriptSrcText": "",
+    "name": "castle1Name_txt"
+  },
+  "member": {}
+}

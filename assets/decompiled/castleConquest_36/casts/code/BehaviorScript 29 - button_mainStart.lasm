@@ -1,0 +1,74 @@
+property my, playerCount
+global objGame
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] setprop 508 ............................. my = sprite(me.spriteNum)
+  [ 12] getprop 508 ............................. <my>
+  [ 15] pushzero ................................ <0>
+  [ 16] setobjprop 183 .......................... my.blend = 0
+  [ 18] ret
+end
+
+on mouseEnter me
+  [  0] getprop 508 ............................. <my>
+  [  3] pushint8 100 ............................ <100>
+  [  5] setobjprop 183 .......................... my.blend = 100
+  [  7] getparam 0 .............................. <me>
+  [  9] getobjprop 509 .......................... <me.spriteNum>
+  [ 12] pusharglist 1 ........................... <me.spriteNum>
+  [ 14] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 16] pushint16 280 ........................... <280>
+  [ 19] setobjprop 518 .......................... sprite(me.spriteNum).cursor = 280
+  [ 22] ret
+end
+
+on mouseUp me
+  [  0] getglobal 439 ........................... <objGame>
+  [  3] getprop 423 ............................. <playerCount>
+  [  6] pusharglistnoret 2 ...................... <objGame, playerCount>
+  [  8] objcall 56 .............................. objGame.startButtonPressed(playerCount)
+  [ 10] pushcons 0 .............................. <"game">
+  [ 12] pusharglistnoret 1 ...................... <"game">
+  [ 14] extcall 192 ............................. go("game")
+  [ 16] ret
+end
+
+on mouseLeave me
+  [  0] getprop 508 ............................. <my>
+  [  3] pushzero ................................ <0>
+  [  4] setobjprop 183 .......................... my.blend = 0
+  [  6] getparam 0 .............................. <me>
+  [  8] getobjprop 509 .......................... <me.spriteNum>
+  [ 11] pusharglist 1 ........................... <me.spriteNum>
+  [ 13] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 15] pushint8 1 .............................. <1>
+  [ 17] inv ..................................... <-1>
+  [ 18] setobjprop 518 .......................... sprite(me.spriteNum).cursor = -1
+  [ 21] ret
+end
+
+on getPropertyDescriptionList
+  [  0] pusharglist 0 ........................... <[:]>
+  [  2] pushproplist ............................ <[:]>
+  [  3] setlocal 0 .............................. description = [:]
+  [  5] getlocal 0 .............................. <description>
+  [  7] pushsymb 423 ............................ <#playerCount>
+  [ 10] pushsymb 98 ............................. <#default>
+  [ 12] pushcons 1 .............................. <"1">
+  [ 14] pushsymb 512 ............................ <#format>
+  [ 17] pushsymb 314 ............................ <#integer>
+  [ 20] pushsymb 513 ............................ <#comment>
+  [ 23] pushcons 2 .............................. <"Number Of Players">
+  [ 25] pusharglist 6 ........................... <[#default: "1", #format: #integer, #comment: "Number Of Players"]>
+  [ 27] pushproplist ............................ <[#default: "1", #format: #integer, #comment: "Number Of Players"]>
+  [ 28] pusharglistnoret 3 ...................... <description, #playerCount, [#default: "1", #format: #integer, #comment: "Number Of Players"]>
+  [ 30] extcall 438 ............................. addProp(description, #playerCount, [#default: "1", #format: #integer, #comment: "Number Of Players"])
+  [ 33] getlocal 0 .............................. <description>
+  [ 35] pusharglistnoret 1 ...................... <description>
+  [ 37] extcall 58 .............................. return description
+  [ 39] ret
+end

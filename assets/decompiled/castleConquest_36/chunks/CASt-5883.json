@@ -1,0 +1,15 @@
+{
+  "type": 15,
+  "infoLen": 133,
+  "specificDataLen": 355,
+  "info": {
+    "dataOffset": 20,
+    "unk1": 0,
+    "unk2": 0,
+    "flags": 4,
+    "scriptId": 0,
+    "scriptSrcText": "",
+    "name": "gameWorld"
+  },
+  "member": {}
+}

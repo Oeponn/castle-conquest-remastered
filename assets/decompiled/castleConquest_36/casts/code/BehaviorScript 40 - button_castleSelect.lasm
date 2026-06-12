@@ -1,0 +1,153 @@
+property my, castleName, castlePrice, castleNum, active
+global objGame
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] setprop 508 ............................. my = sprite(me.spriteNum)
+  [ 12] getparam 0 .............................. <me>
+  [ 14] pusharglistnoret 1 ...................... <me>
+  [ 16] objcall 402 ............................. me.activate()
+  [ 19] ret
+end
+
+on mouseEnter me
+  [  0] getprop 408 ............................. <active>
+  [  3] jmpifz [ 31] ............................ if active then / else
+  [  6] getprop 508 ............................. <my>
+  [  9] pushint8 10 ............................. <10>
+  [ 11] setobjprop 183 .......................... my.blend = 10
+  [ 13] getparam 0 .............................. <me>
+  [ 15] getobjprop 509 .......................... <me.spriteNum>
+  [ 18] pusharglist 1 ........................... <me.spriteNum>
+  [ 20] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 22] pushint16 280 ........................... <280>
+  [ 25] setobjprop 518 .......................... sprite(me.spriteNum).cursor = 280
+  [ 28] jmp [ 46]
+  [ 31] getparam 0 .............................. <me>
+  [ 33] getobjprop 509 .......................... <me.spriteNum>
+  [ 36] pusharglist 1 ........................... <me.spriteNum>
+  [ 38] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 40] pushint8 1 .............................. <1>
+  [ 42] inv ..................................... <-1>
+  [ 43] setobjprop 518 .......................... sprite(me.spriteNum).cursor = -1
+  [ 46] getglobal 439 ........................... <objGame>
+  [ 49] getprop 408 ............................. <active>
+  [ 52] getprop 407 ............................. <castleName>
+  [ 55] getprop 406 ............................. <castlePrice>
+  [ 58] pusharglistnoret 4 ...................... <objGame, active, castleName, castlePrice>
+  [ 60] objcall 49 .............................. objGame.displayCastleItem(active, castleName, castlePrice)
+  [ 62] ret
+end
+
+on mouseUp me
+  [  0] getprop 408 ............................. <active>
+  [  3] jmpifz [ 16] ............................ if active then
+  [  6] getglobal 439 ........................... <objGame>
+  [  9] getprop 409 ............................. <castleNum>
+  [ 12] pusharglistnoret 2 ...................... <objGame, castleNum>
+  [ 14] objcall 51 .............................. objGame.selectCastle(castleNum)
+  [ 16] ret
+end
+
+on mouseLeave me
+  [  0] getprop 408 ............................. <active>
+  [  3] jmpifz [ 27] ............................ if active then
+  [  6] getprop 508 ............................. <my>
+  [  9] pushzero ................................ <0>
+  [ 10] setobjprop 183 .......................... my.blend = 0
+  [ 12] getparam 0 .............................. <me>
+  [ 14] getobjprop 509 .......................... <me.spriteNum>
+  [ 17] pusharglist 1 ........................... <me.spriteNum>
+  [ 19] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 21] pushint8 1 .............................. <1>
+  [ 23] inv ..................................... <-1>
+  [ 24] setobjprop 518 .......................... sprite(me.spriteNum).cursor = -1
+  [ 27] getglobal 439 ........................... <objGame>
+  [ 30] pusharglistnoret 1 ...................... <objGame>
+  [ 32] objcall 50 .............................. objGame.unDisplayCastleItem()
+  [ 34] ret
+end
+
+on deactivate me
+  [  0] pushzero ................................ <0>
+  [  1] setprop 408 ............................. active = 0
+  [  4] getprop 508 ............................. <my>
+  [  7] pushcons 0 .............................. <"000000">
+  [  9] pusharglist 1 ........................... <"000000">
+  [ 11] extcall 234 ............................. <rgb("000000")>
+  [ 13] setobjprop 235 .......................... my.color = rgb("000000")
+  [ 15] getprop 508 ............................. <my>
+  [ 18] pushint8 60 ............................. <60>
+  [ 20] setobjprop 183 .......................... my.blend = 60
+  [ 22] ret
+end
+
+on activate me
+  [  0] pushint8 1 .............................. <1>
+  [  2] setprop 408 ............................. active = 1
+  [  5] getprop 508 ............................. <my>
+  [  8] pushcons 1 .............................. <"FFFFFF">
+  [ 10] pusharglist 1 ........................... <"FFFFFF">
+  [ 12] extcall 234 ............................. <rgb("FFFFFF")>
+  [ 14] setobjprop 235 .......................... my.color = rgb("FFFFFF")
+  [ 16] getprop 508 ............................. <my>
+  [ 19] pushzero ................................ <0>
+  [ 20] setobjprop 183 .......................... my.blend = 0
+  [ 22] ret
+end
+
+on getPrice me
+  [  0] getprop 406 ............................. <castlePrice>
+  [  3] pusharglistnoret 1 ...................... <castlePrice>
+  [  5] extcall 58 .............................. return castlePrice
+  [  7] ret
+end
+
+on getPropertyDescriptionList
+  [  0] pusharglist 0 ........................... <[:]>
+  [  2] pushproplist ............................ <[:]>
+  [  3] setlocal 0 .............................. description = [:]
+  [  5] getlocal 0 .............................. <description>
+  [  7] pushsymb 407 ............................ <#castleName>
+  [ 10] pushsymb 98 ............................. <#default>
+  [ 12] pushcons 2 .............................. <EMPTY>
+  [ 14] pushsymb 512 ............................ <#format>
+  [ 17] pushsymb 91 ............................. <#string>
+  [ 19] pushsymb 513 ............................ <#comment>
+  [ 22] pushcons 3 .............................. <"Castle Name">
+  [ 24] pusharglist 6 ........................... <[#default: EMPTY, #format: #string, #comment: "Castle Name"]>
+  [ 26] pushproplist ............................ <[#default: EMPTY, #format: #string, #comment: "Castle Name"]>
+  [ 27] pusharglistnoret 3 ...................... <description, #castleName, [#default: EMPTY, #format: #string, #comment: "Castle Name"]>
+  [ 29] extcall 438 ............................. addProp(description, #castleName, [#default: EMPTY, #format: #string, #comment: "Castle Name"])
+  [ 32] getlocal 0 .............................. <description>
+  [ 34] pushsymb 406 ............................ <#castlePrice>
+  [ 37] pushsymb 98 ............................. <#default>
+  [ 39] pushcons 2 .............................. <EMPTY>
+  [ 41] pushsymb 512 ............................ <#format>
+  [ 44] pushsymb 314 ............................ <#integer>
+  [ 47] pushsymb 513 ............................ <#comment>
+  [ 50] pushcons 4 .............................. <"Castle Price">
+  [ 52] pusharglist 6 ........................... <[#default: EMPTY, #format: #integer, #comment: "Castle Price"]>
+  [ 54] pushproplist ............................ <[#default: EMPTY, #format: #integer, #comment: "Castle Price"]>
+  [ 55] pusharglistnoret 3 ...................... <description, #castlePrice, [#default: EMPTY, #format: #integer, #comment: "Castle Price"]>
+  [ 57] extcall 438 ............................. addProp(description, #castlePrice, [#default: EMPTY, #format: #integer, #comment: "Castle Price"])
+  [ 60] getlocal 0 .............................. <description>
+  [ 62] pushsymb 409 ............................ <#castleNum>
+  [ 65] pushsymb 98 ............................. <#default>
+  [ 67] pushcons 5 .............................. <"1">
+  [ 69] pushsymb 512 ............................ <#format>
+  [ 72] pushsymb 314 ............................ <#integer>
+  [ 75] pushsymb 513 ............................ <#comment>
+  [ 78] pushcons 6 .............................. <"Castle Number">
+  [ 80] pusharglist 6 ........................... <[#default: "1", #format: #integer, #comment: "Castle Number"]>
+  [ 82] pushproplist ............................ <[#default: "1", #format: #integer, #comment: "Castle Number"]>
+  [ 83] pusharglistnoret 3 ...................... <description, #castleNum, [#default: "1", #format: #integer, #comment: "Castle Number"]>
+  [ 85] extcall 438 ............................. addProp(description, #castleNum, [#default: "1", #format: #integer, #comment: "Castle Number"])
+  [ 88] getlocal 0 .............................. <description>
+  [ 90] pusharglistnoret 1 ...................... <description>
+  [ 92] extcall 58 .............................. return description
+  [ 94] ret
+end

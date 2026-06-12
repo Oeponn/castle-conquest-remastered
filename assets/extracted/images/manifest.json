@@ -1,0 +1,202 @@
+{
+ "crosshair.png": {
+  "member": "crosshair",
+  "castId": 65,
+  "w": 36,
+  "h": 36,
+  "regX": 18,
+  "regY": 18
+ },
+ "blackbox.png": {
+  "member": "blackbox",
+  "castId": 76,
+  "w": 1,
+  "h": 1,
+  "regX": 0,
+  "regY": 0
+ },
+ "instructionsBg.png": {
+  "member": "instructionsBg",
+  "castId": 1063,
+  "w": 312,
+  "h": 227,
+  "regX": 168,
+  "regY": 95
+ },
+ "nav_button.png": {
+  "member": "nav_button",
+  "castId": 1895,
+  "w": 95,
+  "h": 22,
+  "regX": 47,
+  "regY": 11
+ },
+ "shop_button.png": {
+  "member": "shop_button",
+  "castId": 1986,
+  "w": 30,
+  "h": 24,
+  "regX": 15,
+  "regY": 12
+ },
+ "shop_button_deactivated.png": {
+  "member": "shop_button_deactivated",
+  "castId": 1987,
+  "w": 28,
+  "h": 22,
+  "regX": 14,
+  "regY": 11
+ },
+ "launchControls_02.png": {
+  "member": "launchControls_02",
+  "castId": 2141,
+  "w": 105,
+  "h": 346,
+  "regX": 52,
+  "regY": 173
+ },
+ "sword_blade_01.png": {
+  "member": "sword_blade_01",
+  "castId": 2142,
+  "w": 20,
+  "h": 146,
+  "regX": 10,
+  "regY": 73
+ },
+ "yellowLine_bmp.png": {
+  "member": "yellowLine_bmp",
+  "castId": 2337,
+  "w": 2,
+  "h": 29,
+  "regX": 1,
+  "regY": 27
+ },
+ "mainMenuBorder_01.png": {
+  "member": "mainMenuBorder_01",
+  "castId": 2927,
+  "w": 209,
+  "h": 41,
+  "regX": 104,
+  "regY": 20
+ },
+ "mainTitle_01.png": {
+  "member": "mainTitle_01",
+  "castId": 2928,
+  "w": 319,
+  "h": 239,
+  "regX": 23,
+  "regY": 133
+ },
+ "toolbarCover_02.png": {
+  "member": "toolbarCover_02",
+  "castId": 3167,
+  "w": 105,
+  "h": 348,
+  "regX": 52,
+  "regY": 174
+ },
+ "gameWorldOverlay.png": {
+  "member": "gameWorldOverlay",
+  "castId": 3168,
+  "w": 427,
+  "h": 305,
+  "regX": 213,
+  "regY": 152
+ },
+ "powerMeter_bmp.png": {
+  "member": "powerMeter_bmp",
+  "castId": 3169,
+  "w": 163,
+  "h": 4,
+  "regX": 0,
+  "regY": 0
+ },
+ "powerMeter_bmp_2.png": {
+  "member": "powerMeter_bmp",
+  "castId": 3170,
+  "w": 163,
+  "h": 4,
+  "regX": 163,
+  "regY": 0
+ },
+ "soundOn_bmp.png": {
+  "member": "soundOn_bmp",
+  "castId": 3433,
+  "w": 41,
+  "h": 34,
+  "regX": 20,
+  "regY": 17
+ },
+ "soundOff_bmp.png": {
+  "member": "soundOff_bmp",
+  "castId": 3434,
+  "w": 21,
+  "h": 34,
+  "regX": 20,
+  "regY": 17
+ },
+ "skydome.png": {
+  "member": "skydome",
+  "castId": 4322,
+  "w": 603,
+  "h": 393,
+  "regX": 301,
+  "regY": 196
+ },
+ "mainMenu_04.png": {
+  "member": "mainMenu_04",
+  "castId": 4353,
+  "w": 642,
+  "h": 481,
+  "regX": 321,
+  "regY": 240
+ },
+ "main_23.png": {
+  "member": "main_23",
+  "castId": 5001,
+  "w": 642,
+  "h": 481,
+  "regX": 321,
+  "regY": 240
+ },
+ "brick_bmp.png": {
+  "member": "brick_bmp",
+  "castId": 5023,
+  "w": 40,
+  "h": 23,
+  "regX": 20,
+  "regY": 11
+ },
+ "castle_unlock_01.png": {
+  "member": "castle_unlock_01",
+  "castId": 5333,
+  "w": 431,
+  "h": 303,
+  "regX": 215,
+  "regY": 151
+ },
+ "member_5634.png": {
+  "member": "member_5634",
+  "castId": 5634,
+  "w": 82,
+  "h": 29,
+  "regX": 41,
+  "regY": 14
+ },
+ "powermeterArrows_01.png": {
+  "member": "powermeterArrows_01",
+  "castId": 5882,
+  "w": 27,
+  "h": 123,
+  "regX": 13,
+  "regY": 61
+ },
+ "castlesConquered_01.png": {
+  "member": "castlesConquered_01",
+  "castId": 5884,
+  "w": 431,
+  "h": 305,
+  "regX": 215,
+  "regY": 152
+ }
+}

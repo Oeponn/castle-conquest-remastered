@@ -1,0 +1,21 @@
+diff --git a/src/director/dirfile.cpp b/src/director/dirfile.cpp
+index 7a45e12..9157e39 100644
+--- a/src/director/dirfile.cpp
++++ b/src/director/dirfile.cpp
+@@ -406,12 +406,11 @@ Common::BufferView DirectorFile::getChunkData(uint32_t fourCC, int32_t id) {
+ 				actualUncompLength = decompressSnd(chunkStream, uncompStream, id);
+ 			}
+ 			if (actualUncompLength == -1) {
+-				throw std::runtime_error(boost::str(
+-					boost::format("Chunk %d: Could not decompress") % id
++				Common::warning(boost::str(
++					boost::format("Chunk %d: Could not decompress, leaving as-is") % id
+ 				));
+-			}
+-			if ((unsigned)actualUncompLength != info.uncompressedLen) {
+-				throw std::runtime_error(boost::str(
++			} else if ((unsigned)actualUncompLength != info.uncompressedLen) {
++				Common::warning(boost::str(
+ 					boost::format("Chunk %d: Expected uncompressed length %u but got length %zu")
+ 						% id % info.uncompressedLen % (unsigned)actualUncompLength
+ 				));

@@ -1,0 +1,17 @@
+{
+  "type": 11,
+  "infoLen": 44,
+  "specificDataLen": 2,
+  "info": {
+    "dataOffset": 20,
+    "unk1": 0,
+    "unk2": 0,
+    "flags": 0,
+    "scriptId": 39,
+    "scriptSrcText": "",
+    "name": "clear_btn"
+  },
+  "member": {
+    "scriptType": 1
+  }
+}

@@ -1,0 +1,229 @@
+property pieceCount
+global w, hk
+
+on new me
+  [  0] getparam 0 .............................. <me>
+  [  2] pusharglistnoret 1 ...................... <me>
+  [  4] objcall 1 ............................... me.init()
+  [  6] getparam 0 .............................. <me>
+  [  8] pusharglistnoret 1 ...................... <me>
+  [ 10] extcall 58 .............................. return me
+  [ 12] ret
+end
+
+on init me
+  [  0] getglobal 62 ............................ <hk>
+  [  2] getglobal 60 ............................ <w>
+  [  4] pushcons 0 .............................. <0.20000000000000001>
+  [  6] pushint8 1 .............................. <1>
+  [  8] pusharglistnoret 4 ...................... <hk, w, 0.20000000000000001, 1>
+  [ 10] objcall 454 ............................. hk.Initialize(w, 0.20000000000000001, 1)
+  [ 13] pushzero ................................ <0>
+  [ 14] setprop 446 ............................. pieceCount = 0
+  [ 17] ret
+end
+
+on addToSim me, tmodel
+  [  0] getparam 1 .............................. <tmodel>
+  [  2] pusharglistnoret 1 ...................... <tmodel>
+  [  4] objcall 455 ............................. tmodel.addToWorld()
+  [  7] getparam 1 .............................. <tmodel>
+  [  9] pushsymb 456 ............................ <#meshDeform>
+  [ 12] pusharglistnoret 2 ...................... <tmodel, #meshDeform>
+  [ 14] objcall 457 ............................. tmodel.addModifier(#meshDeform)
+  [ 17] getparam 1 .............................. <tmodel>
+  [ 19] getobjprop 258 .......................... <tmodel.name>
+  [ 22] setlocal 0 .............................. modelName = tmodel.name
+  [ 24] pusharglist 0 ........................... <>
+  [ 26] extcall 257 ............................. <VOID>
+  [ 29] setlocal 1 .............................. weight = VOID
+  [ 31] pusharglist 0 ........................... <>
+  [ 33] extcall 257 ............................. <VOID>
+  [ 36] setlocal 2 .............................. isConvex = VOID
+  [ 38] pusharglist 0 ........................... <>
+  [ 40] extcall 257 ............................. <VOID>
+  [ 43] setlocal 3 .............................. convexType = VOID
+  [ 45] pusharglist 0 ........................... <>
+  [ 47] extcall 257 ............................. <VOID>
+  [ 50] setlocal 4 .............................. restitutionAmount = VOID
+  [ 52] pusharglist 0 ........................... <>
+  [ 54] extcall 257 ............................. <VOID>
+  [ 57] setlocal 5 .............................. frictionAmount = VOID
+  [ 59] getparam 1 .............................. <tmodel>
+  [ 61] getchainedprop 458 ...................... <tmodel.userData>
+  [ 64] getobjprop 63 ........................... <tmodel.userData.sim>
+  [ 66] setlocal 6 .............................. simType = tmodel.userData.sim
+  [ 68] getlocal 6 .............................. <simType>
+  [ 70] peek 0 .................................. case simType of
+  [ 72] pushint8 1 .............................. <1>
+  [ 74] eq
+  [ 75] jmpifz [ 97] ............................ (case) 1:
+  [ 78] pushint8 30 ............................. <30>
+  [ 80] setlocal 1 .............................. weight = 30
+  [ 82] pushint8 1 .............................. <1>
+  [ 84] setlocal 2 .............................. isConvex = 1
+  [ 86] pushint8 1 .............................. <1>
+  [ 88] setlocal 4 .............................. restitutionAmount = 1
+  [ 90] pushcons 1 .............................. <0.59999999999999998>
+  [ 92] setlocal 5 .............................. frictionAmount = 0.59999999999999998
+  [ 94] jmp [231]
+  [ 97] peek 0
+  [ 99] pushint8 2 .............................. <2>
+  [101] eq
+  [102] jmpifz [119] ............................ (case) 2:
+  [105] pushzero ................................ <0>
+  [106] setlocal 1 .............................. weight = 0
+  [108] pushcons 2 .............................. <0.10000000000000001>
+  [110] setlocal 4 .............................. restitutionAmount = 0.10000000000000001
+  [112] pushcons 3 .............................. <0.90000000000000002>
+  [114] setlocal 5 .............................. frictionAmount = 0.90000000000000002
+  [116] jmp [231]
+  [119] peek 0
+  [121] pushint8 3 .............................. <3>
+  [123] eq
+  [124] jmpifz [149] ............................ (case) 3:
+  [127] pushint8 55 ............................. <55>
+  [129] setlocal 1 .............................. weight = 55
+  [131] pushint8 1 .............................. <1>
+  [133] setlocal 2 .............................. isConvex = 1
+  [135] pushfloat32 0.5 ......................... <0.5>
+  [140] setlocal 4 .............................. restitutionAmount = 0.5
+  [142] pushcons 4 .............................. <0.40000000000000002>
+  [144] setlocal 5 .............................. frictionAmount = 0.40000000000000002
+  [146] jmp [231]
+  [149] peek 0
+  [151] pushint8 4 .............................. <4>
+  [153] eq
+  [154] jmpifz [181] ............................ (case) 4:
+  [157] pushint8 22 ............................. <22>
+  [159] setlocal 1 .............................. weight = 22
+  [161] pushint8 1 .............................. <1>
+  [163] setlocal 2 .............................. isConvex = 1
+  [165] pushsymb 459 ............................ <#sphere>
+  [168] setlocal 3 .............................. convexType = #sphere
+  [170] pushcons 0 .............................. <0.20000000000000001>
+  [172] setlocal 4 .............................. restitutionAmount = 0.20000000000000001
+  [174] pushcons 5 .............................. <0.80000000000000004>
+  [176] setlocal 5 .............................. frictionAmount = 0.80000000000000004
+  [178] jmp [231]
+  [181] peek 0
+  [183] pushint8 5 .............................. <5>
+  [185] eq
+  [186] jmpifz [207] ............................ (case) 5:
+  [189] pushint8 30 ............................. <30>
+  [191] setlocal 1 .............................. weight = 30
+  [193] pushzero ................................ <0>
+  [194] setlocal 2 .............................. isConvex = 0
+  [196] pushint8 1 .............................. <1>
+  [198] setlocal 4 .............................. restitutionAmount = 1
+  [200] pushcons 1 .............................. <0.59999999999999998>
+  [202] setlocal 5 .............................. frictionAmount = 0.59999999999999998
+  [204] jmp [231]
+  [207] peek 0
+  [209] pushint8 6 .............................. <6>
+  [211] eq
+  [212] jmpifz [231] ............................ (case) 6:
+  [215] pushint8 10 ............................. <10>
+  [217] setlocal 1 .............................. weight = 10
+  [219] pushint8 1 .............................. <1>
+  [221] setlocal 2 .............................. isConvex = 1
+  [223] pushint8 1 .............................. <1>
+  [225] setlocal 4 .............................. restitutionAmount = 1
+  [227] pushcons 1 .............................. <0.59999999999999998>
+  [229] setlocal 5 .............................. frictionAmount = 0.59999999999999998
+  [231] pop 1 ................................... end case
+  [233] getparam 1 .............................. <tmodel>
+  [235] getchainedprop 113 ...................... <tmodel.transform>
+  [237] getchainedprop 185 ...................... <tmodel.transform.scale>
+  [239] getobjprop 126 .......................... <tmodel.transform.scale.x>
+  [241] pushint8 6 .............................. <6>
+  [243] eq ...................................... <tmodel.transform.scale.x = 6>
+  [244] jmpifz [258] ............................ if tmodel.transform.scale.x = 6 then
+  [247] getlocal 0 .............................. <modelName>
+  [249] pushcons 6 .............................. <"cannon">
+  [251] containsstr ............................. <modelName contains "cannon">
+  [252] jmpifz [258] ............................ if modelName contains "cannon" then
+  [255] pushzero ................................ <0>
+  [256] setlocal 1 .............................. weight = 0
+  [258] getlocal 1 .............................. <weight>
+  [260] jmpifz [333] ............................ if weight then / else
+  [263] getlocal 3 .............................. <convexType>
+  [265] pusharglist 0 ........................... <>
+  [267] extcall 257 ............................. <VOID>
+  [270] nteq .................................... <convexType <> VOID>
+  [271] jmpifz [292] ............................ if convexType <> VOID then / else
+  [274] getglobal 62 ............................ <hk>
+  [276] getlocal 0 .............................. <modelName>
+  [278] getlocal 1 .............................. <weight>
+  [280] getlocal 2 .............................. <isConvex>
+  [282] getlocal 3 .............................. <convexType>
+  [284] pusharglistnoret 5 ...................... <hk, modelName, weight, isConvex, convexType>
+  [286] objcall 460 ............................. hk.makeMovableRigidBody(modelName, weight, isConvex, convexType)
+  [289] jmp [305]
+  [292] getglobal 62 ............................ <hk>
+  [294] getlocal 0 .............................. <modelName>
+  [296] getlocal 1 .............................. <weight>
+  [298] getlocal 2 .............................. <isConvex>
+  [300] pusharglistnoret 4 ...................... <hk, modelName, weight, isConvex>
+  [302] objcall 460 ............................. hk.makeMovableRigidBody(modelName, weight, isConvex)
+  [305] getglobal 62 ............................ <hk>
+  [307] getlocal 0 .............................. <modelName>
+  [309] pusharglist 2 ........................... <hk, modelName>
+  [311] objcall 259 ............................. <hk.rigidBody(modelName)>
+  [314] setlocal 7 .............................. rb = hk.rigidBody(modelName)
+  [316] getlocal 7 .............................. <rb>
+  [318] getlocal 4 .............................. <restitutionAmount>
+  [320] setobjprop 461 .......................... rb.restitution = restitutionAmount
+  [323] getlocal 7 .............................. <rb>
+  [325] getlocal 5 .............................. <frictionAmount>
+  [327] setobjprop 462 .......................... rb.friction = frictionAmount
+  [330] jmp [359]
+  [333] getglobal 62 ............................ <hk>
+  [335] getlocal 0 .............................. <modelName>
+  [337] pushzero ................................ <0>
+  [338] pusharglist 3 ........................... <hk, modelName, 0>
+  [340] objcall 463 ............................. <hk.makeFixedRigidBody(modelName, 0)>
+  [343] setlocal 7 .............................. rb = hk.makeFixedRigidBody(modelName, 0)
+  [345] getlocal 7 .............................. <rb>
+  [347] getlocal 4 .............................. <restitutionAmount>
+  [349] setobjprop 461 .......................... rb.restitution = restitutionAmount
+  [352] getlocal 7 .............................. <rb>
+  [354] getlocal 5 .............................. <frictionAmount>
+  [356] setobjprop 462 .......................... rb.friction = frictionAmount
+  [359] ret
+end
+
+on removeFromSim me, tmodel
+  [  0] getparam 1 .............................. <tmodel>
+  [  2] pusharglist 0 ........................... <>
+  [  4] extcall 257 ............................. <VOID>
+  [  7] nteq .................................... <tmodel <> VOID>
+  [  8] jmpifz [ 50] ............................ if tmodel <> VOID then
+  [ 11] getparam 1 .............................. <tmodel>
+  [ 13] getobjprop 258 .......................... <tmodel.name>
+  [ 16] setlocal 0 .............................. modelName = tmodel.name
+  [ 18] getglobal 62 ............................ <hk>
+  [ 20] getlocal 0 .............................. <modelName>
+  [ 22] pusharglist 2 ........................... <hk, modelName>
+  [ 24] objcall 259 ............................. <hk.rigidBody(modelName)>
+  [ 27] pusharglist 1 ........................... <hk.rigidBody(modelName)>
+  [ 29] extcall 91 .............................. <string(hk.rigidBody(modelName))>
+  [ 31] getobjprop 413 .......................... <string(hk.rigidBody(modelName)).length>
+  [ 34] setlocal 1 .............................. rbValid = string(hk.rigidBody(modelName)).length
+  [ 36] getlocal 1 .............................. <rbValid>
+  [ 38] jmpifz [ 50] ............................ if rbValid then
+  [ 41] getglobal 62 ............................ <hk>
+  [ 43] getlocal 0 .............................. <modelName>
+  [ 45] pusharglistnoret 2 ...................... <hk, modelName>
+  [ 47] objcall 472 ............................. hk.deleteRigidBody(modelName)
+  [ 50] ret
+end
+
+on loop me
+  [  0] getglobal 62 ............................ <hk>
+  [  2] pushcons 2 .............................. <0.10000000000000001>
+  [  4] pushint8 15 ............................. <15>
+  [  6] pusharglistnoret 3 ...................... <hk, 0.10000000000000001, 15>
+  [  8] objcall 474 ............................. hk.step(0.10000000000000001, 15)
+  [ 11] ret
+end

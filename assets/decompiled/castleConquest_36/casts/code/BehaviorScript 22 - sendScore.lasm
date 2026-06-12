@@ -1,0 +1,22 @@
+global objGame, sprNum
+
+on beginSprite me
+  [  0] ret
+end
+
+on mouseUp me
+  [  0] getglobal 137 ........................... <sprNum>
+  [  2] getobjprop 194 .......................... <sprNum.gameWorld_w3d>
+  [  4] pusharglist 1 ........................... <sprNum.gameWorld_w3d>
+  [  6] extcall 136 ............................. <sprite(sprNum.gameWorld_w3d)>
+  [  8] pushzero ................................ <0>
+  [  9] setobjprop 232 .......................... sprite(sprNum.gameWorld_w3d).visible = 0
+  [ 11] getglobal 439 ........................... <objGame>
+  [ 14] pusharglist 1 ........................... <objGame>
+  [ 16] objcall 43 .............................. <objGame.getScore()>
+  [ 18] setlocal 0 .............................. myScore = objGame.getScore()
+  [ 20] pushcons 0 .............................. <"sendscore">
+  [ 22] pusharglistnoret 1 ...................... <"sendscore">
+  [ 24] extcall 192 ............................. go("sendscore")
+  [ 26] ret
+end

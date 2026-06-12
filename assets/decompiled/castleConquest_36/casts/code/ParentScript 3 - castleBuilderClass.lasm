@@ -1,0 +1,349 @@
+property pieceCount
+global w
+
+on new me
+  [  0] getparam 0 .............................. <me>
+  [  2] pusharglistnoret 1 ...................... <me>
+  [  4] extcall 58 .............................. return me
+  [  6] ret
+end
+
+on makeCastle me, castleDataList, side
+  [  0] pushint8 1 .............................. <1>
+  [  2] setlocal 0 .............................. sz = 1
+  [  4] pushzero ................................ <0>
+  [  5] setlocal 1 .............................. rx = 0
+  [  7] getparam 2 .............................. <side>
+  [  9] pushint8 1 .............................. <1>
+  [ 11] inv ..................................... <-1>
+  [ 12] eq ...................................... <side = -1>
+  [ 13] jmpifz [ 26] ............................ if side = -1 then
+  [ 16] pushint8 1 .............................. <1>
+  [ 18] inv ..................................... <-1>
+  [ 19] setlocal 0 .............................. sz = -1
+  [ 21] pushint8 8 .............................. <8>
+  [ 23] inv ..................................... <-8>
+  [ 24] setlocal 1 .............................. rx = -8
+  [ 26] pusharglist 0 ........................... <[]>
+  [ 28] pushlist ................................ <[]>
+  [ 29] setlocal 2 .............................. castlePieceList = []
+  [ 31] getparam 1 .............................. <castleDataList>
+  [ 33] getobjprop 264 .......................... <castleDataList.count>
+  [ 36] setlocal 3 .............................. iCount = castleDataList.count
+  [ 38] pushint8 1 .............................. <1>
+  [ 40] setlocal 4
+  [ 42] getlocal 4
+  [ 44] getlocal 3 .............................. <iCount>
+  [ 46] lteq
+  [ 47] jmpifz [163] ............................ repeat with i = 1 to iCount
+  [ 50] getparam 1 .............................. <castleDataList>
+  [ 52] getlocal 4 .............................. <i>
+  [ 54] pusharglist 2 ........................... <castleDataList, i>
+  [ 56] objcall 265 ............................. <castleDataList[i]>
+  [ 59] setlocal 5 .............................. pieceData = castleDataList[i]
+  [ 61] getlocal 5 .............................. <pieceData>
+  [ 63] pushint8 1 .............................. <1>
+  [ 65] pusharglist 2 ........................... <pieceData, 1>
+  [ 67] objcall 265 ............................. <pieceData[1]>
+  [ 70] setlocal 6 .............................. pieceName = pieceData[1]
+  [ 72] getlocal 5 .............................. <pieceData>
+  [ 74] pushint8 2 .............................. <2>
+  [ 76] pusharglist 2 ........................... <pieceData, 2>
+  [ 78] objcall 265 ............................. <pieceData[2]>
+  [ 81] setlocal 7 .............................. tx = pieceData[2]
+  [ 83] getlocal 5 .............................. <pieceData>
+  [ 85] pushint8 3 .............................. <3>
+  [ 87] pusharglist 2 ........................... <pieceData, 3>
+  [ 89] objcall 265 ............................. <pieceData[3]>
+  [ 92] setlocal 8 .............................. ty = pieceData[3]
+  [ 94] getlocal 5 .............................. <pieceData>
+  [ 96] pushint8 4 .............................. <4>
+  [ 98] pusharglist 2 ........................... <pieceData, 4>
+  [100] objcall 265 ............................. <pieceData[4]>
+  [103] setlocal 9 .............................. tz = pieceData[4]
+  [105] getlocal 5 .............................. <pieceData>
+  [107] pushint8 5 .............................. <5>
+  [109] pusharglist 2 ........................... <pieceData, 5>
+  [111] objcall 265 ............................. <pieceData[5]>
+  [114] setlocal 10 ............................. rz = pieceData[5]
+  [116] getparam 0 .............................. <me>
+  [118] getlocal 6 .............................. <pieceName>
+  [120] getlocal 7 .............................. <tx>
+  [122] getparam 2 .............................. <side>
+  [124] mul ..................................... <tx * side>
+  [125] getlocal 8 .............................. <ty>
+  [127] getlocal 9 .............................. <tz>
+  [129] getlocal 10 ............................. <rz>
+  [131] getparam 2 .............................. <side>
+  [133] mul ..................................... <rz * side>
+  [134] getlocal 0 .............................. <sz>
+  [136] getlocal 1 .............................. <rx>
+  [138] pusharglist 8 ........................... <me, pieceName, tx * side, ty, tz, rz * side, sz, rx>
+  [140] objcall 440 ............................. <me.makeCastlePiece(pieceName, tx * side, ty, tz, rz * side, sz, rx)>
+  [143] setlocal 11 ............................. castlePiece = me.makeCastlePiece(pieceName, tx * side, ty, tz, rz * side, sz, rx)
+  [145] getlocal 2 .............................. <castlePieceList>
+  [147] getlocal 11 ............................. <castlePiece>
+  [149] pusharglistnoret 2 ...................... <castlePieceList, castlePiece>
+  [151] objcall 293 ............................. castlePieceList.add(castlePiece)
+  [154] pushint8 1
+  [156] getlocal 4
+  [158] add
+  [159] setlocal 4
+  [161] endrepeat [ 42]
+  [163] getlocal 2 .............................. <castlePieceList>
+  [165] pusharglistnoret 1 ...................... <castlePieceList>
+  [167] extcall 58 .............................. return castlePieceList
+  [169] ret
+end
+
+on getCastleDataList me, castleNum
+  [  0] pushcons 0 .............................. <EMPTY>
+  [  2] setlocal 0 .............................. castleData_str = EMPTY
+  [  4] getparam 1 .............................. <castleNum>
+  [  6] pushint8 1 .............................. <1>
+  [  8] eq ...................................... <castleNum = 1>
+  [  9] jmpifz [ 19] ............................ if castleNum = 1 then / else
+  [ 12] pushcons 1 .............................. <"towerA,-200,25,0,180,wallA,-200,0,0,180,towerA,-200,-20,0,180,towerTopA,-200,-20,15,180,towerTopA,-200,25,15,180,wallA,-225,25,0,-90,wallA,-225,-25,0,90,flagPoleC,-200,25,25,180,flagPoleC,-205,-25,25,0,cannonA,-230,5,0,-180">
+  [ 14] setlocal 0 .............................. castleData_str = "towerA,-200,25,0,180,wallA,-200,0,0,180,towerA,-200,-20,0,180,towerTopA,-200,-20,15,180,towerTopA,-200,25,15,180,wallA,-225,25,0,-90,wallA,-225,-25,0,90,flagPoleC,-200,25,25,180,flagPoleC,-205,-25,25,0,cannonA,-230,5,0,-180"
+  [ 16] jmp [188]
+  [ 19] getparam 1 .............................. <castleNum>
+  [ 21] pushint8 2 .............................. <2>
+  [ 23] eq ...................................... <castleNum = 2>
+  [ 24] jmpifz [ 34] ............................ if castleNum = 2 then / else
+  [ 27] pushcons 2 .............................. <"drawbridgeA,-195,0,0,180,towerA,-200,55,0,180,wallPieceA,-200,15,0,180,wallPieceA,-200,15,15,180,wallPieceA,-200,-10,0,180,wallPieceA,-200,-10,15,180,archA,-200,0,30,180,wallA,-200,30,0,180,wallA,-200,-30,0,180,towerA,-200,-50,0,180,towerTopA,-200,-50,15,180,towerTopA,-200,55,15,180,wallA,-225,55,0,-90,wallA,-225,-55,0,90,towerA,-245,55,0,180,towerA,-245,-50,15,180,towerA,-245,55,15,180,towerA,-245,-50,0,180,flagPoleC,-200,55,25,180,flagPoleC,-205,-55,25,0,cannonA,-230,35,0,180">
+  [ 29] setlocal 0 .............................. castleData_str = "drawbridgeA,-195,0,0,180,towerA,-200,55,0,180,wallPieceA,-200,15,0,180,wallPieceA,-200,15,15,180,wallPieceA,-200,-10,0,180,wallPieceA,-200,-10,15,180,archA,-200,0,30,180,wallA,-200,30,0,180,wallA,-200,-30,0,180,towerA,-200,-50,0,180,towerTopA,-200,-50,15,180,towerTopA,-200,55,15,180,wallA,-225,55,0,-90,wallA,-225,-55,0,90,towerA,-245,55,0,180,towerA,-245,-50,15,180,towerA,-245,55,15,180,towerA,-245,-50,0,180,flagPoleC,-200,55,25,180,flagPoleC,-205,-55,25,0,cannonA,-230,35,0,180"
+  [ 31] jmp [188]
+  [ 34] getparam 1 .............................. <castleNum>
+  [ 36] pushint8 3 .............................. <3>
+  [ 38] eq ...................................... <castleNum = 3>
+  [ 39] jmpifz [ 49] ............................ if castleNum = 3 then / else
+  [ 42] pushcons 3 .............................. <"drawbridgeA,-195,0,0,-180,towerA,-200,55,0,-180,wallPieceA,-200,15,0,-180,wallPieceA,-200,15,15,-180,wallPieceA,-200,-10,0,-180,wallPieceA,-200,-10,15,-180,archA,-200,0,30,-180,wallA,-200,30,0,-180,wallA,-200,-30,0,-180,towerA,-200,-50,0,-180,towerTopA,-200,-50,15,-180,towerTopA,-200,55,15,-180,wallA,-225,55,0,-90,wallA,-225,-55,0,90,towerA,-245,55,0,-180,towerA,-245,-50,0,-180,flagPoleC,-200,55,25,-180,flagPoleC,-205,-55,25,0,wallTopA,-200,-30,15,180,wallTopA,-200,35,15,180,wallTopA,-225,-50,15,-90,wallTopA,-225,50,15,90,towerTopA,-245,-50,15,180,towerTopA,-245,55,15,180,cannonA,-225,-75,0,180">
+  [ 44] setlocal 0 .............................. castleData_str = "drawbridgeA,-195,0,0,-180,towerA,-200,55,0,-180,wallPieceA,-200,15,0,-180,wallPieceA,-200,15,15,-180,wallPieceA,-200,-10,0,-180,wallPieceA,-200,-10,15,-180,archA,-200,0,30,-180,wallA,-200,30,0,-180,wallA,-200,-30,0,-180,towerA,-200,-50,0,-180,towerTopA,-200,-50,15,-180,towerTopA,-200,55,15,-180,wallA,-225,55,0,-90,wallA,-225,-55,0,90,towerA,-245,55,0,-180,towerA,-245,-50,0,-180,flagPoleC,-200,55,25,-180,flagPoleC,-205,-55,25,0,wallTopA,-200,-30,15,180,wallTopA,-200,35,15,180,wallTopA,-225,-50,15,-90,wallTopA,-225,50,15,90,towerTopA,-245,-50,15,180,towerTopA,-245,55,15,180,cannonA,-225,-75,0,180"
+  [ 46] jmp [188]
+  [ 49] getparam 1 .............................. <castleNum>
+  [ 51] pushint8 4 .............................. <4>
+  [ 53] eq ...................................... <castleNum = 4>
+  [ 54] jmpifz [ 64] ............................ if castleNum = 4 then / else
+  [ 57] pushcons 4 .............................. <"drawbridgeA,-195,0,0,180,towerA,-200,55,0,180,wallPieceA,-200,15,0,180,wallPieceA,-200,15,15,180,wallPieceA,-200,-10,0,180,wallPieceA,-200,-10,15,180,archA,-200,0,30,180,towerA,-200,-50,0,180,towerTopA,-200,-50,15,180,towerTopA,-200,55,15,180,wallA,-225,55,0,-90,wallA,-225,-55,0,90,towerA,-245,55,0,180,towerA,-245,-50,0,180,flagPoleC,-200,55,25,180,flagPoleC,-205,-55,25,0,wallTopA,-225,-50,15,-90,wallTopA,-225,50,15,90,towerTopA,-245,-50,15,-180,towerTopA,-245,55,15,-180,wallB,-200,-30,0,180,wallB,-200,30,0,180,wallTopB,-200,30,15,180,wallTopB,-200,-30,15,180,wallA,-250,30,0,180,wallA,-250,-30,0,180,wallA,-250,0,0,180,cannonA,-235,80,0,180">
+  [ 59] setlocal 0 .............................. castleData_str = "drawbridgeA,-195,0,0,180,towerA,-200,55,0,180,wallPieceA,-200,15,0,180,wallPieceA,-200,15,15,180,wallPieceA,-200,-10,0,180,wallPieceA,-200,-10,15,180,archA,-200,0,30,180,towerA,-200,-50,0,180,towerTopA,-200,-50,15,180,towerTopA,-200,55,15,180,wallA,-225,55,0,-90,wallA,-225,-55,0,90,towerA,-245,55,0,180,towerA,-245,-50,0,180,flagPoleC,-200,55,25,180,flagPoleC,-205,-55,25,0,wallTopA,-225,-50,15,-90,wallTopA,-225,50,15,90,towerTopA,-245,-50,15,-180,towerTopA,-245,55,15,-180,wallB,-200,-30,0,180,wallB,-200,30,0,180,wallTopB,-200,30,15,180,wallTopB,-200,-30,15,180,wallA,-250,30,0,180,wallA,-250,-30,0,180,wallA,-250,0,0,180,cannonA,-235,80,0,180"
+  [ 61] jmp [188]
+  [ 64] getparam 1 .............................. <castleNum>
+  [ 66] pushint8 5 .............................. <5>
+  [ 68] eq ...................................... <castleNum = 5>
+  [ 69] jmpifz [ 79] ............................ if castleNum = 5 then / else
+  [ 72] pushcons 5 .............................. <"wallB,-200,-15,0,-180,wallB,-200,15,0,-180,wallB,-200,-15,15,-180,wallB,-200,15,15,-180,towerA,-195,-35,0,-180,towerA,-195,-35,15,-180,towerA,-195,-35,30,-180,towerTopA,-195,-35,45,-180,towerA,-195,40,0,-180,towerA,-195,40,15,-180,towerA,-195,40,30,-180,towerTopA,-195,40,45,-180,wallTopB,-200,-15,30,-180,wallTopB,-200,15,30,-180,wallB,-220,-35,0,-90,wallB,-220,-35,15,-90,wallB,-250,-35,0,-90,wallB,-250,-35,15,-90,wallB,-220,-35,30,-90,wallB,-250,-35,30,-90,wallB,-220,35,0,90,wallB,-220,35,15,90,wallB,-250,35,15,90,wallB,-250,35,0,90,wallB,-220,35,30,90,wallB,-250,35,30,90,towerA,-270,-35,0,-180,towerA,-270,-35,15,-180,towerA,-270,-35,30,-180,towerA,-270,40,0,-180,towerA,-270,40,15,-180,towerA,-270,40,30,-180,flagPoleC,-195,40,55,180,flagPoleC,-200,-40,55,0,cannonB,-180,0,0,-180,flagPoleC,-310,-50,0,0">
+  [ 74] setlocal 0 .............................. castleData_str = "wallB,-200,-15,0,-180,wallB,-200,15,0,-180,wallB,-200,-15,15,-180,wallB,-200,15,15,-180,towerA,-195,-35,0,-180,towerA,-195,-35,15,-180,towerA,-195,-35,30,-180,towerTopA,-195,-35,45,-180,towerA,-195,40,0,-180,towerA,-195,40,15,-180,towerA,-195,40,30,-180,towerTopA,-195,40,45,-180,wallTopB,-200,-15,30,-180,wallTopB,-200,15,30,-180,wallB,-220,-35,0,-90,wallB,-220,-35,15,-90,wallB,-250,-35,0,-90,wallB,-250,-35,15,-90,wallB,-220,-35,30,-90,wallB,-250,-35,30,-90,wallB,-220,35,0,90,wallB,-220,35,15,90,wallB,-250,35,15,90,wallB,-250,35,0,90,wallB,-220,35,30,90,wallB,-250,35,30,90,towerA,-270,-35,0,-180,towerA,-270,-35,15,-180,towerA,-270,-35,30,-180,towerA,-270,40,0,-180,towerA,-270,40,15,-180,towerA,-270,40,30,-180,flagPoleC,-195,40,55,180,flagPoleC,-200,-40,55,0,cannonB,-180,0,0,-180,flagPoleC,-310,-50,0,0"
+  [ 76] jmp [188]
+  [ 79] getparam 1 .............................. <castleNum>
+  [ 81] pushint8 6 .............................. <6>
+  [ 83] eq ...................................... <castleNum = 6>
+  [ 84] jmpifz [ 94] ............................ if castleNum = 6 then / else
+  [ 87] pushcons 6 .............................. <"drawbridgeA,-195,0,0,-180,towerA,-200,55,0,-180,wallPieceA,-200,15,0,-180,wallPieceA,-200,15,15,-180,wallPieceA,-200,-10,0,-180,wallPieceA,-200,-10,15,-180,archA,-200,0,30,-180,towerA,-200,-50,0,-180,towerTopA,-200,-50,15,-180,towerTopA,-200,55,15,-180,wallA,-225,55,0,-90,wallA,-225,-55,0,90,towerA,-245,50,0,-180,towerA,-260,-40,0,-180,flagPoleC,-200,55,25,-180,flagPoleC,-205,-55,25,0,wallTopA,-225,-50,15,-90,wallTopA,-225,50,15,90,towerTopA,-255,-10,30,180,towerTopA,-245,50,15,180,wallB,-200,-30,0,-180,wallB,-200,30,0,-180,wallTopB,-200,30,15,-180,wallTopB,-200,-25,15,-180,wallA,-255,-50,0,-90,wallA,-265,10,0,-180,towerTopB,-255,-35,15,180,towerA,-245,-40,0,180,towerA,-245,-25,0,180,towerA,-260,-25,0,180,towerA,-260,-10,0,180,towerA,-255,-10,15,180,towerA,-260,35,0,180,towerTopA,-260,35,15,180,flagPoleC,-260,-15,40,0,cannonB,-185,-30,0,-180">
+  [ 89] setlocal 0 .............................. castleData_str = "drawbridgeA,-195,0,0,-180,towerA,-200,55,0,-180,wallPieceA,-200,15,0,-180,wallPieceA,-200,15,15,-180,wallPieceA,-200,-10,0,-180,wallPieceA,-200,-10,15,-180,archA,-200,0,30,-180,towerA,-200,-50,0,-180,towerTopA,-200,-50,15,-180,towerTopA,-200,55,15,-180,wallA,-225,55,0,-90,wallA,-225,-55,0,90,towerA,-245,50,0,-180,towerA,-260,-40,0,-180,flagPoleC,-200,55,25,-180,flagPoleC,-205,-55,25,0,wallTopA,-225,-50,15,-90,wallTopA,-225,50,15,90,towerTopA,-255,-10,30,180,towerTopA,-245,50,15,180,wallB,-200,-30,0,-180,wallB,-200,30,0,-180,wallTopB,-200,30,15,-180,wallTopB,-200,-25,15,-180,wallA,-255,-50,0,-90,wallA,-265,10,0,-180,towerTopB,-255,-35,15,180,towerA,-245,-40,0,180,towerA,-245,-25,0,180,towerA,-260,-25,0,180,towerA,-260,-10,0,180,towerA,-255,-10,15,180,towerA,-260,35,0,180,towerTopA,-260,35,15,180,flagPoleC,-260,-15,40,0,cannonB,-185,-30,0,-180"
+  [ 91] jmp [188]
+  [ 94] getparam 1 .............................. <castleNum>
+  [ 96] pushint8 8 .............................. <8>
+  [ 98] eq ...................................... <castleNum = 8>
+  [ 99] jmpifz [109] ............................ if castleNum = 8 then / else
+  [102] pushcons 7 .............................. <"wallA,-245,0,0,-180,wallA,-245,-30,0,-180,wallA,-245,30,0,-180,wallA,-245,0,15,-180,wallA,-245,-30,15,-180,wallA,-245,30,15,-180,wallA,-245,0,30,-180,wallA,-245,-30,30,-180,wallA,-245,30,30,-180,wallTopA,-245,25,45,-180,wallTopA,-245,0,45,-180,wallTopA,-245,-25,45,-180,towerA,-285,-25,0,-180,towerA,-285,30,0,-180,towerTopA,-285,30,15,-180,towerTopA,-285,-25,15,-180,wallA,-265,-25,0,-90,wallA,-265,30,0,-90,supportB,-260,25,15,0,supportB,-260,-30,15,0,supportB,-260,-5,0,0,flagPoleC,-285,30,25,-180,flagPoleC,-290,-30,25,0,cannonB,-200,75,0,-180">
+  [104] setlocal 0 .............................. castleData_str = "wallA,-245,0,0,-180,wallA,-245,-30,0,-180,wallA,-245,30,0,-180,wallA,-245,0,15,-180,wallA,-245,-30,15,-180,wallA,-245,30,15,-180,wallA,-245,0,30,-180,wallA,-245,-30,30,-180,wallA,-245,30,30,-180,wallTopA,-245,25,45,-180,wallTopA,-245,0,45,-180,wallTopA,-245,-25,45,-180,towerA,-285,-25,0,-180,towerA,-285,30,0,-180,towerTopA,-285,30,15,-180,towerTopA,-285,-25,15,-180,wallA,-265,-25,0,-90,wallA,-265,30,0,-90,supportB,-260,25,15,0,supportB,-260,-30,15,0,supportB,-260,-5,0,0,flagPoleC,-285,30,25,-180,flagPoleC,-290,-30,25,0,cannonB,-200,75,0,-180"
+  [106] jmp [188]
+  [109] getparam 1 .............................. <castleNum>
+  [111] pushint8 9 .............................. <9>
+  [113] eq ...................................... <castleNum = 9>
+  [114] jmpifz [124] ............................ if castleNum = 9 then / else
+  [117] pushcons 8 .............................. <"towerA,-185,-25,15,180,towerA,-230,-30,0,180,towerTopA,-185,80,30,180,flagPoleC,-280,35,25,180,cannonA,-210,-45,0,-180,towerA,-230,-45,0,180,towerA,-245,-30,0,180,towerTopB,-240,-40,15,180,flagPoleC,-265,-45,15,0,flagPoleC,-185,80,40,180,flagPoleC,-190,-30,40,0,towerA,-185,80,0,180,towerA,-185,80,15,180,wallB,-185,55,15,180,towerA,-185,-25,0,180,drawbridgeA,-185,25,0,180,wallPieceA,-185,40,0,180,wallPieceA,-185,40,15,180,wallPieceA,-185,15,0,180,wallPieceA,-185,15,15,180,archA,-185,25,30,180,wallB,-185,55,0,180,wallTopB,-185,55,30,180,wallB,-185,-5,0,180,wallB,-185,-5,15,180,wallTopB,-185,-5,30,180,towerTopA,-185,-25,30,180,wallB,-210,-30,0,-90,wallB,-210,-30,15,-90,towerA,-245,-45,0,180,wallB,-210,80,0,-90,towerA,-230,80,0,180,wallB,-235,55,0,180,towerA,-235,35,0,180,wallB,-260,30,0,-90,towerA,-280,35,0,180,wallB,-280,10,0,180,wallB,-280,-20,0,180,towerA,-275,-40,0,180,towerA,-260,-40,0,180,towerTopA,-230,80,15,-180,wallTopB,-210,80,15,-90,wallTopB,-235,55,15,0,towerTopA,-235,35,15,-180,wallTopB,-260,30,15,-90,towerTopA,-280,35,15,-180,wallB,-280,10,15,-180,wallB,-280,-20,15,-180,towerTopA,-275,-40,15,-180,towerA,-205,-90,0,-180,towerTopA,-205,-90,15,-180">
+  [119] setlocal 0 .............................. castleData_str = "towerA,-185,-25,15,180,towerA,-230,-30,0,180,towerTopA,-185,80,30,180,flagPoleC,-280,35,25,180,cannonA,-210,-45,0,-180,towerA,-230,-45,0,180,towerA,-245,-30,0,180,towerTopB,-240,-40,15,180,flagPoleC,-265,-45,15,0,flagPoleC,-185,80,40,180,flagPoleC,-190,-30,40,0,towerA,-185,80,0,180,towerA,-185,80,15,180,wallB,-185,55,15,180,towerA,-185,-25,0,180,drawbridgeA,-185,25,0,180,wallPieceA,-185,40,0,180,wallPieceA,-185,40,15,180,wallPieceA,-185,15,0,180,wallPieceA,-185,15,15,180,archA,-185,25,30,180,wallB,-185,55,0,180,wallTopB,-185,55,30,180,wallB,-185,-5,0,180,wallB,-185,-5,15,180,wallTopB,-185,-5,30,180,towerTopA,-185,-25,30,180,wallB,-210,-30,0,-90,wallB,-210,-30,15,-90,towerA,-245,-45,0,180,wallB,-210,80,0,-90,towerA,-230,80,0,180,wallB,-235,55,0,180,towerA,-235,35,0,180,wallB,-260,30,0,-90,towerA,-280,35,0,180,wallB,-280,10,0,180,wallB,-280,-20,0,180,towerA,-275,-40,0,180,towerA,-260,-40,0,180,towerTopA,-230,80,15,-180,wallTopB,-210,80,15,-90,wallTopB,-235,55,15,0,towerTopA,-235,35,15,-180,wallTopB,-260,30,15,-90,towerTopA,-280,35,15,-180,wallB,-280,10,15,-180,wallB,-280,-20,15,-180,towerTopA,-275,-40,15,-180,towerA,-205,-90,0,-180,towerTopA,-205,-90,15,-180"
+  [121] jmp [188]
+  [124] getparam 1 .............................. <castleNum>
+  [126] pushint8 10 ............................. <10>
+  [128] eq ...................................... <castleNum = 10>
+  [129] jmpifz [139] ............................ if castleNum = 10 then / else
+  [132] pushcons 9 .............................. <"towerA,-200,100,0,180,wallA,-200,75,0,180,towerA,-200,55,0,180,towerTopA,-200,25,15,180,towerTopA,-200,55,15,180,wallA,-225,100,0,-90,wallA,-225,50,0,90,flagPoleC,-200,25,25,180,flagPoleC,-205,-25,25,0,cannonA,-205,40,0,-180,towerA,-200,25,0,180,towerA,-200,-20,0,180,wallA,-200,-75,0,180,towerA,-200,-50,0,180,towerA,-200,-95,0,180,wallPieceA,-205,15,0,180,wallPieceA,-205,-10,0,180,wallPieceA,-205,15,15,180,wallPieceA,-205,-10,15,180,archA,-205,0,30,180,towerTopA,-200,-20,15,180,towerTopA,-200,-50,15,180,drawbridgeA,-205,0,0,180,wallA,-225,-50,0,-90,wallA,-225,-95,0,-90,towerTopA,-200,-95,15,180,towerTopA,-200,100,15,180,wallTopA,-200,75,15,180,wallTopA,-200,-75,15,180,supportB,-245,10,0,0,supportB,-245,-15,0,0,wallA,-230,0,0,180,wallA,-225,25,0,-90,wallA,-225,-20,0,-90,towerA,-245,-20,0,180,towerA,-245,-50,0,180,towerA,-245,25,0,180,towerA,-245,55,0,180,towerA,-245,100,0,180,towerA,-245,-95,0,180,flagPoleC,-220,80,0,180,flagPoleC,-225,-85,0,0,towerA,-245,40,0,180,towerA,-245,-35,0,180,towerTopA,-245,40,15,180,towerTopA,-245,-35,15,180,flagPoleC,-245,40,25,180,flagPoleC,-250,-40,25,0">
+  [134] setlocal 0 .............................. castleData_str = "towerA,-200,100,0,180,wallA,-200,75,0,180,towerA,-200,55,0,180,towerTopA,-200,25,15,180,towerTopA,-200,55,15,180,wallA,-225,100,0,-90,wallA,-225,50,0,90,flagPoleC,-200,25,25,180,flagPoleC,-205,-25,25,0,cannonA,-205,40,0,-180,towerA,-200,25,0,180,towerA,-200,-20,0,180,wallA,-200,-75,0,180,towerA,-200,-50,0,180,towerA,-200,-95,0,180,wallPieceA,-205,15,0,180,wallPieceA,-205,-10,0,180,wallPieceA,-205,15,15,180,wallPieceA,-205,-10,15,180,archA,-205,0,30,180,towerTopA,-200,-20,15,180,towerTopA,-200,-50,15,180,drawbridgeA,-205,0,0,180,wallA,-225,-50,0,-90,wallA,-225,-95,0,-90,towerTopA,-200,-95,15,180,towerTopA,-200,100,15,180,wallTopA,-200,75,15,180,wallTopA,-200,-75,15,180,supportB,-245,10,0,0,supportB,-245,-15,0,0,wallA,-230,0,0,180,wallA,-225,25,0,-90,wallA,-225,-20,0,-90,towerA,-245,-20,0,180,towerA,-245,-50,0,180,towerA,-245,25,0,180,towerA,-245,55,0,180,towerA,-245,100,0,180,towerA,-245,-95,0,180,flagPoleC,-220,80,0,180,flagPoleC,-225,-85,0,0,towerA,-245,40,0,180,towerA,-245,-35,0,180,towerTopA,-245,40,15,180,towerTopA,-245,-35,15,180,flagPoleC,-245,40,25,180,flagPoleC,-250,-40,25,0"
+  [136] jmp [188]
+  [139] getparam 1 .............................. <castleNum>
+  [141] pushint8 11 ............................. <11>
+  [143] eq ...................................... <castleNum = 11>
+  [144] jmpifz [154] ............................ if castleNum = 11 then / else
+  [147] pushcons 10 ............................. <"flagPoleC,-305,-40,55,-180,flagPoleC,-310,-90,55,0,towerA,-260,80,0,-180,towerA,-260,35,0,-180,towerA,-260,-85,0,-180,towerA,-305,-85,0,-180,towerA,-305,80,0,-180,towerA,-260,-40,0,-180,towerA,-305,-40,0,-180,towerA,-305,35,0,-180,wallB,-260,55,0,-180,wallB,-285,80,0,-90,wallB,-285,30,0,-90,wallB,-260,-65,0,-180,wallB,-310,-65,0,-180,wallB,-285,-40,0,-90,wallB,-285,-90,0,-90,wallB,-515,25,0,-180,wallB,-485,-5,0,-180,wallB,-260,55,15,-180,wallB,-260,-65,15,-180,wallB,-310,55,0,-180,wallB,-310,-65,15,-180,wallB,-285,80,15,-90,wallB,-285,30,15,-90,wallB,-285,-90,15,-90,wallB,-285,-40,15,-90,towerA,-305,-85,15,-180,towerA,-305,-40,15,-180,towerA,-260,-40,15,-180,towerA,-260,-85,15,-180,towerA,-260,35,15,-180,towerA,-260,80,15,-180,towerA,-305,80,15,180,towerA,-305,35,15,180,wallB,-310,55,15,180,wallB,-260,55,30,180,wallB,-260,-65,30,180,wallB,-310,55,30,180,wallB,-285,80,30,-90,wallB,-285,30,30,90,towerA,-260,35,30,180,wallB,-310,-65,30,180,wallB,-285,-40,30,-90,wallB,-285,-90,30,90,towerA,-265,-40,30,-90,towerA,-260,-85,30,180,towerA,-305,-40,30,180,towerA,-305,-85,30,180,towerA,-305,35,30,180,towerA,-305,80,30,180,towerA,-260,80,30,180,towerTopA,-260,35,45,180,towerTopA,-260,75,45,180,towerTopA,-305,35,45,180,towerTopA,-305,80,45,180,towerTopA,-260,-40,45,180,towerTopA,-260,-85,45,180,towerTopA,-305,-40,45,180,towerTopA,-305,-85,45,180,flagPoleC,-260,-40,55,-180,flagPoleC,-265,-90,55,0,flagPoleC,-265,30,55,0,flagPoleC,-310,30,55,0,flagPoleC,-260,75,55,180,flagPoleC,-305,80,55,180,cannonB,-235,-5,0,180,towerA,-200,20,0,180,towerA,-200,-25,0,180,supportA,-220,-25,0,0,supportA,-220,15,0,0,wallTopB,-205,-5,0,180,towerTopA,-200,-25,15,-180,towerTopA,-200,20,15,-180">
+  [149] setlocal 0 .............................. castleData_str = "flagPoleC,-305,-40,55,-180,flagPoleC,-310,-90,55,0,towerA,-260,80,0,-180,towerA,-260,35,0,-180,towerA,-260,-85,0,-180,towerA,-305,-85,0,-180,towerA,-305,80,0,-180,towerA,-260,-40,0,-180,towerA,-305,-40,0,-180,towerA,-305,35,0,-180,wallB,-260,55,0,-180,wallB,-285,80,0,-90,wallB,-285,30,0,-90,wallB,-260,-65,0,-180,wallB,-310,-65,0,-180,wallB,-285,-40,0,-90,wallB,-285,-90,0,-90,wallB,-515,25,0,-180,wallB,-485,-5,0,-180,wallB,-260,55,15,-180,wallB,-260,-65,15,-180,wallB,-310,55,0,-180,wallB,-310,-65,15,-180,wallB,-285,80,15,-90,wallB,-285,30,15,-90,wallB,-285,-90,15,-90,wallB,-285,-40,15,-90,towerA,-305,-85,15,-180,towerA,-305,-40,15,-180,towerA,-260,-40,15,-180,towerA,-260,-85,15,-180,towerA,-260,35,15,-180,towerA,-260,80,15,-180,towerA,-305,80,15,180,towerA,-305,35,15,180,wallB,-310,55,15,180,wallB,-260,55,30,180,wallB,-260,-65,30,180,wallB,-310,55,30,180,wallB,-285,80,30,-90,wallB,-285,30,30,90,towerA,-260,35,30,180,wallB,-310,-65,30,180,wallB,-285,-40,30,-90,wallB,-285,-90,30,90,towerA,-265,-40,30,-90,towerA,-260,-85,30,180,towerA,-305,-40,30,180,towerA,-305,-85,30,180,towerA,-305,35,30,180,towerA,-305,80,30,180,towerA,-260,80,30,180,towerTopA,-260,35,45,180,towerTopA,-260,75,45,180,towerTopA,-305,35,45,180,towerTopA,-305,80,45,180,towerTopA,-260,-40,45,180,towerTopA,-260,-85,45,180,towerTopA,-305,-40,45,180,towerTopA,-305,-85,45,180,flagPoleC,-260,-40,55,-180,flagPoleC,-265,-90,55,0,flagPoleC,-265,30,55,0,flagPoleC,-310,30,55,0,flagPoleC,-260,75,55,180,flagPoleC,-305,80,55,180,cannonB,-235,-5,0,180,towerA,-200,20,0,180,towerA,-200,-25,0,180,supportA,-220,-25,0,0,supportA,-220,15,0,0,wallTopB,-205,-5,0,180,towerTopA,-200,-25,15,-180,towerTopA,-200,20,15,-180"
+  [151] jmp [188]
+  [154] getparam 1 .............................. <castleNum>
+  [156] pushint8 7 .............................. <7>
+  [158] eq ...................................... <castleNum = 7>
+  [159] jmpifz [169] ............................ if castleNum = 7 then / else
+  [162] pushcons 11 ............................. <"towerA,-200,70,0,180,towerA,-265,110,0,180,towerTopA,-265,110,15,180,towerTopA,-200,70,15,180,flagPoleC,-280,-40,25,180,flagPoleC,-285,-90,25,0,cannonB,-200,-10,0,180,wallB,-270,-65,0,180,supportA,-285,-70,0,0,supportB,-285,-80,0,0,supportB,-285,-55,0,0,supportA,-285,-60,0,0,wallTopB,-270,-65,15,180,towerA,-280,-40,0,180,towerA,-280,-85,0,180,towerTopA,-280,-85,15,180,towerTopA,-280,-40,15,180,towerA,-295,-40,0,180,towerA,-295,-85,0,180,towerA,-185,-105,0,180,towerA,-300,50,0,180,towerA,-300,50,15,180,towerTopA,-185,-105,15,180,towerTopA,-220,-45,15,180,towerTopB,-250,35,15,180,wallA,-250,20,0,-90,wallA,-250,55,0,-90,wallB,-265,35,0,180,wallB,-235,35,0,180,towerA,-220,-45,0,180,flagPoleC,-220,-45,25,180,flagPoleC,-250,30,25,0,flagPoleC,-200,70,25,180,flagPoleC,-265,110,25,180,flagPoleC,-320,50,0,-90,flagPoleC,-190,-110,25,0,wallTopB,-180,-10,0,-180,towerTopA,-180,-30,0,-180,towerTopA,-180,15,0,-180">
+  [164] setlocal 0 .............................. castleData_str = "towerA,-200,70,0,180,towerA,-265,110,0,180,towerTopA,-265,110,15,180,towerTopA,-200,70,15,180,flagPoleC,-280,-40,25,180,flagPoleC,-285,-90,25,0,cannonB,-200,-10,0,180,wallB,-270,-65,0,180,supportA,-285,-70,0,0,supportB,-285,-80,0,0,supportB,-285,-55,0,0,supportA,-285,-60,0,0,wallTopB,-270,-65,15,180,towerA,-280,-40,0,180,towerA,-280,-85,0,180,towerTopA,-280,-85,15,180,towerTopA,-280,-40,15,180,towerA,-295,-40,0,180,towerA,-295,-85,0,180,towerA,-185,-105,0,180,towerA,-300,50,0,180,towerA,-300,50,15,180,towerTopA,-185,-105,15,180,towerTopA,-220,-45,15,180,towerTopB,-250,35,15,180,wallA,-250,20,0,-90,wallA,-250,55,0,-90,wallB,-265,35,0,180,wallB,-235,35,0,180,towerA,-220,-45,0,180,flagPoleC,-220,-45,25,180,flagPoleC,-250,30,25,0,flagPoleC,-200,70,25,180,flagPoleC,-265,110,25,180,flagPoleC,-320,50,0,-90,flagPoleC,-190,-110,25,0,wallTopB,-180,-10,0,-180,towerTopA,-180,-30,0,-180,towerTopA,-180,15,0,-180"
+  [166] jmp [188]
+  [169] getparam 1 .............................. <castleNum>
+  [171] pushint8 12 ............................. <12>
+  [173] eq ...................................... <castleNum = 12>
+  [174] jmpifz [184] ............................ if castleNum = 12 then / else
+  [177] pushcons 12 ............................. <"flagPoleC,-265,30,55,180,flagPoleC,-280,-30,25,-90,supportB,-195,15,0,180,supportB,-195,-10,0,180,supportA,-195,5,0,180,supportA,-195,-5,0,180,supportA,-195,-25,0,180,supportA,-195,-35,0,180,supportA,-195,25,0,180,supportA,-195,35,0,180,supportB,-195,45,0,180,supportB,-195,-40,0,180,wallB,-210,30,0,180,wallTopB,-210,30,15,180,wallB,-210,0,0,180,wallB,-210,-30,0,180,supportB,-195,20,0,180,wallTopB,-210,0,15,180,supportB,-195,-15,0,180,towerA,-225,-20,0,180,towerTopB,-220,-30,15,180,wallB,-230,-40,0,-90,drawbridgeA,-255,-40,0,-90,archA,-255,-40,30,90,wallPieceA,-270,-40,0,-90,wallPieceA,-270,-40,15,-90,towerTopA,-265,30,45,180,wallB,-230,40,0,-90,wallTopB,-230,40,15,-90,towerA,-265,30,0,180,towerA,-265,30,15,180,towerA,-275,-30,0,180,towerTopA,-280,-30,15,-90,supportA,-295,-30,0,0,towerA,-265,30,30,180,wallB,-280,30,0,180,wallB,-280,0,0,180,wallTopB,-280,30,15,0,wallTopB,-280,0,15,0,wallB,-260,40,0,-90,wallTopB,-260,40,15,-90,supportB,-280,-25,0,0,supportB,-280,-20,0,0,wallPieceA,-245,-40,15,-90,flagPoleC,-215,-20,0,-180,flagPoleC,-215,-30,0,-180,flagPoleC,-230,-30,0,-90,cannonB,-235,-85,0,-180,supportB,-225,10,0,0,wallTopA,-210,-85,0,-180">
+  [179] setlocal 0 .............................. castleData_str = "flagPoleC,-265,30,55,180,flagPoleC,-280,-30,25,-90,supportB,-195,15,0,180,supportB,-195,-10,0,180,supportA,-195,5,0,180,supportA,-195,-5,0,180,supportA,-195,-25,0,180,supportA,-195,-35,0,180,supportA,-195,25,0,180,supportA,-195,35,0,180,supportB,-195,45,0,180,supportB,-195,-40,0,180,wallB,-210,30,0,180,wallTopB,-210,30,15,180,wallB,-210,0,0,180,wallB,-210,-30,0,180,supportB,-195,20,0,180,wallTopB,-210,0,15,180,supportB,-195,-15,0,180,towerA,-225,-20,0,180,towerTopB,-220,-30,15,180,wallB,-230,-40,0,-90,drawbridgeA,-255,-40,0,-90,archA,-255,-40,30,90,wallPieceA,-270,-40,0,-90,wallPieceA,-270,-40,15,-90,towerTopA,-265,30,45,180,wallB,-230,40,0,-90,wallTopB,-230,40,15,-90,towerA,-265,30,0,180,towerA,-265,30,15,180,towerA,-275,-30,0,180,towerTopA,-280,-30,15,-90,supportA,-295,-30,0,0,towerA,-265,30,30,180,wallB,-280,30,0,180,wallB,-280,0,0,180,wallTopB,-280,30,15,0,wallTopB,-280,0,15,0,wallB,-260,40,0,-90,wallTopB,-260,40,15,-90,supportB,-280,-25,0,0,supportB,-280,-20,0,0,wallPieceA,-245,-40,15,-90,flagPoleC,-215,-20,0,-180,flagPoleC,-215,-30,0,-180,flagPoleC,-230,-30,0,-90,cannonB,-235,-85,0,-180,supportB,-225,10,0,0,wallTopA,-210,-85,0,-180"
+  [181] jmp [188]
+  [184] pushcons 13 ............................. <"drawbridgeA,-195,0,0,-180,towerA,-200,55,0,-180,wallPieceA,-200,15,0,-180,wallPieceA,-200,15,15,-180,wallPieceA,-200,-10,0,-180,wallPieceA,-200,-10,15,-180,archA,-200,0,30,-180,wallA,-200,30,0,-180,wallA,-200,-30,0,-180,towerA,-200,-50,0,-180,towerTopA,-200,-50,15,-180,towerTopA,-200,55,15,-180,wallA,-225,55,0,-90,wallA,-225,-55,0,90,towerA,-245,55,0,-180,towerA,-245,-50,15,-180,towerA,-245,55,15,-180,towerA,-245,-50,0,-180,flagPoleC,-200,55,25,-180,flagPoleC,-205,-55,25,0,cannonA,-305,-20,0,-180">
+  [186] setlocal 0 .............................. castleData_str = "drawbridgeA,-195,0,0,-180,towerA,-200,55,0,-180,wallPieceA,-200,15,0,-180,wallPieceA,-200,15,15,-180,wallPieceA,-200,-10,0,-180,wallPieceA,-200,-10,15,-180,archA,-200,0,30,-180,wallA,-200,30,0,-180,wallA,-200,-30,0,-180,towerA,-200,-50,0,-180,towerTopA,-200,-50,15,-180,towerTopA,-200,55,15,-180,wallA,-225,55,0,-90,wallA,-225,-55,0,90,towerA,-245,55,0,-180,towerA,-245,-50,15,-180,towerA,-245,55,15,-180,towerA,-245,-50,0,-180,flagPoleC,-200,55,25,-180,flagPoleC,-205,-55,25,0,cannonA,-305,-20,0,-180"
+  [188] getparam 0 .............................. <me>
+  [190] getlocal 0 .............................. <castleData_str>
+  [192] pusharglist 2 ........................... <me, castleData_str>
+  [194] objcall 144 ............................. <me.parseCastleData(castleData_str)>
+  [196] setlocal 1 .............................. castleDataList = me.parseCastleData(castleData_str)
+  [198] getlocal 1 .............................. <castleDataList>
+  [200] pusharglistnoret 1 ...................... <castleDataList>
+  [202] extcall 58 .............................. return castleDataList
+  [204] ret
+end
+
+on makeCastlePiece me, pieceName, tx, ty, tz, rz, sz, rx
+  [  0] getprop 446 ............................. <pieceCount>
+  [  3] pushint8 1 .............................. <1>
+  [  5] add ..................................... <pieceCount + 1>
+  [  6] setprop 446 ............................. pieceCount = pieceCount + 1
+  [  9] getglobal 60 ............................ <w>
+  [ 11] pushcons 14 ............................. <"p_">
+  [ 13] getparam 1 .............................. <pieceName>
+  [ 15] joinstr ................................. <"p_" & pieceName>
+  [ 16] pushcons 15 ............................. <"_0">
+  [ 18] joinstr ................................. <"p_" & pieceName & "_0">
+  [ 19] pusharglist 2 ........................... <w, "p_" & pieceName & "_0">
+  [ 21] objcall 111 ............................. <w.model("p_" & pieceName & "_0")>
+  [ 23] pushcons 16 ............................. <"p_clone_">
+  [ 25] getparam 1 .............................. <pieceName>
+  [ 27] joinstr ................................. <"p_clone_" & pieceName>
+  [ 28] pushcons 17 ............................. <"_">
+  [ 30] joinstr ................................. <"p_clone_" & pieceName & "_">
+  [ 31] getprop 446 ............................. <pieceCount>
+  [ 34] joinstr ................................. <"p_clone_" & pieceName & "_" & pieceCount>
+  [ 35] pusharglist 2 ........................... <w.model("p_" & pieceName & "_0"), "p_clone_" & pieceName & "_" & pieceCount>
+  [ 37] objcall 447 ............................. <w.model("p_" & pieceName & "_0").clone("p_clone_" & pieceName & "_" & pieceCount)>
+  [ 40] setlocal 0 .............................. castlePiece = w.model("p_" & pieceName & "_0").clone("p_clone_" & pieceName & "_" & pieceCount)
+  [ 42] getlocal 0 .............................. <castlePiece>
+  [ 44] pushsymb 256 ............................ <#front>
+  [ 47] setobjprop 118 .......................... castlePiece.visibility = #front
+  [ 49] getlocal 0 .............................. <castlePiece>
+  [ 51] getchainedprop 113 ...................... <castlePiece.transform>
+  [ 53] getchainedprop 114 ...................... <castlePiece.transform.position>
+  [ 55] getparam 2 .............................. <tx>
+  [ 57] setobjprop 126 .......................... castlePiece.transform.position.x = tx
+  [ 59] getlocal 0 .............................. <castlePiece>
+  [ 61] getchainedprop 113 ...................... <castlePiece.transform>
+  [ 63] getchainedprop 114 ...................... <castlePiece.transform.position>
+  [ 65] getparam 3 .............................. <ty>
+  [ 67] setobjprop 127 .......................... castlePiece.transform.position.y = ty
+  [ 69] getlocal 0 .............................. <castlePiece>
+  [ 71] getchainedprop 113 ...................... <castlePiece.transform>
+  [ 73] getchainedprop 114 ...................... <castlePiece.transform.position>
+  [ 75] getparam 4 .............................. <tz>
+  [ 77] setobjprop 181 .......................... castlePiece.transform.position.z = tz
+  [ 79] getparam 1 .............................. <pieceName>
+  [ 81] pushcons 18 ............................. <"flag">
+  [ 83] containsstr ............................. <pieceName contains "flag">
+  [ 84] getparam 5 .............................. <rz>
+  [ 86] pushzero ................................ <0>
+  [ 87] eq ...................................... <rz = 0>
+  [ 88] and ..................................... <(pieceName contains "flag") and (rz = 0)>
+  [ 89] jmpifz [115] ............................ if (pieceName contains "flag") and (rz = 0) then
+  [ 92] getlocal 0 .............................. <castlePiece>
+  [ 94] getchainedprop 113 ...................... <castlePiece.transform>
+  [ 96] getchainedprop 116 ...................... <castlePiece.transform.rotation>
+  [ 98] getparam 7 .............................. <rx>
+  [100] setobjprop 126 .......................... castlePiece.transform.rotation.x = rx
+  [102] getlocal 0 .............................. <castlePiece>
+  [104] getchainedprop 113 ...................... <castlePiece.transform>
+  [106] getchainedprop 114 ...................... <castlePiece.transform.position>
+  [108] getparam 3 .............................. <ty>
+  [110] pushint8 1 .............................. <1>
+  [112] add ..................................... <ty + 1>
+  [113] setobjprop 127 .......................... castlePiece.transform.position.y = ty + 1
+  [115] getlocal 0 .............................. <castlePiece>
+  [117] getchainedprop 113 ...................... <castlePiece.transform>
+  [119] getchainedprop 116 ...................... <castlePiece.transform.rotation>
+  [121] getparam 5 .............................. <rz>
+  [123] setobjprop 181 .......................... castlePiece.transform.rotation.z = rz
+  [125] getlocal 0 .............................. <castlePiece>
+  [127] getchainedprop 113 ...................... <castlePiece.transform>
+  [129] getchainedprop 116 ...................... <castlePiece.transform.rotation>
+  [131] getchainedprop 185 ...................... <castlePiece.transform.rotation.scale>
+  [133] getparam 6 .............................. <sz>
+  [135] setobjprop 126 .......................... castlePiece.transform.rotation.scale.x = sz
+  [137] getlocal 0 .............................. <castlePiece>
+  [139] pusharglistnoret 1 ...................... <castlePiece>
+  [141] extcall 58 .............................. return castlePiece
+  [143] ret
+end
+
+on parseCastleData me, castleData_str
+  [  0] pusharglist 0 ........................... <[]>
+  [  2] pushlist ................................ <[]>
+  [  3] setlocal 0 .............................. castleDataList = []
+  [  5] getmovieprop 448 ........................ <the itemDelimiter>
+  [  8] setlocal 1 .............................. save = the itemDelimiter
+  [ 10] pushcons 19 ............................. <",">
+  [ 12] setmovieprop 448 ........................ the itemDelimiter = ","
+  [ 15] getparam 1 .............................. <castleData_str>
+  [ 17] pushsymb 449 ............................ <#item>
+  [ 20] pusharglist 2 ........................... <castleData_str, #item>
+  [ 22] objcall 264 ............................. <castleData_str.item.count>
+  [ 25] setlocal 2 .............................. iCount = castleData_str.item.count
+  [ 27] pushint8 1 .............................. <1>
+  [ 29] setlocal 3
+  [ 31] getlocal 3
+  [ 33] getlocal 2 .............................. <iCount>
+  [ 35] lteq
+  [ 36] jmpifz [136] ............................ repeat with i = 1 to iCount
+  [ 39] pusharglist 0 ........................... <[]>
+  [ 41] pushlist ................................ <[]>
+  [ 42] setlocal 4 .............................. pieceData = []
+  [ 44] getlocal 4 .............................. <pieceData>
+  [ 46] getparam 1 .............................. <castleData_str>
+  [ 48] pushsymb 449 ............................ <#item>
+  [ 51] getlocal 3 .............................. <i>
+  [ 53] pusharglist 3 ........................... <castleData_str, #item, i>
+  [ 55] objcall 450 ............................. <castleData_str.item[i]>
+  [ 58] pusharglistnoret 2 ...................... <pieceData, castleData_str.item[i]>
+  [ 60] objcall 293 ............................. pieceData.add(castleData_str.item[i])
+  [ 63] pushint8 1 .............................. <1>
+  [ 65] setlocal 5
+  [ 67] getlocal 5
+  [ 69] pushint8 4 .............................. <4>
+  [ 71] lteq
+  [ 72] jmpifz [111] ............................ repeat with j = 1 to 4
+  [ 75] getlocal 4 .............................. <pieceData>
+  [ 77] getparam 1 .............................. <castleData_str>
+  [ 79] pushsymb 449 ............................ <#item>
+  [ 82] getlocal 3 .............................. <i>
+  [ 84] getlocal 5 .............................. <j>
+  [ 86] add ..................................... <i + j>
+  [ 87] pusharglist 3 ........................... <castleData_str, #item, i + j>
+  [ 89] objcall 450 ............................. <castleData_str.item[i + j]>
+  [ 92] pusharglist 1 ........................... <castleData_str.item[i + j]>
+  [ 94] extcall 314 ............................. <integer(castleData_str.item[i + j])>
+  [ 97] pusharglistnoret 2 ...................... <pieceData, integer(castleData_str.item[i + j])>
+  [ 99] objcall 293 ............................. pieceData.add(integer(castleData_str.item[i + j]))
+  [102] pushint8 1
+  [104] getlocal 5
+  [106] add
+  [107] setlocal 5
+  [109] endrepeat [ 67]
+  [111] getlocal 0 .............................. <castleDataList>
+  [113] getlocal 4 .............................. <pieceData>
+  [115] pusharglistnoret 2 ...................... <castleDataList, pieceData>
+  [117] objcall 293 ............................. castleDataList.add(pieceData)
+  [120] getlocal 3 .............................. <i>
+  [122] pushint8 4 .............................. <4>
+  [124] add ..................................... <i + 4>
+  [125] setlocal 3 .............................. i = i + 4
+  [127] pushint8 1
+  [129] getlocal 3
+  [131] add
+  [132] setlocal 3
+  [134] endrepeat [ 31]
+  [136] getlocal 1 .............................. <save>
+  [138] setmovieprop 448 ........................ the itemDelimiter = save
+  [141] getlocal 0 .............................. <castleDataList>
+  [143] pusharglistnoret 1 ...................... <castleDataList>
+  [145] extcall 58 .............................. return castleDataList
+  [147] ret
+end

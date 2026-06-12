@@ -1,0 +1,12 @@
+global objGame
+
+on exitFrame me
+  [  0] getglobal 439 ........................... <objGame>
+  [  3] pusharglistnoret 1 ...................... <objGame>
+  [  5] objcall 4 ............................... objGame.main()
+  [  7] pusharglist 0 ........................... <>
+  [  9] thebuiltin 503 .......................... <the frame>
+  [ 12] pusharglistnoret 1 ...................... <the frame>
+  [ 14] extcall 192 ............................. go(the frame)
+  [ 16] ret
+end

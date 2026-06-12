@@ -1,0 +1,24 @@
+property my
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] setprop 508 ............................. my = sprite(me.spriteNum)
+  [ 12] ret
+end
+
+on mouseDown
+  [  0] getprop 508 ............................. <my>
+  [  3] getchainedprop 61 ....................... <my.member>
+  [  5] getobjprop 92 ........................... <my.member.text>
+  [  7] pushcons 0 .............................. <"default">
+  [  9] eq ...................................... <my.member.text = "default">
+  [ 10] jmpifz [ 22] ............................ if my.member.text = "default" then
+  [ 13] getprop 508 ............................. <my>
+  [ 16] getchainedprop 61 ....................... <my.member>
+  [ 18] pushcons 1 .............................. <EMPTY>
+  [ 20] setobjprop 92 ........................... my.member.text = EMPTY
+  [ 22] ret
+end

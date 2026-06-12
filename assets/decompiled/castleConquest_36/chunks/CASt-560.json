@@ -1,0 +1,17 @@
+{
+  "type": 11,
+  "infoLen": 48,
+  "specificDataLen": 2,
+  "info": {
+    "dataOffset": 20,
+    "unk1": 0,
+    "unk2": 0,
+    "flags": 0,
+    "scriptId": 20,
+    "scriptSrcText": "",
+    "name": "restartButton"
+  },
+  "member": {
+    "scriptType": 1
+  }
+}

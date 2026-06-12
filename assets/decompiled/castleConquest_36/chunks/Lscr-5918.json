@@ -1,0 +1,60 @@
+{
+  "totalLength": 256,
+  "totalLength2": 256,
+  "headerLength": 92,
+  "scriptNumber": 19,
+  "unk20": 4,
+  "parentNumber": -1,
+  "scriptFlags": 0,
+  "unk42": 0,
+  "castID": 196628,
+  "factoryNameID": -1,
+  "handlerVectorsCount": 2,
+  "handlerVectorsOffset": 252,
+  "handlerVectorsSize": 2,
+  "propertiesCount": 0,
+  "propertiesOffset": 92,
+  "globalsCount": 1,
+  "globalsOffset": 92,
+  "handlersCount": 1,
+  "handlersOffset": 94,
+  "literalsCount": 2,
+  "literalsOffset": 220,
+  "literalsDataCount": 16,
+  "literalsDataOffset": 236,
+  "propertyNameIDs": [],
+  "globalNameIDs": [
+    137
+  ],
+  "handlers": [
+    {
+      "nameID": 515,
+      "vectorPos": 1,
+      "compiledLen": 70,
+      "compiledOffset": 140,
+      "argumentCount": 1,
+      "argumentOffset": 210,
+      "localsCount": 0,
+      "localsOffset": 212,
+      "globalsCount": 0,
+      "globalsOffset": 92,
+      "unknown1": 25,
+      "unknown2": 3,
+      "lineCount": 8,
+      "lineOffset": 212,
+      "stackHeight": 2
+    }
+  ],
+  "literals": [
+    {
+      "type": 1,
+      "offset": 0,
+      "value": "0"
+    },
+    {
+      "type": 1,
+      "offset": 6,
+      "value": "intro"
+    }
+  ]
+}

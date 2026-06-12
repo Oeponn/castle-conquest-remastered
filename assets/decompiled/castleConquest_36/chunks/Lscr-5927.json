@@ -1,0 +1,136 @@
+{
+  "totalLength": 560,
+  "totalLength2": 560,
+  "headerLength": 92,
+  "scriptNumber": 28,
+  "unk20": 4,
+  "parentNumber": -1,
+  "scriptFlags": 0,
+  "unk42": 0,
+  "castID": 196637,
+  "factoryNameID": -1,
+  "handlerVectorsCount": 9,
+  "handlerVectorsOffset": 542,
+  "handlerVectorsSize": 386,
+  "propertiesCount": 2,
+  "propertiesOffset": 92,
+  "globalsCount": 1,
+  "globalsOffset": 96,
+  "handlersCount": 5,
+  "handlersOffset": 98,
+  "literalsCount": 3,
+  "literalsOffset": 480,
+  "literalsDataCount": 38,
+  "literalsDataOffset": 504,
+  "propertyNameIDs": [
+    508,
+    423
+  ],
+  "globalNameIDs": [
+    439
+  ],
+  "handlers": [
+    {
+      "nameID": 504,
+      "vectorPos": 65535,
+      "compiledLen": 19,
+      "compiledOffset": 328,
+      "argumentCount": 1,
+      "argumentOffset": 348,
+      "localsCount": 0,
+      "localsOffset": 350,
+      "globalsCount": 0,
+      "globalsOffset": 96,
+      "unknown1": 55,
+      "unknown2": 4,
+      "lineCount": 2,
+      "lineOffset": 350,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 505,
+      "vectorPos": 7,
+      "compiledLen": 23,
+      "compiledOffset": 352,
+      "argumentCount": 1,
+      "argumentOffset": 376,
+      "localsCount": 0,
+      "localsOffset": 378,
+      "globalsCount": 0,
+      "globalsOffset": 96,
+      "unknown1": 118,
+      "unknown2": 9,
+      "lineCount": 4,
+      "lineOffset": 378,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 515,
+      "vectorPos": 1,
+      "compiledLen": 17,
+      "compiledOffset": 382,
+      "argumentCount": 1,
+      "argumentOffset": 400,
+      "localsCount": 0,
+      "localsOffset": 402,
+      "globalsCount": 0,
+      "globalsOffset": 96,
+      "unknown1": 195,
+      "unknown2": 16,
+      "lineCount": 3,
+      "lineOffset": 402,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 506,
+      "vectorPos": 8,
+      "compiledLen": 22,
+      "compiledOffset": 406,
+      "argumentCount": 1,
+      "argumentOffset": 428,
+      "localsCount": 0,
+      "localsOffset": 430,
+      "globalsCount": 0,
+      "globalsOffset": 96,
+      "unknown1": 293,
+      "unknown2": 22,
+      "lineCount": 4,
+      "lineOffset": 430,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 507,
+      "vectorPos": 65535,
+      "compiledLen": 40,
+      "compiledOffset": 434,
+      "argumentCount": 0,
+      "argumentOffset": 474,
+      "localsCount": 1,
+      "localsOffset": 474,
+      "globalsCount": 0,
+      "globalsOffset": 96,
+      "unknown1": 387,
+      "unknown2": 30,
+      "lineCount": 3,
+      "lineOffset": 476,
+      "stackHeight": 9
+    }
+  ],
+  "literals": [
+    {
+      "type": 1,
+      "offset": 0,
+      "value": "game"
+    },
+    {
+      "type": 1,
+      "offset": 10,
+      "value": "1"
+    },
+    {
+      "type": 1,
+      "offset": 16,
+      "value": "Number Of Players"
+    }
+  ]
+}

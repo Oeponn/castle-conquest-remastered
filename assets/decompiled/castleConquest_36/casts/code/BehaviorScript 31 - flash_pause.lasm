@@ -1,0 +1,19 @@
+on exitFrame me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] getobjprop 503 .......................... <sprite(me.spriteNum).frame>
+  [ 12] pushint8 67 ............................. <67>
+  [ 14] lt ...................................... <sprite(me.spriteNum).frame < 67>
+  [ 15] jmpifz [ 30] ............................ if sprite(me.spriteNum).frame < 67 then / else
+  [ 18] pusharglist 0 ........................... <>
+  [ 20] thebuiltin 503 .......................... <the frame>
+  [ 23] pusharglistnoret 1 ...................... <the frame>
+  [ 25] extcall 192 ............................. go(the frame)
+  [ 27] jmp [ 36]
+  [ 30] pushcons 0 .............................. <"intro">
+  [ 32] pusharglistnoret 1 ...................... <"intro">
+  [ 34] extcall 192 ............................. go("intro")
+  [ 36] ret
+end

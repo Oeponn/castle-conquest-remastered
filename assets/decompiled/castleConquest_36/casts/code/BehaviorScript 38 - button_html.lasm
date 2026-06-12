@@ -1,0 +1,74 @@
+property destination, my
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] setprop 508 ............................. my = sprite(me.spriteNum)
+  [ 12] getprop 508 ............................. <my>
+  [ 15] pushzero ................................ <0>
+  [ 16] setobjprop 183 .......................... my.blend = 0
+  [ 18] ret
+end
+
+on mouseUp me
+  [  0] getprop 547 ............................. <destination>
+  [  3] pushcons 0 .............................. <EMPTY>
+  [  5] nteq .................................... <destination <> EMPTY>
+  [  6] jmpifz [ 19] ............................ if destination <> EMPTY then
+  [  9] getprop 547 ............................. <destination>
+  [ 12] pushcons 1 .............................. <"_new">
+  [ 14] pusharglistnoret 2 ...................... <destination, "_new">
+  [ 16] extcall 548 ............................. gotoNetPage(destination, "_new")
+  [ 19] ret
+end
+
+on mouseEnter me
+  [  0] getprop 508 ............................. <my>
+  [  3] pushint8 100 ............................ <100>
+  [  5] setobjprop 183 .......................... my.blend = 100
+  [  7] getparam 0 .............................. <me>
+  [  9] getobjprop 509 .......................... <me.spriteNum>
+  [ 12] pusharglist 1 ........................... <me.spriteNum>
+  [ 14] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 16] pushint16 280 ........................... <280>
+  [ 19] setobjprop 518 .......................... sprite(me.spriteNum).cursor = 280
+  [ 22] ret
+end
+
+on mouseLeave me
+  [  0] getprop 508 ............................. <my>
+  [  3] pushzero ................................ <0>
+  [  4] setobjprop 183 .......................... my.blend = 0
+  [  6] getparam 0 .............................. <me>
+  [  8] getobjprop 509 .......................... <me.spriteNum>
+  [ 11] pusharglist 1 ........................... <me.spriteNum>
+  [ 13] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 15] pushint8 1 .............................. <1>
+  [ 17] inv ..................................... <-1>
+  [ 18] setobjprop 518 .......................... sprite(me.spriteNum).cursor = -1
+  [ 21] ret
+end
+
+on getPropertyDescriptionList
+  [  0] pusharglist 0 ........................... <[:]>
+  [  2] pushproplist ............................ <[:]>
+  [  3] setlocal 0 .............................. description = [:]
+  [  5] getlocal 0 .............................. <description>
+  [  7] pushsymb 547 ............................ <#destination>
+  [ 10] pushsymb 98 ............................. <#default>
+  [ 12] pushcons 0 .............................. <EMPTY>
+  [ 14] pushsymb 512 ............................ <#format>
+  [ 17] pushsymb 91 ............................. <#string>
+  [ 19] pushsymb 513 ............................ <#comment>
+  [ 22] pushcons 2 .............................. <"html page:">
+  [ 24] pusharglist 6 ........................... <[#default: EMPTY, #format: #string, #comment: "html page:"]>
+  [ 26] pushproplist ............................ <[#default: EMPTY, #format: #string, #comment: "html page:"]>
+  [ 27] pusharglistnoret 3 ...................... <description, #destination, [#default: EMPTY, #format: #string, #comment: "html page:"]>
+  [ 29] extcall 438 ............................. addProp(description, #destination, [#default: EMPTY, #format: #string, #comment: "html page:"])
+  [ 32] getlocal 0 .............................. <description>
+  [ 34] pusharglistnoret 1 ...................... <description>
+  [ 36] extcall 58 .............................. return description
+  [ 38] ret
+end

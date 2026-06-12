@@ -1,0 +1,6 @@
+on mouseUp me
+  [  0] pushcons 0 .............................. <"intro">
+  [  2] pusharglistnoret 1 ...................... <"intro">
+  [  4] extcall 192 ............................. go("intro")
+  [  6] ret
+end

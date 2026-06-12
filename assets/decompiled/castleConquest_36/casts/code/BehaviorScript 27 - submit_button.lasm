@@ -1,0 +1,12 @@
+global objGame
+
+on beginSprite me
+  [  0] ret
+end
+
+on mouseUp me
+  [  0] getglobal 439 ........................... <objGame>
+  [  3] pusharglistnoret 1 ...................... <objGame>
+  [  5] objcall 537 ............................. objGame.submitButtonPressed()
+  [  8] ret
+end

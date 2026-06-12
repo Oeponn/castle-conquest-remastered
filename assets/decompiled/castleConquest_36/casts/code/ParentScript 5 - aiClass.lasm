@@ -1,0 +1,253 @@
+property Math
+
+on new me
+  [  0] pushcons 0 .............................. <"mathClass">
+  [  2] pusharglist 1 ........................... <"mathClass">
+  [  4] extcall 64 .............................. <script("mathClass")>
+  [  6] pusharglist 1 ........................... <script("mathClass")>
+  [  8] objcall 0 ............................... <script("mathClass").new()>
+  [ 10] setprop 67 .............................. Math = script("mathClass").new()
+  [ 12] getparam 0 .............................. <me>
+  [ 14] pusharglistnoret 1 ...................... <me>
+  [ 16] extcall 58 .............................. return me
+  [ 18] ret
+end
+
+on setPower me, roundCount, turnCount, tMaxPower, mBall, piecePosListDefault, currentPieceList
+  [  0] pushfloat32 447.0 ....................... <447.0>
+  [  5] setlocal 0 .............................. minGoldDist = 447.0
+  [  7] pushfloat32 595.0 ....................... <595.0>
+  [ 12] setlocal 1 .............................. maxGoldDist = 595.0
+  [ 14] pushcons 1 .............................. <0.87>
+  [ 16] setlocal 2 .............................. minPowerPerc = 0.87
+  [ 18] pushfloat32 1.0 ......................... <1.0>
+  [ 23] setlocal 3 .............................. maxPowerPerc = 1.0
+  [ 25] getparam 4 .............................. <mBall>
+  [ 27] pusharglist 1 ........................... <mBall>
+  [ 29] objcall 148 ............................. <mBall.getWorldTransform()>
+  [ 31] getobjprop 114 .......................... <mBall.getWorldTransform().position>
+  [ 33] setlocal 4 .............................. posA = mBall.getWorldTransform().position
+  [ 35] pusharglist 0 ........................... <[]>
+  [ 37] pushlist ................................ <[]>
+  [ 38] setlocal 5 .............................. availablePieceList = []
+  [ 40] getparam 6 .............................. <currentPieceList>
+  [ 42] getobjprop 264 .......................... <currentPieceList.count>
+  [ 45] setlocal 6 .............................. iCount = currentPieceList.count
+  [ 47] pushint8 1 .............................. <1>
+  [ 49] setlocal 7
+  [ 51] getlocal 7
+  [ 53] getlocal 6 .............................. <iCount>
+  [ 55] lteq
+  [ 56] jmpifz [161] ............................ repeat with i = 1 to iCount
+  [ 59] getparam 6 .............................. <currentPieceList>
+  [ 61] getlocal 7 .............................. <i>
+  [ 63] pusharglist 2 ........................... <currentPieceList, i>
+  [ 65] objcall 265 ............................. <currentPieceList[i]>
+  [ 68] setlocal 8 .............................. piece = currentPieceList[i]
+  [ 70] getlocal 8 .............................. <piece>
+  [ 72] pusharglist 1 ........................... <piece>
+  [ 74] objcall 148 ............................. <piece.getWorldTransform()>
+  [ 76] getchainedprop 116 ...................... <piece.getWorldTransform().rotation>
+  [ 78] getobjprop 126 .......................... <piece.getWorldTransform().rotation.x>
+  [ 80] pusharglist 1 ........................... <piece.getWorldTransform().rotation.x>
+  [ 82] extcall 149 ............................. <abs(piece.getWorldTransform().rotation.x)>
+  [ 84] setlocal 9 .............................. rotAbsX = abs(piece.getWorldTransform().rotation.x)
+  [ 86] getlocal 8 .............................. <piece>
+  [ 88] pusharglist 1 ........................... <piece>
+  [ 90] objcall 148 ............................. <piece.getWorldTransform()>
+  [ 92] getchainedprop 116 ...................... <piece.getWorldTransform().rotation>
+  [ 94] getobjprop 127 .......................... <piece.getWorldTransform().rotation.y>
+  [ 96] pusharglist 1 ........................... <piece.getWorldTransform().rotation.y>
+  [ 98] extcall 149 ............................. <abs(piece.getWorldTransform().rotation.y)>
+  [100] setlocal 10 ............................. rotAbsY = abs(piece.getWorldTransform().rotation.y)
+  [102] getlocal 9 .............................. <rotAbsX>
+  [104] pushint8 20 ............................. <20>
+  [106] gt ...................................... <rotAbsX > 20>
+  [107] getlocal 10 ............................. <rotAbsY>
+  [109] pushint8 20 ............................. <20>
+  [111] gt ...................................... <rotAbsY > 20>
+  [112] or ...................................... <(rotAbsX > 20) or (rotAbsY > 20)>
+  [113] pushzero ................................ <0>
+  [114] eq ...................................... <((rotAbsX > 20) or (rotAbsY > 20)) = 0>
+  [115] jmpifz [152] ............................ if ((rotAbsX > 20) or (rotAbsY > 20)) = 0 then
+  [118] getparam 6 .............................. <currentPieceList>
+  [120] getlocal 7 .............................. <i>
+  [122] pusharglist 2 ........................... <currentPieceList, i>
+  [124] objcall 265 ............................. <currentPieceList[i]>
+  [127] getobjprop 258 .......................... <currentPieceList[i].name>
+  [130] pushcons 2 .............................. <"flag">
+  [132] containsstr ............................. <currentPieceList[i].name contains "flag">
+  [133] jmpifz [152] ............................ if currentPieceList[i].name contains "flag" then
+  [136] getlocal 5 .............................. <availablePieceList>
+  [138] getparam 6 .............................. <currentPieceList>
+  [140] getlocal 7 .............................. <i>
+  [142] pusharglist 2 ........................... <currentPieceList, i>
+  [144] objcall 265 ............................. <currentPieceList[i]>
+  [147] pusharglistnoret 2 ...................... <availablePieceList, currentPieceList[i]>
+  [149] objcall 293 ............................. availablePieceList.add(currentPieceList[i])
+  [152] pushint8 1
+  [154] getlocal 7
+  [156] add
+  [157] setlocal 7
+  [159] endrepeat [ 51]
+  [161] getlocal 5 .............................. <availablePieceList>
+  [163] getobjprop 264 .......................... <availablePieceList.count>
+  [166] pushzero ................................ <0>
+  [167] gt ...................................... <availablePieceList.count > 0>
+  [168] jmpifz [218] ............................ if availablePieceList.count > 0 then / else
+  [171] getlocal 5 .............................. <availablePieceList>
+  [173] getobjprop 264 .......................... <availablePieceList.count>
+  [176] pusharglist 1 ........................... <availablePieceList.count>
+  [178] extcall 475 ............................. <random(availablePieceList.count)>
+  [181] setlocal 11 ............................. tRandPiece = random(availablePieceList.count)
+  [183] getlocal 11 ............................. <tRandPiece>
+  [185] pushzero ................................ <0>
+  [186] lteq .................................... <tRandPiece <= 0>
+  [187] jmpifz [194] ............................ if tRandPiece <= 0 then
+  [190] pushint8 1 .............................. <1>
+  [192] setlocal 11 ............................. tRandPiece = 1
+  [194] getlocal 5 .............................. <availablePieceList>
+  [196] getlocal 11 ............................. <tRandPiece>
+  [198] pusharglist 2 ........................... <availablePieceList, tRandPiece>
+  [200] objcall 265 ............................. <availablePieceList[tRandPiece]>
+  [203] setlocal 12 ............................. mGold = availablePieceList[tRandPiece]
+  [205] getlocal 12 ............................. <mGold>
+  [207] pusharglist 1 ........................... <mGold>
+  [209] objcall 148 ............................. <mGold.getWorldTransform()>
+  [211] getobjprop 114 .......................... <mGold.getWorldTransform().position>
+  [213] setlocal 13 ............................. posB = mGold.getWorldTransform().position
+  [215] jmp [230]
+  [218] pushint16 200 ........................... <200>
+  [221] inv ..................................... <-200>
+  [222] pushzero ................................ <0>
+  [223] pushzero ................................ <0>
+  [224] pusharglist 3 ........................... <-200, 0, 0>
+  [226] extcall 184 ............................. <vector(-200, 0, 0)>
+  [228] setlocal 13 ............................. posB = vector(-200, 0, 0)
+  [230] getparam 1 .............................. <roundCount>
+  [232] setlocal 14 ............................. tRoundCount = roundCount
+  [234] getlocal 14 ............................. <tRoundCount>
+  [236] pushint8 10 ............................. <10>
+  [238] gt ...................................... <tRoundCount > 10>
+  [239] jmpifz [246] ............................ if tRoundCount > 10 then
+  [242] pushint8 10 ............................. <10>
+  [244] setlocal 14 ............................. tRoundCount = 10
+  [246] pushint8 41 ............................. <41>
+  [248] pusharglist 1 ........................... <41>
+  [250] extcall 475 ............................. <random(41)>
+  [253] pushint8 21 ............................. <21>
+  [255] sub ..................................... <random(41) - 21>
+  [256] setlocal 15 ............................. tDumbnessOffset = random(41) - 21
+  [258] pushfloat32 1.0 ......................... <1.0>
+  [263] getlocal 14 ............................. <tRoundCount>
+  [265] pushfloat32 10.0 ........................ <10.0>
+  [270] div ..................................... <tRoundCount / 10.0>
+  [271] sub ..................................... <1.0 - (tRoundCount / 10.0)>
+  [272] pushcons 3 .............................. <0.20000000000000001>
+  [274] mul ..................................... <(1.0 - (tRoundCount / 10.0)) * 0.20000000000000001>
+  [275] setlocal 16 ............................. tDumbnessInfluence = (1.0 - (tRoundCount / 10.0)) * 0.20000000000000001
+  [277] getlocal 15 ............................. <tDumbnessOffset>
+  [279] getlocal 16 ............................. <tDumbnessInfluence>
+  [281] mul ..................................... <tDumbnessOffset * tDumbnessInfluence>
+  [282] setlocal 15 ............................. tDumbnessOffset = tDumbnessOffset * tDumbnessInfluence
+  [284] getprop 67 .............................. <Math>
+  [286] getlocal 4 .............................. <posA>
+  [288] getlocal 13 ............................. <posB>
+  [290] pusharglist 3 ........................... <Math, posA, posB>
+  [292] objcall 297 ............................. <Math.getDist(posA, posB)>
+  [295] setlocal 17 ............................. tDist = Math.getDist(posA, posB)
+  [297] getprop 67 .............................. <Math>
+  [299] getlocal 17 ............................. <tDist>
+  [301] getobjprop 126 .......................... <tDist.x>
+  [303] getlocal 17 ............................. <tDist>
+  [305] getobjprop 127 .......................... <tDist.y>
+  [307] pusharglist 3 ........................... <Math, tDist.x, tDist.y>
+  [309] objcall 476 ............................. <Math.getAngleXY(tDist.x, tDist.y)>
+  [312] getlocal 15 ............................. <tDumbnessOffset>
+  [314] add ..................................... <Math.getAngleXY(tDist.x, tDist.y) + tDumbnessOffset>
+  [315] setlocal 18 ............................. tAngle = Math.getAngleXY(tDist.x, tDist.y) + tDumbnessOffset
+  [317] getparam 4 .............................. <mBall>
+  [319] pushzero ................................ <0>
+  [320] pushzero ................................ <0>
+  [321] getlocal 18 ............................. <tAngle>
+  [323] pushsymb 209 ............................ <#self>
+  [325] pusharglistnoret 5 ...................... <mBall, 0, 0, tAngle, #self>
+  [327] objcall 208 ............................. mBall.rotate(0, 0, tAngle, #self)
+  [329] pushint8 1 .............................. <1>
+  [331] setlocal 19 ............................. tDumbnessOffsetPerc = 1
+  [333] getparam 2 .............................. <turnCount>
+  [335] pushint8 10 ............................. <10>
+  [337] gt ...................................... <turnCount > 10>
+  [338] jmpifz [382] ............................ if turnCount > 10 then
+  [341] getparam 2 .............................. <turnCount>
+  [343] pushint8 3 .............................. <3>
+  [345] mod ..................................... <turnCount mod 3>
+  [346] setlocal 20 ............................. tOffset = turnCount mod 3
+  [348] getlocal 20 ............................. <tOffset>
+  [350] pushint8 1 .............................. <1>
+  [352] eq ...................................... <tOffset = 1>
+  [353] jmpifz [363] ............................ if tOffset = 1 then / else
+  [356] pushcons 4 .............................. <0.80000000000000004>
+  [358] setlocal 19 ............................. tDumbnessOffsetPerc = 0.80000000000000004
+  [360] jmp [382]
+  [363] getlocal 20 ............................. <tOffset>
+  [365] pushint8 2 .............................. <2>
+  [367] eq ...................................... <tOffset = 2>
+  [368] jmpifz [378] ............................ if tOffset = 2 then / else
+  [371] pushcons 5 .............................. <0.59999999999999998>
+  [373] setlocal 19 ............................. tDumbnessOffsetPerc = 0.59999999999999998
+  [375] jmp [382]
+  [378] pushint8 1 .............................. <1>
+  [380] setlocal 19 ............................. tDumbnessOffsetPerc = 1
+  [382] getlocal 17 ............................. <tDist>
+  [384] getobjprop 303 .......................... <tDist.total>
+  [387] getlocal 0 .............................. <minGoldDist>
+  [389] sub ..................................... <tDist.total - minGoldDist>
+  [390] getlocal 1 .............................. <maxGoldDist>
+  [392] getlocal 0 .............................. <minGoldDist>
+  [394] sub ..................................... <maxGoldDist - minGoldDist>
+  [395] div ..................................... <(tDist.total - minGoldDist) / (maxGoldDist - minGoldDist)>
+  [396] setlocal 21 ............................. tDistPerc = (tDist.total - minGoldDist) / (maxGoldDist - minGoldDist)
+  [398] getlocal 2 .............................. <minPowerPerc>
+  [400] getlocal 3 .............................. <maxPowerPerc>
+  [402] getlocal 2 .............................. <minPowerPerc>
+  [404] sub ..................................... <maxPowerPerc - minPowerPerc>
+  [405] getlocal 21 ............................. <tDistPerc>
+  [407] mul ..................................... <(maxPowerPerc - minPowerPerc) * tDistPerc>
+  [408] add ..................................... <minPowerPerc + ((maxPowerPerc - minPowerPerc) * tDistPerc)>
+  [409] setlocal 22 ............................. tPowerPerc = minPowerPerc + ((maxPowerPerc - minPowerPerc) * tDistPerc)
+  [411] getparam 3 .............................. <tMaxPower>
+  [413] getlocal 22 ............................. <tPowerPerc>
+  [415] mul ..................................... <tMaxPower * tPowerPerc>
+  [416] getlocal 19 ............................. <tDumbnessOffsetPerc>
+  [418] mul ..................................... <tMaxPower * tPowerPerc * tDumbnessOffsetPerc>
+  [419] setlocal 23 ............................. tPower = tMaxPower * tPowerPerc * tDumbnessOffsetPerc
+  [421] getparam 2 .............................. <turnCount>
+  [423] pushint8 3 .............................. <3>
+  [425] gt ...................................... <turnCount > 3>
+  [426] jmpifz [465] ............................ if turnCount > 3 then
+  [429] getparam 2 .............................. <turnCount>
+  [431] pushint8 7 .............................. <7>
+  [433] lt ...................................... <turnCount < 7>
+  [434] jmpifz [465] ............................ if turnCount < 7 then
+  [437] getparam 2 .............................. <turnCount>
+  [439] pushint8 3 .............................. <3>
+  [441] sub ..................................... <turnCount - 3>
+  [442] setlocal 24 ............................. extraTurnCount = turnCount - 3
+  [444] getlocal 23 ............................. <tPower>
+  [446] pushcons 6 .............................. <0.02>
+  [448] mul ..................................... <tPower * 0.02>
+  [449] setlocal 25 ............................. fivePercPower = tPower * 0.02
+  [451] getlocal 24 ............................. <extraTurnCount>
+  [453] getlocal 25 ............................. <fivePercPower>
+  [455] mul ..................................... <extraTurnCount * fivePercPower>
+  [456] setlocal 26 ............................. powerDif = extraTurnCount * fivePercPower
+  [458] getlocal 23 ............................. <tPower>
+  [460] getlocal 26 ............................. <powerDif>
+  [462] sub ..................................... <tPower - powerDif>
+  [463] setlocal 23 ............................. tPower = tPower - powerDif
+  [465] getlocal 23 ............................. <tPower>
+  [467] pusharglistnoret 1 ...................... <tPower>
+  [469] extcall 58 .............................. return tPower
+  [471] ret
+end

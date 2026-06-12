@@ -1,0 +1,24 @@
+global objGame
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] pushzero ................................ <0>
+  [ 10] setobjprop 232 .......................... sprite(me.spriteNum).visible = 0
+  [ 12] ret
+end
+
+on mouseUp me
+  [  0] getglobal 439 ........................... <objGame>
+  [  3] pusharglistnoret 1 ...................... <objGame>
+  [  5] objcall 521 ............................. objGame.castleSelected()
+  [  8] getparam 0 .............................. <me>
+  [ 10] getobjprop 509 .......................... <me.spriteNum>
+  [ 13] pusharglist 1 ........................... <me.spriteNum>
+  [ 15] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 17] pushzero ................................ <0>
+  [ 18] setobjprop 232 .......................... sprite(me.spriteNum).visible = 0
+  [ 20] ret
+end

@@ -1,0 +1,17 @@
+{
+  "type": 11,
+  "infoLen": 26,
+  "specificDataLen": 2,
+  "info": {
+    "dataOffset": 20,
+    "unk1": 0,
+    "unk2": 0,
+    "flags": 0,
+    "scriptId": 17,
+    "scriptSrcText": "",
+    "name": ""
+  },
+  "member": {
+    "scriptType": 7
+  }
+}

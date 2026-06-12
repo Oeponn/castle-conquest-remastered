@@ -1,0 +1,18 @@
+global objGame, sprNum
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] pushint8 1 .............................. <1>
+  [ 11] setobjprop 232 .......................... sprite(me.spriteNum).visible = 1
+  [ 13] ret
+end
+
+on mouseUp me
+  [  0] getglobal 439 ........................... <objGame>
+  [  3] pusharglistnoret 1 ...................... <objGame>
+  [  5] objcall 516 ............................. objGame.beginround()
+  [  8] ret
+end

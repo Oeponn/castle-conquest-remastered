@@ -1,0 +1,219 @@
+global objGame, sprNum, soundOn
+
+on prepareMovie
+  [  0] pushint16 800 ........................... <800>
+  [  3] pusharglistnoret 1 ...................... <800>
+  [  5] extcall 434 ............................. puppetTempo(800)
+  [  8] ret
+end
+
+on startMovie
+  [  0] pushint8 1 .............................. <1>
+  [  2] pushint8 8 .............................. <8>
+  [  4] set 7 ................................... set the exitLock to 1
+  [  6] pushsymb 435 ............................ <#auto>
+  [  9] setmovieprop 436 ........................ the preferred3dRenderer = #auto
+  [ 12] pusharglist 0 ........................... <[:]>
+  [ 14] pushproplist ............................ <[:]>
+  [ 15] setglobal 137 ........................... sprNum = [:]
+  [ 17] getglobal 137 ........................... <sprNum>
+  [ 19] pushsymb 437 ............................ <#intro_swf>
+  [ 22] pushint8 1 .............................. <1>
+  [ 24] pusharglistnoret 3 ...................... <sprNum, #intro_swf, 1>
+  [ 26] objcall 438 ............................. sprNum.addProp(#intro_swf, 1)
+  [ 29] getglobal 137 ........................... <sprNum>
+  [ 31] pushsymb 370 ............................ <#castleUnlock>
+  [ 34] pushint8 2 .............................. <2>
+  [ 36] pusharglistnoret 3 ...................... <sprNum, #castleUnlock, 2>
+  [ 38] objcall 438 ............................. sprNum.addProp(#castleUnlock, 2)
+  [ 41] getglobal 137 ........................... <sprNum>
+  [ 43] pushsymb 371 ............................ <#castlesConquered_bmp>
+  [ 46] pushint8 3 .............................. <3>
+  [ 48] pusharglistnoret 3 ...................... <sprNum, #castlesConquered_bmp, 3>
+  [ 50] objcall 438 ............................. sprNum.addProp(#castlesConquered_bmp, 3)
+  [ 53] getglobal 137 ........................... <sprNum>
+  [ 55] pushsymb 375 ............................ <#castleSelectButtonFirst>
+  [ 58] pushint8 8 .............................. <8>
+  [ 60] pusharglistnoret 3 ...................... <sprNum, #castleSelectButtonFirst, 8>
+  [ 62] objcall 438 ............................. sprNum.addProp(#castleSelectButtonFirst, 8)
+  [ 65] getglobal 137 ........................... <sprNum>
+  [ 67] pushsymb 376 ............................ <#castleSelectButtonLast>
+  [ 70] pushint8 19 ............................. <19>
+  [ 72] pusharglistnoret 3 ...................... <sprNum, #castleSelectButtonLast, 19>
+  [ 74] objcall 438 ............................. sprNum.addProp(#castleSelectButtonLast, 19)
+  [ 77] getglobal 137 ........................... <sprNum>
+  [ 79] pushsymb 194 ............................ <#gameWorld_w3d>
+  [ 81] pushint8 7 .............................. <7>
+  [ 83] pusharglistnoret 3 ...................... <sprNum, #gameWorld_w3d, 7>
+  [ 85] objcall 438 ............................. sprNum.addProp(#gameWorld_w3d, 7)
+  [ 88] getglobal 137 ........................... <sprNum>
+  [ 90] pushsymb 217 ............................ <#powerMeterContainer_bmp>
+  [ 92] pushint8 23 ............................. <23>
+  [ 94] pusharglistnoret 3 ...................... <sprNum, #powerMeterContainer_bmp, 23>
+  [ 96] objcall 438 ............................. sprNum.addProp(#powerMeterContainer_bmp, 23)
+  [ 99] getglobal 137 ........................... <sprNum>
+  [101] pushsymb 231 ............................ <#powerMeter_bmp>
+  [103] pushint8 24 ............................. <24>
+  [105] pusharglistnoret 3 ...................... <sprNum, #powerMeter_bmp, 24>
+  [107] objcall 438 ............................. sprNum.addProp(#powerMeter_bmp, 24)
+  [110] getglobal 137 ........................... <sprNum>
+  [112] pushsymb 233 ............................ <#accuracyMeter_bmp>
+  [114] pushint8 25 ............................. <25>
+  [116] pusharglistnoret 3 ...................... <sprNum, #accuracyMeter_bmp, 25>
+  [118] objcall 438 ............................. sprNum.addProp(#accuracyMeter_bmp, 25)
+  [121] getglobal 137 ........................... <sprNum>
+  [123] pushsymb 374 ............................ <#powerMeterTint_bmp>
+  [126] pushint8 26 ............................. <26>
+  [128] pusharglistnoret 3 ...................... <sprNum, #powerMeterTint_bmp, 26>
+  [130] objcall 438 ............................. sprNum.addProp(#powerMeterTint_bmp, 26)
+  [133] getglobal 137 ........................... <sprNum>
+  [135] pushsymb 210 ............................ <#rotationDial_bmp>
+  [137] pushint8 27 ............................. <27>
+  [139] pusharglistnoret 3 ...................... <sprNum, #rotationDial_bmp, 27>
+  [141] objcall 438 ............................. sprNum.addProp(#rotationDial_bmp, 27)
+  [144] getglobal 137 ........................... <sprNum>
+  [146] pushsymb 211 ............................ <#angleDial_bmp>
+  [148] pushint8 28 ............................. <28>
+  [150] pusharglistnoret 3 ...................... <sprNum, #angleDial_bmp, 28>
+  [152] objcall 438 ............................. sprNum.addProp(#angleDial_bmp, 28)
+  [155] getglobal 137 ........................... <sprNum>
+  [157] pushsymb 373 ............................ <#level_txt>
+  [160] pushint8 29 ............................. <29>
+  [162] pusharglistnoret 3 ...................... <sprNum, #level_txt, 29>
+  [164] objcall 438 ............................. sprNum.addProp(#level_txt, 29)
+  [167] getglobal 137 ........................... <sprNum>
+  [169] pushsymb 330 ............................ <#flags_txt>
+  [172] pushint8 30 ............................. <30>
+  [174] pusharglistnoret 3 ...................... <sprNum, #flags_txt, 30>
+  [176] objcall 438 ............................. sprNum.addProp(#flags_txt, 30)
+  [179] getglobal 137 ........................... <sprNum>
+  [181] pushsymb 372 ............................ <#restart_txt>
+  [184] pushint8 31 ............................. <31>
+  [186] pusharglistnoret 3 ...................... <sprNum, #restart_txt, 31>
+  [188] objcall 438 ............................. sprNum.addProp(#restart_txt, 31)
+  [191] getglobal 137 ........................... <sprNum>
+  [193] pushsymb 220 ............................ <#accuracyMarker_bmp>
+  [195] pushint8 32 ............................. <32>
+  [197] pusharglistnoret 3 ...................... <sprNum, #accuracyMarker_bmp, 32>
+  [199] objcall 438 ............................. sprNum.addProp(#accuracyMarker_bmp, 32)
+  [202] getglobal 137 ........................... <sprNum>
+  [204] pushsymb 380 ............................ <#gameScore_txt>
+  [207] pushint8 33 ............................. <33>
+  [209] pusharglistnoret 3 ...................... <sprNum, #gameScore_txt, 33>
+  [211] objcall 438 ............................. sprNum.addProp(#gameScore_txt, 33)
+  [214] getglobal 137 ........................... <sprNum>
+  [216] pushsymb 379 ............................ <#score_txt>
+  [219] pushint8 34 ............................. <34>
+  [221] pusharglistnoret 3 ...................... <sprNum, #score_txt, 34>
+  [223] objcall 438 ............................. sprNum.addProp(#score_txt, 34)
+  [226] getglobal 137 ........................... <sprNum>
+  [228] pushsymb 377 ............................ <#gold_txt>
+  [231] pushint8 35 ............................. <35>
+  [233] pusharglistnoret 3 ...................... <sprNum, #gold_txt, 35>
+  [235] objcall 438 ............................. sprNum.addProp(#gold_txt, 35)
+  [238] getglobal 137 ........................... <sprNum>
+  [240] pushsymb 378 ............................ <#goldScore_txt>
+  [243] pushint8 36 ............................. <36>
+  [245] pusharglistnoret 3 ...................... <sprNum, #goldScore_txt, 36>
+  [247] objcall 438 ............................. sprNum.addProp(#goldScore_txt, 36)
+  [250] getglobal 137 ........................... <sprNum>
+  [252] pushsymb 338 ............................ <#tallyNames_txt>
+  [255] pushint8 37 ............................. <37>
+  [257] pusharglistnoret 3 ...................... <sprNum, #tallyNames_txt, 37>
+  [259] objcall 438 ............................. sprNum.addProp(#tallyNames_txt, 37)
+  [262] getglobal 137 ........................... <sprNum>
+  [264] pushsymb 315 ............................ <#tallyTotals_txt>
+  [267] pushint8 38 ............................. <38>
+  [269] pusharglistnoret 3 ...................... <sprNum, #tallyTotals_txt, 38>
+  [271] objcall 438 ............................. sprNum.addProp(#tallyTotals_txt, 38)
+  [274] getglobal 137 ........................... <sprNum>
+  [276] pushsymb 339 ............................ <#gameOver_txt>
+  [279] pushint8 39 ............................. <39>
+  [281] pusharglistnoret 3 ...................... <sprNum, #gameOver_txt, 39>
+  [283] objcall 438 ............................. sprNum.addProp(#gameOver_txt, 39)
+  [286] getglobal 137 ........................... <sprNum>
+  [288] pushsymb 138 ............................ <#hint_txt>
+  [290] pushint8 40 ............................. <40>
+  [292] pusharglistnoret 3 ...................... <sprNum, #hint_txt, 40>
+  [294] objcall 438 ............................. sprNum.addProp(#hint_txt, 40)
+  [297] getglobal 137 ........................... <sprNum>
+  [299] pushsymb 381 ............................ <#toolbarCover_bmp>
+  [302] pushint8 42 ............................. <42>
+  [304] pusharglistnoret 3 ...................... <sprNum, #toolbarCover_bmp, 42>
+  [306] objcall 438 ............................. sprNum.addProp(#toolbarCover_bmp, 42)
+  [309] pushcons 0 .............................. <"gameClass">
+  [311] pusharglist 1 ........................... <"gameClass">
+  [313] extcall 64 .............................. <script("gameClass")>
+  [315] pusharglist 1 ........................... <script("gameClass")>
+  [317] objcall 0 ............................... <script("gameClass").new()>
+  [319] setglobal 439 ........................... objGame = script("gameClass").new()
+  [322] pushint8 1 .............................. <1>
+  [324] setglobal 200 ........................... soundOn = 1
+  [326] getglobal 137 ........................... <sprNum>
+  [328] getobjprop 437 .......................... <sprNum.intro_swf>
+  [331] pusharglist 1 ........................... <sprNum.intro_swf>
+  [333] extcall 136 ............................. <sprite(sprNum.intro_swf)>
+  [335] pushint8 1 .............................. <1>
+  [337] setobjprop 232 .......................... sprite(sprNum.intro_swf).visible = 1
+  [339] getglobal 137 ........................... <sprNum>
+  [341] getobjprop 194 .......................... <sprNum.gameWorld_w3d>
+  [343] pusharglist 1 ........................... <sprNum.gameWorld_w3d>
+  [345] extcall 136 ............................. <sprite(sprNum.gameWorld_w3d)>
+  [347] pushzero ................................ <0>
+  [348] setobjprop 232 .......................... sprite(sprNum.gameWorld_w3d).visible = 0
+  [350] getglobal 137 ........................... <sprNum>
+  [352] getobjprop 338 .......................... <sprNum.tallyNames_txt>
+  [355] pusharglist 1 ........................... <sprNum.tallyNames_txt>
+  [357] extcall 136 ............................. <sprite(sprNum.tallyNames_txt)>
+  [359] pushzero ................................ <0>
+  [360] setobjprop 232 .......................... sprite(sprNum.tallyNames_txt).visible = 0
+  [362] getglobal 137 ........................... <sprNum>
+  [364] getobjprop 315 .......................... <sprNum.tallyTotals_txt>
+  [367] pusharglist 1 ........................... <sprNum.tallyTotals_txt>
+  [369] extcall 136 ............................. <sprite(sprNum.tallyTotals_txt)>
+  [371] pushzero ................................ <0>
+  [372] setobjprop 232 .......................... sprite(sprNum.tallyTotals_txt).visible = 0
+  [374] getglobal 137 ........................... <sprNum>
+  [376] getobjprop 339 .......................... <sprNum.gameOver_txt>
+  [379] pusharglist 1 ........................... <sprNum.gameOver_txt>
+  [381] extcall 136 ............................. <sprite(sprNum.gameOver_txt)>
+  [383] pushzero ................................ <0>
+  [384] setobjprop 232 .......................... sprite(sprNum.gameOver_txt).visible = 0
+  [386] pushcons 1 .............................. <"miniclipIntro">
+  [388] pusharglistnoret 1 ...................... <"miniclipIntro">
+  [390] extcall 192 ............................. go("miniclipIntro")
+  [392] ret
+end
+
+on stopMovie
+  [  0] pushcons 2 .............................. <"gameWorld">
+  [  2] pusharglist 1 ........................... <"gameWorld">
+  [  4] extcall 61 .............................. <member("gameWorld")>
+  [  6] pusharglistnoret 1 ...................... <member("gameWorld")>
+  [  8] objcall 389 ............................. member("gameWorld").resetWorld()
+  [ 11] pushcons 3 .............................. <"gameScore_txt">
+  [ 13] pusharglist 1 ........................... <"gameScore_txt">
+  [ 15] extcall 61 .............................. <member("gameScore_txt")>
+  [ 17] pushzero ................................ <0>
+  [ 18] pusharglist 1 ........................... <0>
+  [ 20] extcall 91 .............................. <string(0)>
+  [ 22] setobjprop 92 ........................... member("gameScore_txt").text = string(0)
+  [ 24] getglobal 137 ........................... <sprNum>
+  [ 26] getobjprop 194 .......................... <sprNum.gameWorld_w3d>
+  [ 28] pusharglist 1 ........................... <sprNum.gameWorld_w3d>
+  [ 30] extcall 136 ............................. <sprite(sprNum.gameWorld_w3d)>
+  [ 32] pushzero ................................ <0>
+  [ 33] setobjprop 232 .......................... sprite(sprNum.gameWorld_w3d).visible = 0
+  [ 35] ret
+end
+
+on keyUp
+  [  0] getglobal 439 ........................... <objGame>
+  [  3] pusharglistnoret 1 ...................... <objGame>
+  [  5] objcall 8 ............................... objGame.keyUp()
+  [  7] ret
+end
+
+on keyDown
+  [  0] ret
+end

@@ -1,0 +1,23 @@
+global objGame
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] pushint8 1 .............................. <1>
+  [ 11] setobjprop 232 .......................... sprite(me.spriteNum).visible = 1
+  [ 13] ret
+end
+
+on mouseUp me
+  [  0] getglobal 439 ........................... <objGame>
+  [  3] pushsymb 140 ............................ <#human>
+  [  5] pushsymb 260 ............................ <#computer>
+  [  8] pusharglistnoret 3 ...................... <objGame, #human, #computer>
+  [ 10] objcall 517 ............................. objGame.startGame(#human, #computer)
+  [ 13] pushcons 0 .............................. <"start_transition">
+  [ 15] pusharglistnoret 1 ...................... <"start_transition">
+  [ 17] extcall 192 ............................. go("start_transition")
+  [ 19] ret
+end

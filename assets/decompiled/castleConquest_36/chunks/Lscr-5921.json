@@ -1,0 +1,99 @@
+{
+  "totalLength": 402,
+  "totalLength2": 402,
+  "headerLength": 92,
+  "scriptNumber": 22,
+  "unk20": 4,
+  "parentNumber": -1,
+  "scriptFlags": 0,
+  "unk42": 0,
+  "castID": 196631,
+  "factoryNameID": -1,
+  "handlerVectorsCount": 2,
+  "handlerVectorsOffset": 398,
+  "handlerVectorsSize": 2,
+  "propertiesCount": 3,
+  "propertiesOffset": 92,
+  "globalsCount": 2,
+  "globalsOffset": 98,
+  "handlersCount": 3,
+  "handlersOffset": 102,
+  "literalsCount": 2,
+  "literalsOffset": 348,
+  "literalsDataCount": 34,
+  "literalsDataOffset": 364,
+  "propertyNameIDs": [
+    508,
+    523,
+    524
+  ],
+  "globalNameIDs": [
+    439,
+    200
+  ],
+  "handlers": [
+    {
+      "nameID": 504,
+      "vectorPos": 65535,
+      "compiledLen": 46,
+      "compiledOffset": 240,
+      "argumentCount": 1,
+      "argumentOffset": 286,
+      "localsCount": 0,
+      "localsOffset": 288,
+      "globalsCount": 0,
+      "globalsOffset": 98,
+      "unknown1": 83,
+      "unknown2": 5,
+      "lineCount": 5,
+      "lineOffset": 288,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 515,
+      "vectorPos": 1,
+      "compiledLen": 15,
+      "compiledOffset": 294,
+      "argumentCount": 1,
+      "argumentOffset": 310,
+      "localsCount": 0,
+      "localsOffset": 312,
+      "globalsCount": 0,
+      "globalsOffset": 98,
+      "unknown1": 256,
+      "unknown2": 13,
+      "lineCount": 2,
+      "lineOffset": 312,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 522,
+      "vectorPos": 65535,
+      "compiledLen": 25,
+      "compiledOffset": 314,
+      "argumentCount": 1,
+      "argumentOffset": 340,
+      "localsCount": 0,
+      "localsOffset": 342,
+      "globalsCount": 0,
+      "globalsOffset": 98,
+      "unknown1": 321,
+      "unknown2": 18,
+      "lineCount": 5,
+      "lineOffset": 342,
+      "stackHeight": 2
+    }
+  ],
+  "literals": [
+    {
+      "type": 1,
+      "offset": 0,
+      "value": "soundOn_bmp"
+    },
+    {
+      "type": 1,
+      "offset": 16,
+      "value": "soundOff_bmp"
+    }
+  ]
+}

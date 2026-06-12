@@ -1,0 +1,53 @@
+property my, buttonDown, buttonUp
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] setprop 508 ............................. my = sprite(me.spriteNum)
+  [ 12] getprop 508 ............................. <my>
+  [ 15] getobjprop 61 ........................... <my.member>
+  [ 17] setprop 510 ............................. buttonUp = my.member
+  [ 20] ret
+end
+
+on mouseEnter me
+  [  0] getprop 508 ............................. <my>
+  [  3] getprop 511 ............................. <buttonDown>
+  [  6] pusharglist 1 ........................... <buttonDown>
+  [  8] extcall 61 .............................. <member(buttonDown)>
+  [ 10] setobjprop 61 ........................... my.member = member(buttonDown)
+  [ 12] ret
+end
+
+on mouseLeave me
+  [  0] getprop 508 ............................. <my>
+  [  3] getprop 510 ............................. <buttonUp>
+  [  6] pusharglist 1 ........................... <buttonUp>
+  [  8] extcall 61 .............................. <member(buttonUp)>
+  [ 10] setobjprop 61 ........................... my.member = member(buttonUp)
+  [ 12] ret
+end
+
+on getPropertyDescriptionList
+  [  0] pusharglist 0 ........................... <[:]>
+  [  2] pushproplist ............................ <[:]>
+  [  3] setlocal 0 .............................. description = [:]
+  [  5] getlocal 0 .............................. <description>
+  [  7] pushsymb 511 ............................ <#buttonDown>
+  [ 10] pushsymb 98 ............................. <#default>
+  [ 12] pushcons 0 .............................. <"button_">
+  [ 14] pushsymb 512 ............................ <#format>
+  [ 17] pushsymb 91 ............................. <#string>
+  [ 19] pushsymb 513 ............................ <#comment>
+  [ 22] pushcons 1 .............................. <"buttonDown graphic:">
+  [ 24] pusharglist 6 ........................... <[#default: "button_", #format: #string, #comment: "buttonDown graphic:"]>
+  [ 26] pushproplist ............................ <[#default: "button_", #format: #string, #comment: "buttonDown graphic:"]>
+  [ 27] pusharglistnoret 3 ...................... <description, #buttonDown, [#default: "button_", #format: #string, #comment: "buttonDown graphic:"]>
+  [ 29] extcall 438 ............................. addProp(description, #buttonDown, [#default: "button_", #format: #string, #comment: "buttonDown graphic:"])
+  [ 32] getlocal 0 .............................. <description>
+  [ 34] pusharglistnoret 1 ...................... <description>
+  [ 36] extcall 58 .............................. return description
+  [ 38] ret
+end

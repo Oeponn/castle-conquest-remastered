@@ -1,0 +1,17 @@
+{
+  "type": 11,
+  "infoLen": 46,
+  "specificDataLen": 2,
+  "info": {
+    "dataOffset": 20,
+    "unk1": 0,
+    "unk2": 0,
+    "flags": 0,
+    "scriptId": 31,
+    "scriptSrcText": "",
+    "name": "flash_pause"
+  },
+  "member": {
+    "scriptType": 1
+  }
+}

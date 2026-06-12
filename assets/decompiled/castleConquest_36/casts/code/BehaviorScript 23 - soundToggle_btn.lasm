@@ -1,0 +1,48 @@
+property my, soundOnMember, soundOffMember
+global objGame, soundOn
+
+on beginSprite me
+  [  0] pushcons 0 .............................. <"soundOn_bmp">
+  [  2] pusharglist 1 ........................... <"soundOn_bmp">
+  [  4] extcall 61 .............................. <member("soundOn_bmp")>
+  [  6] setprop 523 ............................. soundOnMember = member("soundOn_bmp")
+  [  9] pushcons 1 .............................. <"soundOff_bmp">
+  [ 11] pusharglist 1 ........................... <"soundOff_bmp">
+  [ 13] extcall 61 .............................. <member("soundOff_bmp")>
+  [ 15] setprop 524 ............................. soundOffMember = member("soundOff_bmp")
+  [ 18] getparam 0 .............................. <me>
+  [ 20] getobjprop 509 .......................... <me.spriteNum>
+  [ 23] pusharglist 1 ........................... <me.spriteNum>
+  [ 25] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 27] setprop 508 ............................. my = sprite(me.spriteNum)
+  [ 30] getprop 508 ............................. <my>
+  [ 33] getprop 523 ............................. <soundOnMember>
+  [ 36] setobjprop 61 ........................... my.member = soundOnMember
+  [ 38] getparam 0 .............................. <me>
+  [ 40] pusharglistnoret 1 ...................... <me>
+  [ 42] objcall 522 ............................. me.updateIcon()
+  [ 45] ret
+end
+
+on mouseUp me
+  [  0] getglobal 439 ........................... <objGame>
+  [  3] pusharglistnoret 1 ...................... <objGame>
+  [  5] objcall 36 .............................. objGame.soundToggle()
+  [  7] getparam 0 .............................. <me>
+  [  9] pusharglistnoret 1 ...................... <me>
+  [ 11] objcall 522 ............................. me.updateIcon()
+  [ 14] ret
+end
+
+on updateIcon me
+  [  0] getglobal 200 ........................... <soundOn>
+  [  2] jmpifz [ 16] ............................ if soundOn then / else
+  [  5] getprop 508 ............................. <my>
+  [  8] getprop 523 ............................. <soundOnMember>
+  [ 11] setobjprop 61 ........................... my.member = soundOnMember
+  [ 13] jmp [ 24]
+  [ 16] getprop 508 ............................. <my>
+  [ 19] getprop 524 ............................. <soundOffMember>
+  [ 22] setobjprop 61 ........................... my.member = soundOffMember
+  [ 24] ret
+end

@@ -1,0 +1,102 @@
+{
+  "totalLength": 980,
+  "totalLength2": 980,
+  "headerLength": 92,
+  "scriptNumber": 41,
+  "unk20": 4,
+  "parentNumber": -1,
+  "scriptFlags": 0,
+  "unk42": 0,
+  "castID": 196613,
+  "factoryNameID": -1,
+  "handlerVectorsCount": 0,
+  "handlerVectorsOffset": 980,
+  "handlerVectorsSize": 0,
+  "propertiesCount": 1,
+  "propertiesOffset": 92,
+  "globalsCount": 0,
+  "globalsOffset": 94,
+  "handlersCount": 2,
+  "handlersOffset": 94,
+  "literalsCount": 7,
+  "literalsOffset": 840,
+  "literalsDataCount": 84,
+  "literalsDataOffset": 896,
+  "propertyNameIDs": [
+    67
+  ],
+  "globalNameIDs": [],
+  "handlers": [
+    {
+      "nameID": 0,
+      "vectorPos": 65535,
+      "compiledLen": 19,
+      "compiledOffset": 186,
+      "argumentCount": 1,
+      "argumentOffset": 206,
+      "localsCount": 0,
+      "localsOffset": 208,
+      "globalsCount": 0,
+      "globalsOffset": 94,
+      "unknown1": 21,
+      "unknown2": 3,
+      "lineCount": 2,
+      "lineOffset": 208,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 107,
+      "vectorPos": 65535,
+      "compiledLen": 472,
+      "compiledOffset": 210,
+      "argumentCount": 7,
+      "argumentOffset": 682,
+      "localsCount": 27,
+      "localsOffset": 696,
+      "globalsCount": 0,
+      "globalsOffset": 94,
+      "unknown1": 92,
+      "unknown2": 9,
+      "lineCount": 90,
+      "lineOffset": 750,
+      "stackHeight": 6
+    }
+  ],
+  "literals": [
+    {
+      "type": 1,
+      "offset": 0,
+      "value": "mathClass"
+    },
+    {
+      "type": 9,
+      "offset": 14,
+      "value": 0.87
+    },
+    {
+      "type": 1,
+      "offset": 26,
+      "value": "flag"
+    },
+    {
+      "type": 9,
+      "offset": 36,
+      "value": 0.20000000000000001
+    },
+    {
+      "type": 9,
+      "offset": 48,
+      "value": 0.80000000000000004
+    },
+    {
+      "type": 9,
+      "offset": 60,
+      "value": 0.59999999999999998
+    },
+    {
+      "type": 9,
+      "offset": 72,
+      "value": 0.02
+    }
+  ]
+}

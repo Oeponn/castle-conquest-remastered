@@ -1,0 +1,15 @@
+{
+  "type": 15,
+  "infoLen": 125,
+  "specificDataLen": 444,
+  "info": {
+    "dataOffset": 20,
+    "unk1": 0,
+    "unk2": 0,
+    "flags": 0,
+    "scriptId": 0,
+    "scriptSrcText": "",
+    "name": "score_txt"
+  },
+  "member": {}
+}

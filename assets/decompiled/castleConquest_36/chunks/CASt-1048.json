@@ -1,0 +1,15 @@
+{
+  "type": 6,
+  "infoLen": 46,
+  "specificDataLen": 0,
+  "info": {
+    "dataOffset": 20,
+    "unk1": 0,
+    "unk2": 0,
+    "flags": 0,
+    "scriptId": 0,
+    "scriptSrcText": "",
+    "name": "crank_sound"
+  },
+  "member": {}
+}

@@ -1,0 +1,48 @@
+property my
+global objGame
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] setprop 508 ............................. my = sprite(me.spriteNum)
+  [ 12] getprop 508 ............................. <my>
+  [ 15] pushzero ................................ <0>
+  [ 16] setobjprop 183 .......................... my.blend = 0
+  [ 18] ret
+end
+
+on mouseEnter me
+  [  0] getprop 508 ............................. <my>
+  [  3] pushint8 100 ............................ <100>
+  [  5] setobjprop 183 .......................... my.blend = 100
+  [  7] getparam 0 .............................. <me>
+  [  9] getobjprop 509 .......................... <me.spriteNum>
+  [ 12] pusharglist 1 ........................... <me.spriteNum>
+  [ 14] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 16] pushint16 280 ........................... <280>
+  [ 19] setobjprop 518 .......................... sprite(me.spriteNum).cursor = 280
+  [ 22] ret
+end
+
+on mouseUp me
+  [  0] pushcons 0 .............................. <"sendChallenge">
+  [  2] pusharglistnoret 1 ...................... <"sendChallenge">
+  [  4] extcall 192 ............................. go("sendChallenge")
+  [  6] ret
+end
+
+on mouseLeave me
+  [  0] getprop 508 ............................. <my>
+  [  3] pushzero ................................ <0>
+  [  4] setobjprop 183 .......................... my.blend = 0
+  [  6] getparam 0 .............................. <me>
+  [  8] getobjprop 509 .......................... <me.spriteNum>
+  [ 11] pusharglist 1 ........................... <me.spriteNum>
+  [ 13] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 15] pushint8 1 .............................. <1>
+  [ 17] inv ..................................... <-1>
+  [ 18] setobjprop 518 .......................... sprite(me.spriteNum).cursor = -1
+  [ 21] ret
+end

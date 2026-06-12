@@ -1,0 +1,113 @@
+{
+  "totalLength": 460,
+  "totalLength2": 460,
+  "headerLength": 92,
+  "scriptNumber": 8,
+  "unk20": 4,
+  "parentNumber": -1,
+  "scriptFlags": 0,
+  "unk42": 0,
+  "castID": 196617,
+  "factoryNameID": -1,
+  "handlerVectorsCount": 9,
+  "handlerVectorsOffset": 442,
+  "handlerVectorsSize": 384,
+  "propertiesCount": 3,
+  "propertiesOffset": 92,
+  "globalsCount": 0,
+  "globalsOffset": 98,
+  "handlersCount": 4,
+  "handlersOffset": 98,
+  "literalsCount": 2,
+  "literalsOffset": 390,
+  "literalsDataCount": 36,
+  "literalsDataOffset": 406,
+  "propertyNameIDs": [
+    508,
+    511,
+    510
+  ],
+  "globalNameIDs": [],
+  "handlers": [
+    {
+      "nameID": 504,
+      "vectorPos": 65535,
+      "compiledLen": 21,
+      "compiledOffset": 282,
+      "argumentCount": 1,
+      "argumentOffset": 304,
+      "localsCount": 0,
+      "localsOffset": 306,
+      "globalsCount": 0,
+      "globalsOffset": 98,
+      "unknown1": 49,
+      "unknown2": 3,
+      "lineCount": 2,
+      "lineOffset": 306,
+      "stackHeight": 2
+    },
+    {
+      "nameID": 505,
+      "vectorPos": 7,
+      "compiledLen": 13,
+      "compiledOffset": 308,
+      "argumentCount": 1,
+      "argumentOffset": 322,
+      "localsCount": 0,
+      "localsOffset": 324,
+      "globalsCount": 0,
+      "globalsOffset": 98,
+      "unknown1": 118,
+      "unknown2": 8,
+      "lineCount": 1,
+      "lineOffset": 324,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 506,
+      "vectorPos": 8,
+      "compiledLen": 13,
+      "compiledOffset": 326,
+      "argumentCount": 1,
+      "argumentOffset": 340,
+      "localsCount": 0,
+      "localsOffset": 342,
+      "globalsCount": 0,
+      "globalsOffset": 98,
+      "unknown1": 172,
+      "unknown2": 12,
+      "lineCount": 1,
+      "lineOffset": 342,
+      "stackHeight": 3
+    },
+    {
+      "nameID": 507,
+      "vectorPos": 65535,
+      "compiledLen": 39,
+      "compiledOffset": 344,
+      "argumentCount": 0,
+      "argumentOffset": 384,
+      "localsCount": 1,
+      "localsOffset": 384,
+      "globalsCount": 0,
+      "globalsOffset": 98,
+      "unknown1": 239,
+      "unknown2": 16,
+      "lineCount": 3,
+      "lineOffset": 386,
+      "stackHeight": 9
+    }
+  ],
+  "literals": [
+    {
+      "type": 1,
+      "offset": 0,
+      "value": "button_"
+    },
+    {
+      "type": 1,
+      "offset": 12,
+      "value": "buttonDown graphic:"
+    }
+  ]
+}

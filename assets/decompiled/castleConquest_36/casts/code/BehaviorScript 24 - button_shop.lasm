@@ -1,0 +1,154 @@
+property my, itemName, itemPrice, itemWorldName, active
+global objGame
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] setprop 508 ............................. my = sprite(me.spriteNum)
+  [ 12] getparam 0 .............................. <me>
+  [ 14] pusharglistnoret 1 ...................... <me>
+  [ 16] objcall 402 ............................. me.activate()
+  [ 19] ret
+end
+
+on mouseEnter me
+  [  0] getprop 408 ............................. <active>
+  [  3] jmpifz [ 31] ............................ if active then / else
+  [  6] getprop 508 ............................. <my>
+  [  9] pushint8 100 ............................ <100>
+  [ 11] setobjprop 183 .......................... my.blend = 100
+  [ 13] getparam 0 .............................. <me>
+  [ 15] getobjprop 509 .......................... <me.spriteNum>
+  [ 18] pusharglist 1 ........................... <me.spriteNum>
+  [ 20] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 22] pushint16 280 ........................... <280>
+  [ 25] setobjprop 518 .......................... sprite(me.spriteNum).cursor = 280
+  [ 28] jmp [ 46]
+  [ 31] getparam 0 .............................. <me>
+  [ 33] getobjprop 509 .......................... <me.spriteNum>
+  [ 36] pusharglist 1 ........................... <me.spriteNum>
+  [ 38] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 40] pushint8 1 .............................. <1>
+  [ 42] inv ..................................... <-1>
+  [ 43] setobjprop 518 .......................... sprite(me.spriteNum).cursor = -1
+  [ 46] getglobal 439 ........................... <objGame>
+  [ 49] getprop 525 ............................. <itemName>
+  [ 52] getprop 404 ............................. <itemPrice>
+  [ 55] pusharglistnoret 3 ...................... <objGame, itemName, itemPrice>
+  [ 57] objcall 526 ............................. objGame.displayShopItem(itemName, itemPrice)
+  [ 60] ret
+end
+
+on mouseUp me
+  [  0] getprop 408 ............................. <active>
+  [  3] jmpifz [ 23] ............................ if active then
+  [  6] getglobal 439 ........................... <objGame>
+  [  9] getprop 525 ............................. <itemName>
+  [ 12] getprop 404 ............................. <itemPrice>
+  [ 15] getprop 527 ............................. <itemWorldName>
+  [ 18] pusharglistnoret 4 ...................... <objGame, itemName, itemPrice, itemWorldName>
+  [ 20] objcall 528 ............................. objGame.buyShopItem(itemName, itemPrice, itemWorldName)
+  [ 23] ret
+end
+
+on mouseLeave me
+  [  0] getprop 408 ............................. <active>
+  [  3] jmpifz [ 27] ............................ if active then
+  [  6] getprop 508 ............................. <my>
+  [  9] pushzero ................................ <0>
+  [ 10] setobjprop 183 .......................... my.blend = 0
+  [ 12] getparam 0 .............................. <me>
+  [ 14] getobjprop 509 .......................... <me.spriteNum>
+  [ 17] pusharglist 1 ........................... <me.spriteNum>
+  [ 19] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 21] pushint8 1 .............................. <1>
+  [ 23] inv ..................................... <-1>
+  [ 24] setobjprop 518 .......................... sprite(me.spriteNum).cursor = -1
+  [ 27] getglobal 439 ........................... <objGame>
+  [ 30] pusharglistnoret 1 ...................... <objGame>
+  [ 32] objcall 529 ............................. objGame.unDisplayShopItem()
+  [ 35] ret
+end
+
+on deactivate me
+  [  0] pushzero ................................ <0>
+  [  1] setprop 408 ............................. active = 0
+  [  4] getprop 508 ............................. <my>
+  [  7] pushcons 0 .............................. <"shop_button_deactivated">
+  [  9] pusharglist 1 ........................... <"shop_button_deactivated">
+  [ 11] extcall 61 .............................. <member("shop_button_deactivated")>
+  [ 13] setobjprop 61 ........................... my.member = member("shop_button_deactivated")
+  [ 15] getprop 508 ............................. <my>
+  [ 18] pushint8 50 ............................. <50>
+  [ 20] setobjprop 183 .......................... my.blend = 50
+  [ 22] ret
+end
+
+on activate me
+  [  0] pushint8 1 .............................. <1>
+  [  2] setprop 408 ............................. active = 1
+  [  5] getprop 508 ............................. <my>
+  [  8] pushcons 1 .............................. <"shop_button">
+  [ 10] pusharglist 1 ........................... <"shop_button">
+  [ 12] extcall 61 .............................. <member("shop_button")>
+  [ 14] setobjprop 61 ........................... my.member = member("shop_button")
+  [ 16] getprop 508 ............................. <my>
+  [ 19] pushzero ................................ <0>
+  [ 20] setobjprop 183 .......................... my.blend = 0
+  [ 22] ret
+end
+
+on getPrice me
+  [  0] getprop 404 ............................. <itemPrice>
+  [  3] pusharglistnoret 1 ...................... <itemPrice>
+  [  5] extcall 58 .............................. return itemPrice
+  [  7] ret
+end
+
+on getPropertyDescriptionList
+  [  0] pusharglist 0 ........................... <[:]>
+  [  2] pushproplist ............................ <[:]>
+  [  3] setlocal 0 .............................. description = [:]
+  [  5] getlocal 0 .............................. <description>
+  [  7] pushsymb 525 ............................ <#itemName>
+  [ 10] pushsymb 98 ............................. <#default>
+  [ 12] pushcons 2 .............................. <EMPTY>
+  [ 14] pushsymb 512 ............................ <#format>
+  [ 17] pushsymb 91 ............................. <#string>
+  [ 19] pushsymb 513 ............................ <#comment>
+  [ 22] pushcons 3 .............................. <"Item Name">
+  [ 24] pusharglist 6 ........................... <[#default: EMPTY, #format: #string, #comment: "Item Name"]>
+  [ 26] pushproplist ............................ <[#default: EMPTY, #format: #string, #comment: "Item Name"]>
+  [ 27] pusharglistnoret 3 ...................... <description, #itemName, [#default: EMPTY, #format: #string, #comment: "Item Name"]>
+  [ 29] extcall 438 ............................. addProp(description, #itemName, [#default: EMPTY, #format: #string, #comment: "Item Name"])
+  [ 32] getlocal 0 .............................. <description>
+  [ 34] pushsymb 404 ............................ <#itemPrice>
+  [ 37] pushsymb 98 ............................. <#default>
+  [ 39] pushcons 2 .............................. <EMPTY>
+  [ 41] pushsymb 512 ............................ <#format>
+  [ 44] pushsymb 314 ............................ <#integer>
+  [ 47] pushsymb 513 ............................ <#comment>
+  [ 50] pushcons 4 .............................. <"Item Price">
+  [ 52] pusharglist 6 ........................... <[#default: EMPTY, #format: #integer, #comment: "Item Price"]>
+  [ 54] pushproplist ............................ <[#default: EMPTY, #format: #integer, #comment: "Item Price"]>
+  [ 55] pusharglistnoret 3 ...................... <description, #itemPrice, [#default: EMPTY, #format: #integer, #comment: "Item Price"]>
+  [ 57] extcall 438 ............................. addProp(description, #itemPrice, [#default: EMPTY, #format: #integer, #comment: "Item Price"])
+  [ 60] getlocal 0 .............................. <description>
+  [ 62] pushsymb 527 ............................ <#itemWorldName>
+  [ 65] pushsymb 98 ............................. <#default>
+  [ 67] pushcons 2 .............................. <EMPTY>
+  [ 69] pushsymb 512 ............................ <#format>
+  [ 72] pushsymb 91 ............................. <#string>
+  [ 74] pushsymb 513 ............................ <#comment>
+  [ 77] pushcons 5 .............................. <"3D World Name">
+  [ 79] pusharglist 6 ........................... <[#default: EMPTY, #format: #string, #comment: "3D World Name"]>
+  [ 81] pushproplist ............................ <[#default: EMPTY, #format: #string, #comment: "3D World Name"]>
+  [ 82] pusharglistnoret 3 ...................... <description, #itemWorldName, [#default: EMPTY, #format: #string, #comment: "3D World Name"]>
+  [ 84] extcall 438 ............................. addProp(description, #itemWorldName, [#default: EMPTY, #format: #string, #comment: "3D World Name"])
+  [ 87] getlocal 0 .............................. <description>
+  [ 89] pusharglistnoret 1 ...................... <description>
+  [ 91] extcall 58 .............................. return description
+  [ 93] ret
+end

@@ -1,0 +1,132 @@
+property my, navAction, navInfo, active
+global objGame
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] setprop 508 ............................. my = sprite(me.spriteNum)
+  [ 12] getparam 0 .............................. <me>
+  [ 14] pusharglistnoret 1 ...................... <me>
+  [ 16] objcall 402 ............................. me.activate()
+  [ 19] ret
+end
+
+on mouseEnter me
+  [  0] getprop 408 ............................. <active>
+  [  3] jmpifz [ 31] ............................ if active then / else
+  [  6] getprop 508 ............................. <my>
+  [  9] pushint8 100 ............................ <100>
+  [ 11] setobjprop 183 .......................... my.blend = 100
+  [ 13] getparam 0 .............................. <me>
+  [ 15] getobjprop 509 .......................... <me.spriteNum>
+  [ 18] pusharglist 1 ........................... <me.spriteNum>
+  [ 20] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 22] pushint16 280 ........................... <280>
+  [ 25] setobjprop 518 .......................... sprite(me.spriteNum).cursor = 280
+  [ 28] jmp [ 46]
+  [ 31] getparam 0 .............................. <me>
+  [ 33] getobjprop 509 .......................... <me.spriteNum>
+  [ 36] pusharglist 1 ........................... <me.spriteNum>
+  [ 38] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 40] pushint8 1 .............................. <1>
+  [ 42] inv ..................................... <-1>
+  [ 43] setobjprop 518 .......................... sprite(me.spriteNum).cursor = -1
+  [ 46] getglobal 439 ........................... <objGame>
+  [ 49] getprop 530 ............................. <navInfo>
+  [ 52] pusharglistnoret 2 ...................... <objGame, navInfo>
+  [ 54] objcall 531 ............................. objGame.displayNavInfo(navInfo)
+  [ 57] ret
+end
+
+on mouseUp me
+  [  0] getprop 408 ............................. <active>
+  [  3] jmpifz [ 17] ............................ if active then
+  [  6] getglobal 439 ........................... <objGame>
+  [  9] getprop 532 ............................. <navAction>
+  [ 12] pusharglistnoret 2 ...................... <objGame, navAction>
+  [ 14] objcall 533 ............................. objGame.doNavAction(navAction)
+  [ 17] ret
+end
+
+on mouseLeave me
+  [  0] getprop 408 ............................. <active>
+  [  3] jmpifz [ 35] ............................ if active then
+  [  6] getprop 508 ............................. <my>
+  [  9] pushzero ................................ <0>
+  [ 10] setobjprop 183 .......................... my.blend = 0
+  [ 12] getparam 0 .............................. <me>
+  [ 14] getobjprop 509 .......................... <me.spriteNum>
+  [ 17] pusharglist 1 ........................... <me.spriteNum>
+  [ 19] extcall 136 ............................. <sprite(me.spriteNum)>
+  [ 21] pushint8 1 .............................. <1>
+  [ 23] inv ..................................... <-1>
+  [ 24] setobjprop 518 .......................... sprite(me.spriteNum).cursor = -1
+  [ 27] getglobal 439 ........................... <objGame>
+  [ 30] pusharglistnoret 1 ...................... <objGame>
+  [ 32] objcall 534 ............................. objGame.unDisplayNavInfo()
+  [ 35] ret
+end
+
+on deactivate me
+  [  0] pushzero ................................ <0>
+  [  1] setprop 408 ............................. active = 0
+  [  4] getprop 508 ............................. <my>
+  [  7] pushcons 0 .............................. <"nav_button_deactivated">
+  [  9] pusharglist 1 ........................... <"nav_button_deactivated">
+  [ 11] extcall 61 .............................. <member("nav_button_deactivated")>
+  [ 13] setobjprop 61 ........................... my.member = member("nav_button_deactivated")
+  [ 15] getprop 508 ............................. <my>
+  [ 18] pushint8 50 ............................. <50>
+  [ 20] setobjprop 183 .......................... my.blend = 50
+  [ 22] ret
+end
+
+on activate me
+  [  0] pushint8 1 .............................. <1>
+  [  2] setprop 408 ............................. active = 1
+  [  5] getprop 508 ............................. <my>
+  [  8] pushcons 1 .............................. <"nav_button">
+  [ 10] pusharglist 1 ........................... <"nav_button">
+  [ 12] extcall 61 .............................. <member("nav_button")>
+  [ 14] setobjprop 61 ........................... my.member = member("nav_button")
+  [ 16] getprop 508 ............................. <my>
+  [ 19] pushzero ................................ <0>
+  [ 20] setobjprop 183 .......................... my.blend = 0
+  [ 22] ret
+end
+
+on getPropertyDescriptionList
+  [  0] pusharglist 0 ........................... <[:]>
+  [  2] pushproplist ............................ <[:]>
+  [  3] setlocal 0 .............................. description = [:]
+  [  5] getlocal 0 .............................. <description>
+  [  7] pushsymb 532 ............................ <#navAction>
+  [ 10] pushsymb 98 ............................. <#default>
+  [ 12] pushcons 2 .............................. <EMPTY>
+  [ 14] pushsymb 512 ............................ <#format>
+  [ 17] pushsymb 535 ............................ <#static>
+  [ 20] pushsymb 513 ............................ <#comment>
+  [ 23] pushcons 3 .............................. <"NavAction">
+  [ 25] pusharglist 6 ........................... <[#default: EMPTY, #format: #static, #comment: "NavAction"]>
+  [ 27] pushproplist ............................ <[#default: EMPTY, #format: #static, #comment: "NavAction"]>
+  [ 28] pusharglistnoret 3 ...................... <description, #navAction, [#default: EMPTY, #format: #static, #comment: "NavAction"]>
+  [ 30] extcall 438 ............................. addProp(description, #navAction, [#default: EMPTY, #format: #static, #comment: "NavAction"])
+  [ 33] getlocal 0 .............................. <description>
+  [ 35] pushsymb 530 ............................ <#navInfo>
+  [ 38] pushsymb 98 ............................. <#default>
+  [ 40] pushcons 2 .............................. <EMPTY>
+  [ 42] pushsymb 512 ............................ <#format>
+  [ 45] pushsymb 91 ............................. <#string>
+  [ 47] pushsymb 513 ............................ <#comment>
+  [ 50] pushcons 4 .............................. <"Nav Info">
+  [ 52] pusharglist 6 ........................... <[#default: EMPTY, #format: #string, #comment: "Nav Info"]>
+  [ 54] pushproplist ............................ <[#default: EMPTY, #format: #string, #comment: "Nav Info"]>
+  [ 55] pusharglistnoret 3 ...................... <description, #navInfo, [#default: EMPTY, #format: #string, #comment: "Nav Info"]>
+  [ 57] extcall 438 ............................. addProp(description, #navInfo, [#default: EMPTY, #format: #string, #comment: "Nav Info"])
+  [ 60] getlocal 0 .............................. <description>
+  [ 62] pusharglistnoret 1 ...................... <description>
+  [ 64] extcall 58 .............................. return description
+  [ 66] ret
+end

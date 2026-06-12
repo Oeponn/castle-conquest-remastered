@@ -1,0 +1,90 @@
+property my, my_str, password
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] setprop 508 ............................. my = sprite(me.spriteNum)
+  [ 12] getparam 0 .............................. <me>
+  [ 14] pusharglistnoret 1 ...................... <me>
+  [ 16] objcall 540 ............................. me.reset()
+  [ 19] ret
+end
+
+on keyDown me
+  [  0] pusharglist 0 ........................... <>
+  [  2] extcall 541 ............................. <key()>
+  [  5] setlocal 0 .............................. newChar = key()
+  [  7] getlocal 0 .............................. <newChar>
+  [  9] pushcons 0 .............................. <BACKSPACE>
+  [ 11] eq ...................................... <newChar = BACKSPACE>
+  [ 12] jmpifz [ 76] ............................ if newChar = BACKSPACE then / else
+  [ 15] pushvarref 542 .......................... <password>
+  [ 18] pushchunkvarref 3 ....................... <password>
+  [ 20] pushsymb 412 ............................ <#char>
+  [ 23] getprop 542 ............................. <password>
+  [ 26] pushsymb 412 ............................ <#char>
+  [ 29] pusharglist 2 ........................... <password, #char>
+  [ 31] objcall 264 ............................. <password.char.count>
+  [ 34] pusharglist 3 ........................... <password, #char, password.char.count>
+  [ 36] objcall 396 ............................. <password.char[password.char.count]>
+  [ 39] pusharglistnoret 1 ...................... <password.char[password.char.count]>
+  [ 41] objcall 414 ............................. delete password.char[password.char.count]
+  [ 44] pushvarref 543 .......................... <my_str>
+  [ 47] pushchunkvarref 3 ....................... <my_str>
+  [ 49] pushsymb 412 ............................ <#char>
+  [ 52] getprop 543 ............................. <my_str>
+  [ 55] pushsymb 412 ............................ <#char>
+  [ 58] pusharglist 2 ........................... <my_str, #char>
+  [ 60] objcall 264 ............................. <my_str.char.count>
+  [ 63] pusharglist 3 ........................... <my_str, #char, my_str.char.count>
+  [ 65] objcall 396 ............................. <my_str.char[my_str.char.count]>
+  [ 68] pusharglistnoret 1 ...................... <my_str.char[my_str.char.count]>
+  [ 70] objcall 414 ............................. delete my_str.char[my_str.char.count]
+  [ 73] jmp [114]
+  [ 76] pusharglist 0 ........................... <>
+  [ 78] extcall 541 ............................. <key()>
+  [ 81] pushcons 1 .............................. <TAB>
+  [ 83] nteq .................................... <key() <> TAB>
+  [ 84] pusharglist 0 ........................... <>
+  [ 86] extcall 541 ............................. <key()>
+  [ 89] pushcons 2 .............................. <RETURN>
+  [ 91] nteq .................................... <key() <> RETURN>
+  [ 92] and ..................................... <(key() <> TAB) and (key() <> RETURN)>
+  [ 93] jmpifz [114] ............................ if (key() <> TAB) and (key() <> RETURN) then
+  [ 96] getprop 542 ............................. <password>
+  [ 99] getlocal 0 .............................. <newChar>
+  [101] joinstr ................................. <password & newChar>
+  [102] setprop 542 ............................. password = password & newChar
+  [105] getprop 543 ............................. <my_str>
+  [108] pushcons 3 .............................. <"*">
+  [110] joinstr ................................. <my_str & "*">
+  [111] setprop 543 ............................. my_str = my_str & "*"
+  [114] getprop 508 ............................. <my>
+  [117] getchainedprop 61 ....................... <my.member>
+  [119] getprop 543 ............................. <my_str>
+  [122] setobjprop 92 ........................... my.member.text = my_str
+  [124] ret
+end
+
+on getPassword me
+  [  0] getprop 542 ............................. <password>
+  [  3] pusharglistnoret 1 ...................... <password>
+  [  5] extcall 58 .............................. return password
+  [  7] ret
+end
+
+on reset me
+  [  0] getprop 508 ............................. <my>
+  [  3] getchainedprop 61 ....................... <my.member>
+  [  5] pushcons 4 .............................. <EMPTY>
+  [  7] setobjprop 92 ........................... my.member.text = EMPTY
+  [  9] pushcons 4 .............................. <EMPTY>
+  [ 11] setprop 542 ............................. password = EMPTY
+  [ 14] getprop 508 ............................. <my>
+  [ 17] getchainedprop 61 ....................... <my.member>
+  [ 19] getobjprop 92 ........................... <my.member.text>
+  [ 21] setprop 543 ............................. my_str = my.member.text
+  [ 24] ret
+end

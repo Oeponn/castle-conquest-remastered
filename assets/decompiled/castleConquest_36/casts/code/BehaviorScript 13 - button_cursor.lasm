@@ -1,0 +1,20 @@
+on mouseEnter me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] pushint16 280 ........................... <280>
+  [ 12] setobjprop 518 .......................... sprite(me.spriteNum).cursor = 280
+  [ 15] ret
+end
+
+on mouseLeave me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] pushint8 1 .............................. <1>
+  [ 11] inv ..................................... <-1>
+  [ 12] setobjprop 518 .......................... sprite(me.spriteNum).cursor = -1
+  [ 15] ret
+end

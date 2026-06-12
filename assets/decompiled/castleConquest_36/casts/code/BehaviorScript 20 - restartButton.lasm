@@ -1,0 +1,39 @@
+global sprNum
+
+on mouseUp me
+  [  0] getglobal 137 ........................... <sprNum>
+  [  2] getobjprop 380 .......................... <sprNum.gameScore_txt>
+  [  5] pusharglist 1 ........................... <sprNum.gameScore_txt>
+  [  7] extcall 136 ............................. <sprite(sprNum.gameScore_txt)>
+  [  9] getchainedprop 61 ....................... <sprite(sprNum.gameScore_txt).member>
+  [ 11] pushcons 0 .............................. <"0">
+  [ 13] setobjprop 92 ........................... sprite(sprNum.gameScore_txt).member.text = "0"
+  [ 15] getglobal 137 ........................... <sprNum>
+  [ 17] getobjprop 372 .......................... <sprNum.restart_txt>
+  [ 20] pusharglist 1 ........................... <sprNum.restart_txt>
+  [ 22] extcall 136 ............................. <sprite(sprNum.restart_txt)>
+  [ 24] pushzero ................................ <0>
+  [ 25] setobjprop 232 .......................... sprite(sprNum.restart_txt).visible = 0
+  [ 27] getglobal 137 ........................... <sprNum>
+  [ 29] getobjprop 338 .......................... <sprNum.tallyNames_txt>
+  [ 32] pusharglist 1 ........................... <sprNum.tallyNames_txt>
+  [ 34] extcall 136 ............................. <sprite(sprNum.tallyNames_txt)>
+  [ 36] pushzero ................................ <0>
+  [ 37] setobjprop 232 .......................... sprite(sprNum.tallyNames_txt).visible = 0
+  [ 39] getglobal 137 ........................... <sprNum>
+  [ 41] getobjprop 315 .......................... <sprNum.tallyTotals_txt>
+  [ 44] pusharglist 1 ........................... <sprNum.tallyTotals_txt>
+  [ 46] extcall 136 ............................. <sprite(sprNum.tallyTotals_txt)>
+  [ 48] pushzero ................................ <0>
+  [ 49] setobjprop 232 .......................... sprite(sprNum.tallyTotals_txt).visible = 0
+  [ 51] getglobal 137 ........................... <sprNum>
+  [ 53] getobjprop 339 .......................... <sprNum.gameOver_txt>
+  [ 56] pusharglist 1 ........................... <sprNum.gameOver_txt>
+  [ 58] extcall 136 ............................. <sprite(sprNum.gameOver_txt)>
+  [ 60] pushzero ................................ <0>
+  [ 61] setobjprop 232 .......................... sprite(sprNum.gameOver_txt).visible = 0
+  [ 63] pushcons 1 .............................. <"intro">
+  [ 65] pusharglistnoret 1 ...................... <"intro">
+  [ 67] extcall 192 ............................. go("intro")
+  [ 69] ret
+end

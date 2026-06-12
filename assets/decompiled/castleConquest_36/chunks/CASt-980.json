@@ -1,0 +1,15 @@
+{
+  "type": 6,
+  "infoLen": 49,
+  "specificDataLen": 0,
+  "info": {
+    "dataOffset": 20,
+    "unk1": 0,
+    "unk2": 0,
+    "flags": 16,
+    "scriptId": 0,
+    "scriptSrcText": "",
+    "name": "boompoof_sound"
+  },
+  "member": {}
+}

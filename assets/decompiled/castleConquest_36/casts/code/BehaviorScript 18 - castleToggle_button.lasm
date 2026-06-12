@@ -1,0 +1,43 @@
+property Dir
+global objGame, sprNum
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 509 .......................... <me.spriteNum>
+  [  5] pusharglist 1 ........................... <me.spriteNum>
+  [  7] extcall 136 ............................. <sprite(me.spriteNum)>
+  [  9] pushint8 1 .............................. <1>
+  [ 11] setobjprop 232 .......................... sprite(me.spriteNum).visible = 1
+  [ 13] ret
+end
+
+on mouseUp me
+  [  0] getglobal 439 ........................... <objGame>
+  [  3] getprop 296 ............................. <Dir>
+  [  6] pusharglistnoret 2 ...................... <objGame, Dir>
+  [  8] objcall 520 ............................. objGame.castleToggle(Dir)
+  [ 11] ret
+end
+
+on getPropertyDescriptionList
+  [  0] pusharglist 0 ........................... <[:]>
+  [  2] pushproplist ............................ <[:]>
+  [  3] setlocal 0 .............................. description = [:]
+  [  5] getlocal 0 .............................. <description>
+  [  7] pushsymb 296 ............................ <#Dir>
+  [ 10] pushsymb 98 ............................. <#default>
+  [ 12] pushint8 1 .............................. <1>
+  [ 14] inv ..................................... <-1>
+  [ 15] pushsymb 512 ............................ <#format>
+  [ 18] pushsymb 314 ............................ <#integer>
+  [ 21] pushsymb 513 ............................ <#comment>
+  [ 24] pushcons 0 .............................. <"toggle direction +1 or -1">
+  [ 26] pusharglist 6 ........................... <[#default: -1, #format: #integer, #comment: "toggle direction +1 or -1"]>
+  [ 28] pushproplist ............................ <[#default: -1, #format: #integer, #comment: "toggle direction +1 or -1"]>
+  [ 29] pusharglistnoret 3 ...................... <description, #Dir, [#default: -1, #format: #integer, #comment: "toggle direction +1 or -1"]>
+  [ 31] extcall 438 ............................. addProp(description, #Dir, [#default: -1, #format: #integer, #comment: "toggle direction +1 or -1"])
+  [ 34] getlocal 0 .............................. <description>
+  [ 36] pusharglistnoret 1 ...................... <description>
+  [ 38] extcall 58 .............................. return description
+  [ 40] ret
+end
