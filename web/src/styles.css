@@ -20,7 +20,8 @@ body { font-family: Georgia, "Times New Roman", serif; touch-action: none; -webk
   background: transparent;
   border: none;
   cursor: pointer;
-  width: 150px; height: 34px;
+  /* matches the gold boxes baked into mainMenu_04.png */
+  left: 48px; width: 209px; height: 40px;
 }
 .menu-btn:hover { outline: 2px solid #f5d76a; outline-offset: -2px; }
 

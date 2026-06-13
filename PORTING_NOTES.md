@@ -78,6 +78,19 @@ classes and what they do:
 - Sprite layout puts the 3D viewport at a 427×305 area with a parchment frame
   (`gameWorldOverlay.png`), toolbar on the left (`launchControls_02.png`):
   power meter, rotation dial, angle dial, sword power-meter needle.
+- The original sprite positions lived in the Director *score* (not readable by
+  ProjectorRays), so the HUD/menu overlay coordinates were re-measured from the
+  artwork pixels (2026-06-12, fixing the misaligned first pass):
+  - `launchControls_02.png` (105×346, placed at stage 18,70): the sword-blade
+    slot is a **transparent window** at x 45–62, y 12–156 — the original drew
+    `sword_blade_01` *behind* the toolbar art and let it show through the slot
+    as it slides up with power (so no clipping is needed, just z-order).
+    Rotation-dial circle center is (52,239); protractor vertex is (37,336).
+  - `mainMenu_04.png`: the three baked-in button boxes sit at x 48–257,
+    tops 148/207/265, 40px tall (59px pitch). The port's "Two Player" button is
+    drawn as a matching fourth box at top 324.
+  - `yellowLine_bmp.png` decoded with a broken palette (green/black pixels), so
+    the elevation needle is drawn as a CSS line instead of using that bitmap.
 - Menus are full-screen bitmaps: `mainMenu_04.png` (menu), `main_23.png`
   (instructions background), `castlesConquered_01.png` (castle select),
   `castle_unlock_01.png` (unlock popup).

@@ -1,7 +1,12 @@
 // In-game HUD composed from the original toolbar art: launchControls_02 is
 // the left toolbar (sword slot, rotation dial, angle protractor); the sword
-// blade rises as the power meter; yellowLine + dials rotate with the aim
+// blade rises as the power meter; the dial needles rotate with the aim
 // angles, mirroring sprite rotations in applyVelToAimCam.
+//
+// Toolbar geometry measured from launchControls_02.png (105x346): the sword
+// slot is a transparent window at x 45-62, y 12-156 — the blade sprite slides
+// up BEHIND the art and shows through it (original Director z-order). Dial
+// circle center (52,239); protractor vertex (37,336).
 
 import { useRef } from "react";
 import { HudState } from "../game/engine";
@@ -51,45 +56,44 @@ export function Hud(props: {
         <img
           className="crosshair"
           src={IMG("crosshair")}
-          style={{ left: 145 + 195, top: 80 + 140 }}
+          style={{ left: 145 + (427 - 36) / 2, top: 80 + (305 - 36) / 2 }}
           alt=""
         />
       )}
 
       <div className="toolbar">
-        <img className="tb" src={IMG("launchControls_02")} alt="" />
-        {/* power: sword blade rises in its slot */}
+        {/* power: sword blade slides up behind the slot window in the art */}
         <img
           src={IMG("sword_blade_01")}
           style={{
-            position: "absolute", left: 42, width: 20, height: 146,
-            top: 30 + (1 - hud.meterPerc) * 0, transform: `translateY(${(1 - hud.meterPerc) * 110 - 110 + 110}px)`,
-            clipPath: `inset(${(1 - hud.meterPerc) * 100}% 0 0 0)`,
+            position: "absolute", left: 44, width: 20, height: 146,
+            top: 156 - hud.meterPerc * 145,
           }}
           alt=""
         />
+        <img className="tb" src={IMG("launchControls_02")} alt="" />
+        {/* range arrows bracket the slot (slot center y = 84) */}
         <img
           src={IMG("powermeterArrows_01")}
-          style={{ position: "absolute", left: 8, top: 40, width: 27, height: 123 }}
+          style={{ position: "absolute", left: 17, top: 22, width: 27, height: 123 }}
           alt=""
         />
-        {/* rotation dial needle */}
+        {/* rotation dial needle, pivots on the dial center */}
         <div
           className="dial"
           style={{
-            left: 38, top: 196, width: 30, height: 4, background: "#f5d76a",
+            left: 37, top: 237, width: 30, height: 4, background: "#f5d76a",
             transform: `rotate(${rotDial}deg)`, position: "absolute",
           }}
         />
-        {/* elevation needle over the protractor */}
-        <img
-          src={IMG("yellowLine_bmp")}
+        {/* elevation needle pivots on the protractor vertex; drawn in CSS
+            because yellowLine_bmp decoded with a broken palette */}
+        <div
           className="dial"
           style={{
-            left: 50, top: 268, width: 3, height: 36, position: "absolute",
-            transformOrigin: "50% 100%", transform: `rotate(${angDial}deg)`,
+            left: 36, top: 307, width: 2, height: 29, background: "#f5d76a",
+            position: "absolute", transformOrigin: "50% 100%", transform: `rotate(${angDial}deg)`,
           }}
-          alt=""
         />
       </div>
 

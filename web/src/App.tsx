@@ -153,12 +153,14 @@ export default function App() {
         {screen === "menu" && (
           <div className="screen">
             <img className="bg" src={IMG("mainMenu_04")} alt="Castle Conquest main menu" />
-            {/* invisible hotspots over the baked-in button art */}
-            <button className="menu-btn" style={{ left: 36, top: 152 }} onClick={() => startGame(false)} aria-label="Start Game" />
-            <button className="menu-btn" style={{ left: 36, top: 222 }} onClick={() => setScreen("instructions")} aria-label="Instructions" />
+            {/* invisible hotspots over the baked-in button art (boxes at
+                x 48-257, tops 148/207/265, 59px pitch) */}
+            <button className="menu-btn" style={{ top: 148 }} onClick={() => startGame(false)} aria-label="Start Game" />
+            <button className="menu-btn" style={{ top: 207 }} onClick={() => setScreen("instructions")} aria-label="Instructions" />
+            {/* extra slot below the baked-in boxes, drawn to match them */}
             <button
               className="menu-btn gold-text"
-              style={{ left: 36, top: 292, fontSize: 17, fontFamily: "inherit" }}
+              style={{ top: 324, fontSize: 17, fontFamily: "inherit", fontStyle: "italic", border: "2px solid #825f0e" }}
               onClick={() => startGame(true)}
             >
               Two Player
