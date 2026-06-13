@@ -49,7 +49,10 @@ export class GameWorld {
     this.stoneMat = new THREE.MeshLambertMaterial({ map: this.brickTex });
     this.roofMat = new THREE.MeshLambertMaterial({ color: 0x8a4a2a });
     this.woodMat = new THREE.MeshLambertMaterial({ color: 0x6b4a2a });
-    this.flagMat = new THREE.MeshLambertMaterial({ color: 0xcc1111, side: THREE.DoubleSide });
+    this.flagMat = new THREE.MeshLambertMaterial({
+      color: 0xcc1111,
+      side: THREE.DoubleSide,
+    });
     this.cannonMat = new THREE.MeshLambertMaterial({ color: 0x333338 });
 
     // Sky: the original skydome bitmap mapped onto a backdrop dome
@@ -57,7 +60,11 @@ export class GameWorld {
     skyTex.colorSpace = THREE.SRGBColorSpace;
     const sky = new THREE.Mesh(
       new THREE.SphereGeometry(1500, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2),
-      new THREE.MeshBasicMaterial({ map: skyTex, side: THREE.BackSide, depthWrite: false })
+      new THREE.MeshBasicMaterial({
+        map: skyTex,
+        side: THREE.BackSide,
+        depthWrite: false,
+      }),
     );
     sky.rotation.x = Math.PI / 2; // z-up
     this.scene.add(sky);
@@ -65,11 +72,17 @@ export class GameWorld {
 
     // Ground
     const groundMat = new THREE.MeshLambertMaterial({ color: 0x5e7a3a });
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(3000, 3000), groundMat);
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(3000, 3000),
+      groundMat,
+    );
     this.scene.add(ground);
     this.groundBody = new CANNON.Body({ mass: 0, shape: new CANNON.Plane() });
     // CANNON.Plane faces +z by default, which is up in our world. p_ground sim=2.
-    this.groundBody.material = new CANNON.Material({ friction: 0.9, restitution: 0.1 });
+    this.groundBody.material = new CANNON.Material({
+      friction: 0.9,
+      restitution: 0.1,
+    });
     this.world.addBody(this.groundBody);
 
     // Lights
@@ -86,19 +99,25 @@ export class GameWorld {
     const g = new THREE.Group();
     switch (def.kind) {
       case "box": {
-        const m = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), this.stoneMat);
+        const m = new THREE.Mesh(
+          new THREE.BoxGeometry(sx, sy, sz),
+          this.stoneMat,
+        );
         g.add(m);
         break;
       }
       case "cylinder": {
         const m = new THREE.Mesh(
           new THREE.CylinderGeometry(sx / 2, sx / 2, sz, 12),
-          baseName.includes("Top") ? this.roofMat : this.stoneMat
+          baseName.includes("Top") ? this.roofMat : this.stoneMat,
         );
         m.rotation.x = Math.PI / 2; // cylinder axis -> z
         g.add(m);
         if (baseName === "towerTopA") {
-          const cone = new THREE.Mesh(new THREE.ConeGeometry(sx / 2 + 1, 8, 12), this.roofMat);
+          const cone = new THREE.Mesh(
+            new THREE.ConeGeometry(sx / 2 + 1, 8, 12),
+            this.roofMat,
+          );
           cone.rotation.x = Math.PI / 2;
           cone.position.z = sz / 2 + 4;
           g.add(cone);
@@ -112,7 +131,10 @@ export class GameWorld {
         shape.lineTo(sx / 2, 0);
         shape.lineTo(-sx / 2, sz);
         shape.closePath();
-        const geo = new THREE.ExtrudeGeometry(shape, { depth: sy, bevelEnabled: false });
+        const geo = new THREE.ExtrudeGeometry(shape, {
+          depth: sy,
+          bevelEnabled: false,
+        });
         const m = new THREE.Mesh(geo, this.stoneMat);
         m.rotation.x = Math.PI / 2;
         m.position.set(0, sy / 2, -sz / 2);
@@ -120,11 +142,17 @@ export class GameWorld {
         break;
       }
       case "arch": {
-        const left = new THREE.Mesh(new THREE.BoxGeometry(sx, sy / 3, sz), this.stoneMat);
+        const left = new THREE.Mesh(
+          new THREE.BoxGeometry(sx, sy / 3, sz),
+          this.stoneMat,
+        );
         left.position.y = -sy / 3;
         const right = left.clone();
         right.position.y = sy / 3;
-        const top = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz / 2), this.stoneMat);
+        const top = new THREE.Mesh(
+          new THREE.BoxGeometry(sx, sy, sz / 2),
+          this.stoneMat,
+        );
         top.position.z = sz / 4;
         g.add(left, right, top);
         break;
@@ -132,14 +160,27 @@ export class GameWorld {
       case "cannon": {
         const barrel = new THREE.Mesh(
           new THREE.CylinderGeometry(sz * 0.22, sz * 0.3, sx, 12),
-          this.cannonMat
+          this.cannonMat,
         );
         barrel.rotation.z = Math.PI / 2 - 0.35; // tilted up toward enemy (+x when rz=180 flips)
         barrel.position.z = sz * 0.15;
-        const base = new THREE.Mesh(new THREE.BoxGeometry(sx * 0.7, sy * 0.8, sz * 0.5), this.woodMat);
+        const base = new THREE.Mesh(
+          new THREE.BoxGeometry(sx * 0.7, sy * 0.8, sz * 0.5),
+          this.woodMat,
+        );
         base.position.z = -sz * 0.25;
-        const wheelGeo = new THREE.CylinderGeometry(sz * 0.2, sz * 0.2, 1.5, 10);
-        for (const [wx, wy] of [[-sx * 0.25, -sy * 0.4], [-sx * 0.25, sy * 0.4], [sx * 0.25, -sy * 0.4], [sx * 0.25, sy * 0.4]]) {
+        const wheelGeo = new THREE.CylinderGeometry(
+          sz * 0.2,
+          sz * 0.2,
+          1.5,
+          10,
+        );
+        for (const [wx, wy] of [
+          [-sx * 0.25, -sy * 0.4],
+          [-sx * 0.25, sy * 0.4],
+          [sx * 0.25, -sy * 0.4],
+          [sx * 0.25, sy * 0.4],
+        ]) {
           const w = new THREE.Mesh(wheelGeo, this.woodMat);
           w.position.set(wx, wy, -sz * 0.4);
           g.add(w);
@@ -148,9 +189,15 @@ export class GameWorld {
         break;
       }
       case "flag": {
-        const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, sz, 6), this.woodMat);
+        const pole = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.6, 0.6, sz, 6),
+          this.woodMat,
+        );
         pole.rotation.x = Math.PI / 2;
-        const cloth = new THREE.Mesh(new THREE.PlaneGeometry(8, 5), this.flagMat);
+        const cloth = new THREE.Mesh(
+          new THREE.PlaneGeometry(8, 5),
+          this.flagMat,
+        );
         cloth.rotation.y = Math.PI / 2;
         cloth.position.set(0, 4, sz / 2 - 3);
         g.add(pole, cloth);
@@ -164,20 +211,37 @@ export class GameWorld {
     const [sx, sy, sz] = def.size;
     const body = new CANNON.Body({ mass: def.mass });
     if (def.kind === "cylinder") {
-      body.addShape(new CANNON.Cylinder(sx / 2, sx / 2, sz, 8), new CANNON.Vec3(), new CANNON.Quaternion().setFromEuler(Math.PI / 2, 0, 0));
+      body.addShape(
+        new CANNON.Cylinder(sx / 2, sx / 2, sz, 8),
+        new CANNON.Vec3(),
+        new CANNON.Quaternion().setFromEuler(Math.PI / 2, 0, 0),
+      );
     } else if (def.kind === "flag") {
       body.addShape(new CANNON.Box(new CANNON.Vec3(1.5, 1.5, sz / 2)));
     } else {
       body.addShape(new CANNON.Box(new CANNON.Vec3(sx / 2, sy / 2, sz / 2)));
     }
-    body.material = new CANNON.Material({ friction: def.friction, restitution: Math.min(def.restitution, 0.4) });
+    // The catalogue restitution is Havok's (which only bounced above a
+    // velocity threshold); cannon-es applies it at any contact speed, so
+    // resting stacks micro-bounce and wobble unless it's near zero.
+    body.material = new CANNON.Material({
+      friction: def.friction,
+      restitution: 0.05,
+    });
     body.sleepSpeedLimit = 0.4;
     body.sleepTimeLimit = 0.6;
     return body;
   }
 
   /** castleBuilderClass.makeCastlePiece — z position is the piece's *base*. */
-  makeCastlePiece(pieceName: string, x: number, y: number, z: number, rz: number, side: 1 | -1): GamePiece {
+  makeCastlePiece(
+    pieceName: string,
+    x: number,
+    y: number,
+    z: number,
+    rz: number,
+    side: 1 | -1,
+  ): GamePiece {
     this.pieceCount++;
     const def = PIECES[pieceName];
     const name = `p_clone_${pieceName}_${this.pieceCount}`;
@@ -185,7 +249,9 @@ export class GameWorld {
     const body = this.buildBody(def);
     const cz = z + def.size[2] / 2;
     body.position.set(x, y, cz);
-    const yaw = (rz * Math.PI) / 180 * (side === -1 ? -1 : 1) + (side === -1 ? Math.PI : 0);
+    const yaw =
+      ((rz * Math.PI) / 180) * (side === -1 ? -1 : 1) +
+      (side === -1 ? Math.PI : 0);
     body.quaternion.setFromEuler(0, 0, yaw);
     mesh.position.copy(body.position as unknown as THREE.Vector3);
     this.scene.add(mesh);
@@ -207,24 +273,46 @@ export class GameWorld {
   makeCastle(dataList: PieceData[], side: 1 | -1): GamePiece[] {
     const out: GamePiece[] = [];
     for (const pd of dataList) {
-      out.push(this.makeCastlePiece(pd.name, pd.x * side, pd.y, pd.z, pd.rz * side, side));
+      out.push(
+        this.makeCastlePiece(
+          pd.name,
+          pd.x * side,
+          pd.y,
+          pd.z,
+          pd.rz * side,
+          side,
+        ),
+      );
     }
     return out;
   }
 
   addToSim(piece: GamePiece) {
     if (!this.world.bodies.includes(piece.body)) this.world.addBody(piece.body);
-    piece.body.wakeUp();
+    // Spawn frozen: Havok held live stacks rock-stable, cannon-es doesn't.
+    // A sleeping body is immovable until an awake one (the ball, or a piece
+    // it knocked loose) contacts it, which wakes the stack in a chain.
+    piece.body.sleep();
   }
 
   removeFromSim(piece: GamePiece) {
-    if (this.world.bodies.includes(piece.body)) this.world.removeBody(piece.body);
+    if (this.world.bodies.includes(piece.body))
+      this.world.removeBody(piece.body);
   }
 
   syncMeshes() {
     for (const p of this.pieces) {
-      p.mesh.position.set(p.body.position.x, p.body.position.y, p.body.position.z);
-      p.mesh.quaternion.set(p.body.quaternion.x, p.body.quaternion.y, p.body.quaternion.z, p.body.quaternion.w);
+      p.mesh.position.set(
+        p.body.position.x,
+        p.body.position.y,
+        p.body.position.z,
+      );
+      p.mesh.quaternion.set(
+        p.body.quaternion.x,
+        p.body.quaternion.y,
+        p.body.quaternion.z,
+        p.body.quaternion.w,
+      );
     }
   }
 
@@ -240,8 +328,13 @@ export class GameWorld {
   /** world-space tilt of a piece in degrees on x/y axes (checkFlagsDown) */
   tiltDegrees(piece: GamePiece): { x: number; y: number } {
     const e = new THREE.Euler().setFromQuaternion(
-      new THREE.Quaternion(piece.body.quaternion.x, piece.body.quaternion.y, piece.body.quaternion.z, piece.body.quaternion.w),
-      "XYZ"
+      new THREE.Quaternion(
+        piece.body.quaternion.x,
+        piece.body.quaternion.y,
+        piece.body.quaternion.z,
+        piece.body.quaternion.w,
+      ),
+      "XYZ",
     );
     return { x: (e.x * 180) / Math.PI, y: (e.y * 180) / Math.PI };
   }

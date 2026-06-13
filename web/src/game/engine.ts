@@ -70,6 +70,7 @@ export class GameEngine {
   ballBody: CANNON.Body;
   ballThrown = false;
   ballInWorld = false;
+  lastThrust = 0; // read by the headless test harness
 
   player1Turn = true;
   twoPlayer = false;
@@ -326,6 +327,7 @@ export class GameEngine {
   // ---------- throwing (getThrowVectors / throwBall) ----------
   private throwBall(thrust: number, aiAngleDeg?: number) {
     this.audio.stopCrank();
+    this.lastThrust = thrust;
     const dir = this.player1Turn ? 1 : -1;
     const big = (this.player1Turn ? this.player1Cannon : this.player2Cannon)?.baseName === "cannonB";
     const radius = big ? C.BALL_RADIUS_BIG : C.BALL_RADIUS;
@@ -360,6 +362,7 @@ export class GameEngine {
       (ySpeed + ry * 0.3) * dir,
       zSpeed + rz * 0.3
     );
+    impulse.scale(C.IMPULSE_SCALE, impulse);
     if (!this.ballInWorld) {
       this.gw.world.addBody(this.ballBody);
       this.ballInWorld = true;
@@ -659,17 +662,22 @@ export class GameEngine {
     switch (this.state) {
       case "ballInPlay":
         this.ballInPlayTick(dt);
-        this.gw.world.step(dt * 2); // ~original Havok pace, sub-stepped at 100 Hz
+        this.stepPhysics();
         break;
       case "setPower":
       case "throwBall":
         this.aimTick();
-        this.gw.world.step(dt * 2);
+        this.stepPhysics();
         break;
       default:
         break;
     }
     if (this.movePowerMeter) this.oscillatePowerTick();
+  }
+
+  private stepPhysics() {
+    const sub = C.PHYS_DT_PER_TICK / C.PHYS_SUBSTEPS;
+    for (let i = 0; i < C.PHYS_SUBSTEPS; i++) this.gw.world.step(sub);
   }
 
   private pushHud(force = false) {

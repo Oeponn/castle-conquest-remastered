@@ -59,14 +59,21 @@ export const AI_MAX_POWER_PERC = 1.0;
 
 export const MAX_CASTLE_ID = 8; // computer cycles castles 1..8 by level
 
-// Physics: Havok ran step(0.1, 15) per logic tick. We integrate the same
-// 0.1 s of simulated time per logic tick, split into substeps so the
-// cannonball can't tunnel through 5-unit-thick walls.
-export const PHYS_DT_PER_TICK = 0.1 / 10;
-export const PHYS_SUBSTEPS = 1; // applied every logic tick (100 Hz * 0.01 = original rate)
-export const GRAVITY = -57; // tuned so AI's distance->power table lands on target
+// Physics: Havok ran step(0.1, 15) per logic tick; we run 0.02 s of sim per
+// 10 ms logic tick (2x real time), split into substeps so the ~260 units/s
+// cannonball can't tunnel through 5-unit-thick walls (cannon-es has no CCD).
+export const PHYS_DT_PER_TICK = 0.02;
+export const PHYS_SUBSTEPS = 3;
+export const GRAVITY = -175;
+// The Havok Xtra's impulse/unit scaling is lost with the plugin, so launch
+// strength is calibrated against the AI's own distance->power table
+// (aiClass.setPower: 447 units -> 87% power, 595 -> 100%). That table is
+// exactly quadratic (595/447 = (1/0.87)^2), i.e. range = v^2 sin(30°)/g for
+// the default 15° launch, which requires v(87%) ~= 226 units/s — 3.2x what
+// thrust/BALL_MASS alone gives.
+export const IMPULSE_SCALE = 3.2;
 
-export const BALL_MASS = 22;
+export const BALL_MASS = 20;
 export const BALL_RADIUS = 3.4;
 export const BALL_RADIUS_BIG = 6;
 

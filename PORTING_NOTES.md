@@ -148,6 +148,51 @@ Desktop controls: arrow keys aim, spacebar starts/sets the power meter,
 number keys 0-9 switch cameras (original keymap). Touch: drag the view to aim,
 tap FIRE twice.
 
+## Fixed 2026-06-12: cannonball range + unstable castles at round start
+
+Two related physics bugs, both resolved:
+
+**Range.** Shots fell short because thrust-as-impulse on the 22 kg ball gives
+only 57–82 units/s while castles sit 447–595 apart. A first attempt weakened
+gravity 5x (−57 → −11.4), but the right move was the opposite: the AI's own
+distance→power table (`447 units → 87% power, 595 → 100%`) is exactly
+quadratic — `595/447 = (1/0.87)²` — which means drag-free ballistics where
+range = v²·sin(30°)/g at the default 15° launch. Any (gravity, launch-speed)
+pair satisfying that gives *identical trajectory shapes*; they differ only in
+flight time and impact energy. We restored `GRAVITY = -57` (matching Havok's
+≈49 units/s² at the original 0.2 unit→meter scale) and added
+`IMPULSE_SCALE = 3.2` on launch, calibrated so the AI table lands shots —
+verified headless: the AI's shot reaches the player castle face, a 50%-meter
+player shot demolishes the enemy front wall. The ball now flies ~260 units/s,
+so each 0.02 s physics tick is split into 4 substeps (cannon-es has no CCD)
+to keep it from tunneling through 5-unit walls.
+
+**Wobbly/collapsing enemy castle before any shot.** Three causes:
+
+1. `towerTopA` was rebuilt 8 units tall but the original was 10 — every
+   layout mounts flags at the tower top's base + 10 (castle 1: top at 15,
+   flag at 25; castle 11: 45 → 55; castle 6: 30 → 40). Flags spawned floating
+   2 units in the air, dropped, bounced and tipped over (>10° = "captured")
+   before the first shot. Same for `towerTopB` (was 5, now 10, pinned by
+   castle 7's flag).
+2. cannon-es applies restitution at *any* contact speed (Havok only above a
+   threshold), so the catalogue's bouncy pieces micro-jittered forever.
+   Piece bodies now use restitution 0.05; the catalogue keeps the original
+   values for reference.
+3. Havok held live stacks rock-stable; cannon-es doesn't. Pieces now spawn
+   *asleep* (frozen solid) and wake in a chain reaction when the ball — or a
+   piece it knocked loose — touches them. Bonus: zero drift means no phantom
+   "damage" gold from settling.
+
+Headless checks live in `web/flagtest.cjs` (flags must stay at 0° tilt with
+no shot), `web/balltest.cjs` (shot ranges), `web/hittest.cjs` (a mid-power
+hit must wake and damage the castle). They drive the dev server on port 5175
+via Playwright and `window.__engine`.
+
+Also noted: gold is the only persisted progress — localStorage key
+`cstlcnqst20` (the original SharedObject name), written after each round
+tally. Score/level/round are not saved; castle unlocks derive from gold.
+
 ## Known approximations (worth revisiting)
 
 - **Geometry**: castle pieces are rebuilt primitives, not the original meshes
@@ -156,9 +201,10 @@ tap FIRE twice.
 - **Castle names/unlock prices** on the select screen are invented — the real
   ones were Director score-sprite parameters we can't read back. Gating logic
   (locked until enough gold) matches the original.
-- **Physics feel**: cannon-es with the original mass/friction/restitution
-  table, gravity tuned so the AI's distance→power formula stays on target.
-  Not Havok-identical, but close in behavior.
+- **Physics feel**: cannon-es with the original mass/friction table; launch
+  impulse scaled 3.2x (calibrated against the AI's distance→power formula —
+  the Havok Xtra's unit scaling is lost with the plugin). Piece restitution
+  is near zero for stack stability. Not Havok-identical, but close.
 - The original's third spacebar tap (accuracy meter) is simplified to two taps
   (power only) — the accuracy mechanic can be added later from the
   instructions' description.

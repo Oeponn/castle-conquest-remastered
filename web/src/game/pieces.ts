@@ -36,10 +36,13 @@ export const PIECES: Record<string, PieceDef> = {
   towerA: { kind: "cylinder", size: [15, 15, 15], ...WALL, displayName: "Tower Piece", price: 750 },
   wallTopA: { kind: "box", size: [5, 25, 8], ...WALL, displayName: "Wall Top Thin", price: 150 },
   wallTopB: { kind: "box", size: [10, 25, 8], ...WALL, displayName: "Wall Top Thick", price: 750 },
-  towerTopA: { kind: "cylinder", size: [17, 17, 8], ...WALL, displayName: "Tower Top", price: 1000 },
+  // Tower-top heights are pinned by the layouts: every castle mounts flags at
+  // the top's base z + 10 (e.g. castle 1: towerTopA at 15, flag at 25;
+  // castle 11: 45 -> 55; castle 7 puts a flag on towerTopB at +10).
+  towerTopA: { kind: "cylinder", size: [17, 17, 10], ...WALL, displayName: "Tower Top", price: 1000 },
   drawbridgeA: { kind: "box", size: [3, 20, 28], ...WALL, displayName: "Drawbridge", price: 1000 },
   archA: { kind: "arch", size: [5, 30, 10], mass: 30, restitution: 1, friction: 0.6, displayName: "Archway", price: 800 },
-  towerTopB: { kind: "box", size: [16, 16, 5], ...WALL, displayName: "Platform", price: 1500 },
+  towerTopB: { kind: "box", size: [16, 16, 10], ...WALL, displayName: "Platform", price: 1500 },
   wallPieceA: { kind: "box", size: [5, 10, 15], ...WALL, displayName: "Wall Piece", price: 75 },
   supportA: { kind: "wedge", size: [8, 8, 15], ...WALL, displayName: "Wedge Small", price: 500 },
   supportB: { kind: "wedge", size: [12, 12, 15], ...WALL, displayName: "Wedge Large", price: 750 },
