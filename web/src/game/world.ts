@@ -228,6 +228,13 @@ export class GameWorld {
       friction: def.friction,
       restitution: 0.05,
     });
+    // Damping keeps impacts *localized*: a struck piece bleeds off velocity
+    // (and especially the fast spin a hard hit imparts) quickly, so it topples
+    // roughly in place instead of cartwheeling into the rest of the castle and
+    // dominoing the whole thing down. Linear damping is light so pieces still
+    // fall naturally under gravity; angular damping is heavier to tame tumbling.
+    body.linearDamping = 0.15;
+    body.angularDamping = 0.5;
     body.sleepSpeedLimit = 0.4;
     body.sleepTimeLimit = 0.6;
     return body;

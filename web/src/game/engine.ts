@@ -245,7 +245,10 @@ export class GameEngine {
       case "aim": {
         // camera on a pivot at the cannon: yaw = ballAngleZ, slight pitch with angleY
         const yaw = (this.ballAngleZ * Math.PI) / 180;
-        const pitch = ((this.ballAngleY - C.BALL_ANGLE_Y_DEFAULT) * 0.9 * Math.PI) / 180;
+        // launch elevation is (75 - ballAngleY): a *lower* ballAngleY = steeper
+        // shot, so the camera pitch must rise as ballAngleY falls to match the
+        // trajectory (and the HUD elevation needle).
+        const pitch = ((C.BALL_ANGLE_Y_DEFAULT - this.ballAngleY) * 0.9 * Math.PI) / 180;
         const back = new THREE.Vector3(-70 * dir, 0, 40 - 30 * Math.sin(pitch));
         back.applyAxisAngle(new THREE.Vector3(0, 0, 1), yaw * dir);
         this.camera.position.copy(cp).add(back);
@@ -294,8 +297,10 @@ export class GameEngine {
     if (this.state === "setPower" || this.state === "throwBall") {
       if (this.keys.left) { this.aimVelX += C.AIM_SPEED_INC; cranking = true; }
       if (this.keys.right) { this.aimVelX -= C.AIM_SPEED_INC; cranking = true; }
-      if (this.keys.up) { this.aimVelY -= C.AIM_SPEED_INC; cranking = true; }
-      if (this.keys.down) { this.aimVelY += C.AIM_SPEED_INC; cranking = true; }
+      // up = aim higher: a steeper shot is a *lower* ballAngleY (launch
+      // elevation = 75 - ballAngleY), and ballAngleY += -aimVelY below.
+      if (this.keys.up) { this.aimVelY += C.AIM_SPEED_INC; cranking = true; }
+      if (this.keys.down) { this.aimVelY -= C.AIM_SPEED_INC; cranking = true; }
 
       this.ballAngleZ += this.aimVelX;
       this.ballAngleY -= this.aimVelY;

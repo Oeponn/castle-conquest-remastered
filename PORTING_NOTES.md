@@ -193,6 +193,36 @@ Also noted: gold is the only persisted progress — localStorage key
 `cstlcnqst20` (the original SharedObject name), written after each round
 tally. Score/level/round are not saved; castle unlocks derive from gold.
 
+## Tuned 2026-06-13: lighter feel + localized castle impacts
+
+The physics felt wonky: the ball whipped through too fast and impacts were
+all-or-nothing (a hit either barely nudged the castle or dominoed the whole
+thing flat). Root cause: an in-progress experiment had pushed `GRAVITY` to
+−175 while leaving `IMPULSE_SCALE` at 3.2, which (since range ∝ scale²/g)
+left shots reaching only ~1/3 of their calibrated distance on a steep,
+fast-dropping arc. Re-tuned around three levers:
+
+1. **Lighter / slower ball.** Dropped `GRAVITY` to −50 (floatier) and
+   re-derived `IMPULSE_SCALE` to keep the AI's distance→power table on target.
+   The calibration: at 87% power (thrust 1566) the ball must travel 447 units,
+   so `scale = sqrt(447·|g| / 3066)` = 2.7 at g=−50 (the old 3.2 assumed the
+   pre-change `BALL_MASS` of 22; it's 20 now). Lower gravity *with* the
+   matching smaller impulse = same range, but the ball flies slower with a
+   longer, gentler arc and lands with ~30% less energy.
+2. **Lighter pieces.** Catalogue masses run ~25% under the original table
+   (WALL 30→22, HEAVY 55→40, LIGHT 10→7, ratios preserved) so a moderate hit
+   registers instead of needing a full-power blast.
+3. **Localized impacts via damping.** Piece bodies now carry
+   `linearDamping 0.15` / `angularDamping 0.5`. The heavy angular damping tames
+   the fast spin a hard hit imparts, so a struck piece topples roughly in place
+   rather than cartwheeling into its neighbours and cascading the whole castle.
+
+Verified headless: `flagtest` (castles hold at 0° tilt, no pre-shot collapse),
+`hittest` (an 85%-power direct hit lands and moves 12 of 28 pieces — graded,
+no longer all-or-nothing). `balltest`'s "max x" is misleading here: the ball
+rolls a long way after landing, so that number reflects roll, not range.
+Damping strength and masses are deliberately exposed for further eyeballing.
+
 ## Known approximations (worth revisiting)
 
 - **Geometry**: castle pieces are rebuilt primitives, not the original meshes

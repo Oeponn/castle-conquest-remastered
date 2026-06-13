@@ -14,7 +14,7 @@ export const AIM_SPEED_INC = 0.01;
 export const AIM_MAX_SPEED = 10;
 export const AIM_FRICTION = 0.98;
 
-export const BALL_ANGLE_Y_DEFAULT = 60.0; // measured from vertical-ish, see getThrowVectors
+export const BALL_ANGLE_Y_DEFAULT = 45.0; // measured from vertical-ish, see getThrowVectors
 export const BALL_ANGLE_Y_MIN = 15;
 export const BALL_ANGLE_Y_MAX = 67;
 export const BALL_ANGLE_Z_MIN = -27;
@@ -60,18 +60,22 @@ export const AI_MAX_POWER_PERC = 1.0;
 export const MAX_CASTLE_ID = 8; // computer cycles castles 1..8 by level
 
 // Physics: Havok ran step(0.1, 15) per logic tick; we run 0.02 s of sim per
-// 10 ms logic tick (2x real time), split into substeps so the ~260 units/s
-// cannonball can't tunnel through 5-unit-thick walls (cannon-es has no CCD).
+// 10 ms logic tick (2x real time), split into substeps so the cannonball
+// can't tunnel through 5-unit-thick walls (cannon-es has no CCD).
 export const PHYS_DT_PER_TICK = 0.02;
 export const PHYS_SUBSTEPS = 3;
-export const GRAVITY = -175;
-// The Havok Xtra's impulse/unit scaling is lost with the plugin, so launch
-// strength is calibrated against the AI's own distance->power table
-// (aiClass.setPower: 447 units -> 87% power, 595 -> 100%). That table is
-// exactly quadratic (595/447 = (1/0.87)^2), i.e. range = v^2 sin(30°)/g for
-// the default 15° launch, which requires v(87%) ~= 226 units/s — 3.2x what
-// thrust/BALL_MASS alone gives.
-export const IMPULSE_SCALE = 3.2;
+// Lower gravity = lighter, floatier feel. The AI's distance->power table
+// (aiClass.setPower: 447 units -> 87% power, 595 -> 100%) is exactly
+// quadratic (595/447 = (1/0.87)^2), i.e. range = v^2 sin(30°)/g for the
+// default 15° launch (v = IMPULSE_SCALE * thrust / BALL_MASS). That pins a
+// calibration point that must hold or the AI stops landing shots: at 87%
+// power (thrust 1566) the ball must travel 447 units. Solving for the impulse
+// at the chosen gravity:
+//   447 = (scale * 1566 / 20)^2 * sin(30°) / |g|  ->  scale = sqrt(447*|g| / 3066)
+// Picking a lighter gravity AND its matching (smaller) impulse keeps the same
+// range while making the ball travel slower with a longer, gentler arc.
+export const GRAVITY = -50;
+export const IMPULSE_SCALE = 2.7; // = sqrt(447*50/3066); keeps the AI on target
 
 export const BALL_MASS = 20;
 export const BALL_RADIUS = 3.4;
