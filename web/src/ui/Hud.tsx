@@ -10,6 +10,7 @@
 
 import { useRef } from "react";
 import { HudState } from "../game/engine";
+import { ACCURACY_MARKER_PERC } from "../game/constants";
 
 const IMG = (n: string) => `/games/castle-conquest/images/${n}.png`;
 
@@ -28,8 +29,10 @@ export function Hud(props: {
   const rotDial = hud.angleZ * -2.5;
   const angDial = hud.angleY * 1.7 - 25;
 
+  const aiming = hud.state === "setPower" || hud.state === "setAccuracy" || hud.state === "throwBall";
+
   const aimStart = (e: React.PointerEvent) => {
-    if (hud.state !== "setPower" && hud.state !== "throwBall") return;
+    if (!aiming) return;
     dragRef.current = { x: e.clientX, y: e.clientY };
     (e.target as Element).setPointerCapture(e.pointerId);
   };
@@ -52,7 +55,7 @@ export function Hud(props: {
         onPointerUp={aimEnd}
         onPointerCancel={aimEnd}
       />
-      {(hud.state === "setPower" || hud.state === "throwBall") && (hud.playerTurn === 1 || hud.twoPlayer) && (
+      {aiming && (hud.playerTurn === 1 || hud.twoPlayer) && (
         <img
           className="crosshair"
           src={IMG("crosshair")}
@@ -71,7 +74,28 @@ export function Hud(props: {
           }}
           alt=""
         />
+        {/* accuracy sweep: the cyan bar (accuracyMeter_bmp, rgb 00DDFF) rises
+            in the same slot; the third tap must hit the fixed marker notch */}
+        {hud.accuracyPerc !== undefined && (
+          <div
+            style={{
+              position: "absolute", left: 58, width: 5,
+              top: 156 - hud.accuracyPerc * 145,
+              height: Math.max(2, hud.accuracyPerc * 145), background: "#00ddff",
+            }}
+          />
+        )}
         <img className="tb" src={IMG("launchControls_02")} alt="" />
+        {/* the accuracy marker: a FIXED notch on the track (original sprite 32,
+            an 18x4 bar 31px up the 146px container — never moved by code) */}
+        {aiming && (
+          <div
+            style={{
+              position: "absolute", left: 45, width: 18, height: 4,
+              top: 154 - ACCURACY_MARKER_PERC * 145, background: "#ffdd00",
+            }}
+          />
+        )}
         {/* range arrows bracket the slot (slot center y = 84) */}
         <img
           src={IMG("powermeterArrows_01")}

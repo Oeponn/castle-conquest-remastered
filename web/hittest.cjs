@@ -1,5 +1,8 @@
 // Fires a calibrated mid-power shot at the enemy castle and verifies the
-// sleeping pieces wake up and take damage.
+// sleeping pieces wake up and take damage. Drives the real three-tap flow
+// (power -> accuracy -> throw); the taps run inside one evaluate so no logic
+// tick advances the meter in between, and the sweep is parked on the fixed
+// accuracy marker before the third tap so the miss is exactly 0.
 const { chromium } = require('playwright');
 (async () => {
   const browser = await chromium.launch();
@@ -10,14 +13,19 @@ const { chromium } = require('playwright');
   await page.waitForTimeout(300);
   await page.click('.castle-card:not(.locked)');
   await page.waitForTimeout(1500);
-  // ~85% meter -> thrust ~1719 -> range ~430: direct hit on the castle front
+  // ballAngleY 45 = a 30° launch for player 1; 50% meter -> thrust 1530 ->
+  // range (2.234*1530/22)^2 * sin(60°)/49 ≈ 427: direct hit on the castle front
   await page.evaluate(() => {
     const e = window.__engine;
-    e.firePressed(); // start meter
-    e.meterOscDist = 0.5 * e.meterContainerH;
-    e.firePressed(); // throw at 50% meter (thrust 1530, range ~435)
+    e.ballAngleY = 45;
+    e.firePressed(); // start power sweep
+    e.oscVal = Math.PI - Math.asin(0.5); // meter fill = 1-|sin| = 0.5
+    e.oscPerc = 0.5;
+    e.firePressed(); // set power (thrust 1530), start accuracy sweep
+    e.oscPerc = 1 - 31 / 146; // park the sweep on the fixed accuracy marker
+    e.firePressed(); // perfect accuracy tap -> throw
   });
-  for (let i = 0; i < 120; i++) {
+  for (let i = 0; i < 150; i++) {
     await page.waitForTimeout(100);
     const s = await page.evaluate(() => window.__engine.state);
     if (s !== 'ballInPlay') break;

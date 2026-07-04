@@ -1,7 +1,10 @@
-// The game engine: a port of gameClass (ParentScript 41). One class owns the
-// state machine, aiming, power meter, throwing, cameras (including the
-// impact-cutscene camera that was broken on Mac), turn flow, scoring and
-// persistence. React subscribes via onHud to render menus/HUD.
+// The game engine: a port of the LIVE gameClass — ParentScript 2, the member
+// Director's script("gameClass") lookup actually resolves to. (ParentScript 41,
+// also named "gameClass", is an abandoned revision: two-tap throw, random
+// scatter, no accuracy meter. See PORTING_NOTES "wrong gameClass".) One class
+// owns the state machine, aiming, the power/accuracy meters, throwing, cameras
+// (including the impact-cutscene camera that was broken on Mac), turn flow,
+// scoring and persistence. React subscribes via onHud to render menus/HUD.
 
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
@@ -12,8 +15,13 @@ import { aiSetPower } from "./ai";
 import { getCastleDataList, PieceData, parseCastleData } from "./castles";
 import * as C from "./constants";
 
+// State names mirror the live gameClass (ParentScript 2) even where they read
+// oddly: "setPower" = aiming (no meter yet); the first FIRE starts the POWER
+// sweep and moves to "setAccuracy"; the second captures power and starts the
+// ACCURACY sweep in "throwBall"; the third captures accuracy and throws.
 export type GameState =
   | "setPower"
+  | "setAccuracy"
   | "throwBall"
   | "ballInPlay"
   | "roundOver"
@@ -27,7 +35,8 @@ export interface HudState {
   score: number;
   flagsText: string;
   hint: string;
-  meterPerc: number; // 0..1 power meter fill
+  meterPerc: number; // 0..1 power meter fill (frozen at the set power during the accuracy sweep)
+  accuracyPerc?: number; // 0..1 accuracy sweep position while state is "throwBall"
   angleY: number;
   angleZ: number;
   playerTurn: 1 | 2;
@@ -83,10 +92,16 @@ export class GameEngine {
   aimVelX = 0;
   aimVelY = 0;
 
-  meterOscDist = 0;
-  meterVelocity = 0;
+  // Power/accuracy oscillator (live gameClass): fill = 1 - |sin(oscVal)|.
+  // The same oscillator runs both sweeps; after the power tap it's slowed and
+  // keeps its direction (meterDir).
+  oscVal = C.METER_OSC_VAL0;
+  oscSpeed = C.METER_OSC_SPEED;
+  oscPerc = 0;
+  meterDir = 1;
   movePowerMeter = false;
-  meterContainerH = 140; // px of HUD meter track
+  thrust = 0; // captured at the power tap
+  powerPerc = 0; // power-meter fill at the power tap (HUD freeze during the accuracy sweep)
 
   player1Gold = 0;
   player1Score = 0;
@@ -121,7 +136,17 @@ export class GameEngine {
     this.ball.visible = false;
     this.gw.scene.add(this.ball);
     this.ballBody = new CANNON.Body({ mass: C.BALL_MASS, shape: new CANNON.Sphere(C.BALL_RADIUS) });
-    this.ballBody.material = new CANNON.Material({ friction: 0.8, restitution: 0.2 });
+    // friction sqrt-encoded (cannon-es multiplies material frictions; Havok
+    // used the geometric mean — see the ground material comment in world.ts)
+    this.ballBody.material = new CANNON.Material({ friction: Math.sqrt(0.8), restitution: 0.2 });
+    // The AI's distance->power table is exactly quadratic, i.e. drag-free
+    // ballistics — cannon-es's default linearDamping (0.01) would shave a few
+    // percent off every shot and drift the calibration. Angular damping does
+    // not touch ballistic flight, only spin: without it a landed ball rolls
+    // essentially forever (cannon-es has no rolling resistance) and a dud
+    // lob can bulldoze the castle at walking pace.
+    this.ballBody.linearDamping = 0;
+    this.ballBody.angularDamping = 0.8;
 
     this.player1Gold = this.loadGold();
 
@@ -158,16 +183,29 @@ export class GameEngine {
     Object.assign(this.keys, k);
   }
 
-  /** spacebar / fire button (throwControl) */
+  /** spacebar / fire button — throwControl's three taps: power, accuracy, throw */
   firePressed() {
     if (this.state === "setPower") {
       this.initPowerMeter();
+      this.state = "setAccuracy";
+      this.hint = "Tap FIRE to set power level.";
+      this.pushHud(true);
+    } else if (this.state === "setAccuracy") {
+      const meterPerc = 1 - this.oscPerc;
+      this.thrust = C.MAX_POWER * meterPerc * C.THROW_METER_FRAC + C.MAX_POWER * C.THROW_BASE_FRAC;
+      this.powerPerc = meterPerc;
+      this.initPowerAccuracy();
       this.state = "throwBall";
+      this.hint = "Tap FIRE again as the sweep crosses the marker notch!";
+      this.pushHud(true);
     } else if (this.state === "throwBall") {
+      // accuracy = signed miss from the FIXED marker notch, normalized by the
+      // constant marker->track-top distance (gameClass throwControl; the
+      // marker sprite is score-placed and never moved). Bounded [-0.27, +1].
+      const cur = 1 - this.oscPerc;
+      const accuracy = (cur - C.ACCURACY_MARKER_PERC) / (1 - C.ACCURACY_MARKER_PERC);
       this.movePowerMeter = false;
-      const meterPerc = Math.min(1, Math.abs(this.meterOscDist) / this.meterContainerH);
-      const thrust = C.MAX_POWER * meterPerc * C.THROW_METER_FRAC + C.MAX_POWER * C.THROW_BASE_FRAC;
-      this.throwBall(thrust);
+      this.throwBall(this.thrust, undefined, accuracy);
     } else if (this.state === "roundOver") {
       this.advanceAfterRound();
     }
@@ -219,12 +257,23 @@ export class GameEngine {
     this.aimVelX = 0;
     this.aimVelY = 0;
     this.movePowerMeter = false;
-    this.meterOscDist = 0;
+    this.powerPerc = 0;
     this.camState = "waiting";
-    this.pickCam("aim");
-    this.hint = "Aim the cannon, then hold FIRE to set power.";
+    // Establishing shot of the player's OWN castle (it sits behind the aim
+    // camera, at negative x, so without this the chosen castle is never seen
+    // and selecting a different one looks like it did nothing). After a beat,
+    // swing round to the normal aim view facing the enemy.
+    this.pickCam("castle1");
+    this.hint = "This is your castle — defend its flags!";
     this.checkFlagsDown();
     this.pushHud(true);
+    window.setTimeout(() => {
+      if (this.myCam === "castle1" && this.state === "setPower") {
+        this.pickCam("aim");
+        this.hint = "Aim the cannon, then tap FIRE to start the power meter.";
+        this.pushHud(true);
+      }
+    }, 2200);
   }
 
   // ---------- aiming & camera ----------
@@ -245,16 +294,25 @@ export class GameEngine {
       case "aim": {
         // camera on a pivot at the cannon: yaw = ballAngleZ, slight pitch with angleY
         const yaw = (this.ballAngleZ * Math.PI) / 180;
-        // launch elevation is (75 - ballAngleY): a *lower* ballAngleY = steeper
-        // shot, so the camera pitch must rise as ballAngleY falls to match the
-        // trajectory (and the HUD elevation needle).
-        const pitch = ((C.BALL_ANGLE_Y_DEFAULT - this.ballAngleY) * 0.9 * Math.PI) / 180;
-        const back = new THREE.Vector3(-70 * dir, 0, 40 - 30 * Math.sin(pitch));
+        // The camera sits above & behind the cannon and looks toward the enemy.
+        // Faithful to applyVelToAimCam: the original rotated cam_aimShape by
+        // 0.9° about its own x-axis per degree of ballAngleY, from a baked
+        // w3d anchor orientation that framed the enemy castle at the default
+        // aim (ballAngleY 60 = flat 15° launch). We anchor that default at
+        // -4° (slightly down, enemy castle centred under the crosshair); a
+        // steep lob pitches the view up to ~+36° of sky, just like the
+        // original — there is no FOV cap.
+        const lookPitch = ((-4 + 0.9 * (60 - this.ballAngleY)) * Math.PI) / 180;
+        const back = new THREE.Vector3(-70 * dir, 0, 45);
         back.applyAxisAngle(new THREE.Vector3(0, 0, 1), yaw * dir);
         this.camera.position.copy(cp).add(back);
-        const ahead = new THREE.Vector3(400 * dir, 0, 60 + 160 * Math.sin(pitch));
+        const ahead = new THREE.Vector3(
+          400 * Math.cos(lookPitch) * dir,
+          0,
+          400 * Math.sin(lookPitch),
+        );
         ahead.applyAxisAngle(new THREE.Vector3(0, 0, 1), yaw * dir);
-        this.camera.lookAt(cp.clone().add(ahead));
+        this.camera.lookAt(this.camera.position.clone().add(ahead));
         break;
       }
       case "ball": {
@@ -294,7 +352,9 @@ export class GameEngine {
     const humanTurn = this.player1Turn || this.twoPlayer;
     if (!humanTurn) return;
     let cranking = false;
-    if (this.state === "setPower" || this.state === "throwBall") {
+    // ballController runs while aiming and during the power sweep, but NOT
+    // during the accuracy sweep (live gameClass gates on setPower/setAccuracy)
+    if (this.state === "setPower" || this.state === "setAccuracy") {
       if (this.keys.left) { this.aimVelX += C.AIM_SPEED_INC; cranking = true; }
       if (this.keys.right) { this.aimVelX -= C.AIM_SPEED_INC; cranking = true; }
       // up = aim higher: a steeper shot is a *lower* ballAngleY (launch
@@ -316,21 +376,34 @@ export class GameEngine {
     }
   }
 
-  // ---------- power meter (initPowerMeter / oscilatePower) ----------
+  // ---------- power meter (initPowerMeter / initPowerAccuracy / oscilate) ----------
   private initPowerMeter() {
-    this.meterOscDist = this.meterContainerH;
-    this.meterVelocity = 0;
+    this.oscVal = C.METER_OSC_VAL0;
+    this.oscSpeed = C.METER_OSC_SPEED;
+    this.oscPerc = Math.abs(Math.sin(this.oscVal)); // ~1: the meter starts empty
     this.movePowerMeter = true;
   }
 
+  /** the accuracy sweep reuses the oscillator, slowed by powerPerc*0.8 (min 0.1) */
+  private initPowerAccuracy() {
+    let mult = (1 - this.oscPerc) * C.ACCURACY_SPEED_FRAC;
+    if (mult < C.ACCURACY_SPEED_MIN) mult = C.ACCURACY_SPEED_MIN;
+    this.oscSpeed = Math.abs(this.oscSpeed) * mult * (this.meterDir < 0 ? -1 : 1);
+  }
+
   private oscillatePowerTick() {
-    const accel = (C.METER_REST - this.meterOscDist) / C.METER_OSC_SPEED;
-    this.meterVelocity += accel;
-    this.meterOscDist += this.meterVelocity;
+    const prev = this.oscPerc;
+    this.oscVal += this.oscSpeed;
+    this.oscPerc = Math.abs(Math.sin(this.oscVal));
+    this.meterDir = this.oscPerc < prev ? -1 : 1;
+    // oscilatePower: when the accuracy sweep runs back down to the bottom of
+    // the track the shot fires itself with whatever accuracy that is
+    // (newTop >= 173 on the 28..174 container = fill within 1px of empty)
+    if (this.state === "throwBall" && this.oscPerc >= 0.993) this.firePressed();
   }
 
   // ---------- throwing (getThrowVectors / throwBall) ----------
-  private throwBall(thrust: number, aiAngleDeg?: number) {
+  private throwBall(thrust: number, aiAngleDeg?: number, accuracy = 0) {
     this.audio.stopCrank();
     this.lastThrust = thrust;
     const dir = this.player1Turn ? 1 : -1;
@@ -346,27 +419,23 @@ export class GameEngine {
     this.ballBody.velocity.setZero();
     this.ballBody.angularVelocity.set(0, dir > 0 ? -1 : 1, 0);
 
-    // getThrowVectors: angles measured like the original
-    const elev = ((this.ballAngleY + 15) * Math.PI) / 180;
-    let xSpeed = thrust * Math.sin(elev);
-    const zSpeed = thrust * Math.cos(elev);
-    const rotZ = aiAngleDeg !== undefined ? (aiAngleDeg * Math.PI) / 180 : (this.ballAngleZ * Math.PI) / 180;
+    // getThrowVectors: the zenith angle is ballAngleY + 15 for player 1 only —
+    // the AI (and player 2 in 2P) fires 15° steeper for the same dial, and the
+    // AI's distance->power table is calibrated on that 30° launch (see
+    // IMPULSE_SCALE).
+    const isAi = aiAngleDeg !== undefined;
+    const zenith = ((this.ballAngleY + (this.player1Turn ? 15 : 0)) * Math.PI) / 180;
+    let xSpeed = thrust * Math.sin(zenith);
+    const zSpeed = thrust * Math.cos(zenith);
+    const rotZ = isAi ? (aiAngleDeg * Math.PI) / 180 : (this.ballAngleZ * Math.PI) / 180;
     let ySpeed = xSpeed * Math.sin(rotZ);
     xSpeed = xSpeed * Math.cos(rotZ);
 
-    // player shots scatter with power; AI shots don't (throwBall)
-    let rx = 0, ry = 0, rz = 0;
-    if (this.player1Turn || this.twoPlayer) {
-      const perc = thrust / C.MAX_POWER;
-      rx = Math.random() * C.SCATTER_MAX * perc;
-      ry = Math.random() * C.SCATTER_MAX * perc;
-      rz = Math.random() * C.SCATTER_MAX * perc;
-    }
-    const impulse = new CANNON.Vec3(
-      (xSpeed + rx) * dir,
-      (ySpeed + ry * 0.3) * dir,
-      zSpeed + rz * 0.3
-    );
+    // No random scatter: the only shot error is the deterministic lateral
+    // deflection from the accuracy tap (throwBall: tRandY = 400 * accuracy,
+    // tRandX = tRandZ = 0). AI shots fly true.
+    if (!isAi) ySpeed += C.ACCURACY_DEFLECT_MAX * accuracy;
+    const impulse = new CANNON.Vec3(xSpeed * dir, ySpeed * dir, zSpeed);
     impulse.scale(C.IMPULSE_SCALE, impulse);
     if (!this.ballInWorld) {
       this.gw.world.addBody(this.ballBody);
@@ -382,6 +451,7 @@ export class GameEngine {
     this.ballThrown = true;
     this.throwTimeS = 0;
     this.smokeAnimCycle = 0;
+    this.hint = ""; // throwBall: defaultHint_txt = EMPTY
     this.state = "ballInPlay";
     this.camState = "waiting";
     this.pickCam("start");
@@ -492,7 +562,7 @@ export class GameEngine {
     this.aimVelX = 0;
     this.aimVelY = 0;
     this.movePowerMeter = false;
-    this.meterOscDist = 0;
+    this.powerPerc = 0; // resetPowerMeter: both bars empty for the next turn
     this.switchTurns();
     this.removeBallFromSim();
     this.ball.visible = false;
@@ -519,8 +589,8 @@ export class GameEngine {
       }, 1200);
     } else {
       this.hint = this.twoPlayer
-        ? `Player ${this.player1Turn ? 1 : 2}: aim, then hold FIRE to set power.`
-        : "Aim the cannon, then hold FIRE to set power.";
+        ? `Player ${this.player1Turn ? 1 : 2}: aim, then tap FIRE to start the power meter.`
+        : "Aim the cannon, then tap FIRE to start the power meter.";
     }
     this.pushHud(true);
   }
@@ -670,6 +740,7 @@ export class GameEngine {
         this.stepPhysics();
         break;
       case "setPower":
+      case "setAccuracy":
       case "throwBall":
         this.aimTick();
         this.stepPhysics();
@@ -695,7 +766,11 @@ export class GameEngine {
       score: Math.floor(this.player1Score),
       flagsText: this.flagsText,
       hint: this.hint,
-      meterPerc: Math.min(1, Math.abs(this.meterOscDist) / this.meterContainerH),
+      // during the power sweep the meter tracks the oscillator; during the
+      // accuracy sweep it freezes at the set power and the accuracy bar
+      // takes over
+      meterPerc: this.state === "setAccuracy" ? 1 - this.oscPerc : this.powerPerc,
+      accuracyPerc: this.state === "throwBall" ? 1 - this.oscPerc : undefined,
       angleY: this.ballAngleY,
       angleZ: this.ballAngleZ,
       playerTurn: this.player1Turn ? 1 : 2,

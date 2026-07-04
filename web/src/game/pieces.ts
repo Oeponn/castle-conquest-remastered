@@ -24,14 +24,14 @@ export interface PieceDef {
   price: number;
 }
 
-// simClass presets (original masses kept in comments): 1:{30} 2:static
-// 3:{55} 4:ball 5:{30,nonconvex} 6:{10}. We run everything ~25% lighter than
-// the original table so pieces respond to a moderate hit instead of needing a
-// full-power blast — the gentler-feeling castle the original Havok scaling
-// implied but cannon-es doesn't reproduce. Mass ratios are preserved.
-const WALL = { mass: 25, restitution: 1, friction: 0.6 }; // orig 30
-const HEAVY = { mass: 50, restitution: 0.5, friction: 0.4 }; // orig 55
-const LIGHT = { mass: 10, restitution: 1, friction: 0.6 }; // orig 10
+// simClass presets, 1:1 with the original table: 1:{30, rest 1, fric 0.6}
+// 2:static 3:{55, rest 0.5, fric 0.4} 4:ball 5:{30, nonconvex} 6:{10}.
+// (An earlier pass ran these ~25% lighter to compensate for a mistuned,
+// too-slow ball; with the launch speed recovered from the original the 22 kg
+// ball at ~210-240 u/s moves full-weight pieces fine.)
+const WALL = { mass: 30, restitution: 1, friction: 0.6 };
+const HEAVY = { mass: 55, restitution: 0.5, friction: 0.4 };
+const LIGHT = { mass: 10, restitution: 1, friction: 0.6 };
 
 export const PIECES: Record<string, PieceDef> = {
   wallA: {

@@ -8,10 +8,19 @@ const { chromium } = require('playwright');
   await page.waitForTimeout(300);
   await page.click('.castle-card:not(.locked)');
   await page.waitForTimeout(1500);
-  // meter starts at perc=1, so two quick spaces = near max power
-  await page.keyboard.press(' ');
-  await page.waitForTimeout(30);
-  await page.keyboard.press(' ');
+  // Player shot at the AI's own calibration point: 30° launch (ballAngleY 45
+  // for player 1), meter 0.566 -> thrust 1566 (87% power) -> range 447, which
+  // lands on the enemy castle face. Three-tap flow with a perfect accuracy tap.
+  await page.evaluate(() => {
+    const e = window.__engine;
+    e.ballAngleY = 45;
+    e.firePressed();
+    e.oscVal = Math.PI - Math.asin(1 - 0.566); // meter fill = 0.566
+    e.oscPerc = 1 - 0.566;
+    e.firePressed();
+    e.oscPerc = 1 - 31 / 146; // park the sweep on the fixed accuracy marker (perfect tap)
+    e.firePressed();
+  });
   // track ball for both player and AI shots over 40s
   let lastState = '';
   let maxX = -999, aiMinX = 999;
@@ -22,7 +31,7 @@ const { chromium } = require('playwright');
         x: +e.ballBody.position.x.toFixed(1), z: +e.ballBody.position.z.toFixed(1),
         thrust: e.lastThrust };
     });
-    if (s.state !== lastState) { console.log(`t=${(i*0.1).toFixed(1)}s state=${s.state} p1turn=${s.p1} ball=(${s.x}, z=${s.z})`); lastState = s.state; }
+    if (s.state !== lastState) { console.log(`t=${(i*0.1).toFixed(1)}s state=${s.state} p1turn=${s.p1} ball=(${s.x}, z=${s.z}) thrust=${s.thrust.toFixed(0)}`); lastState = s.state; }
     if (s.state === 'ballInPlay') {
       if (s.p1 && s.x > maxX) maxX = s.x;
       if (!s.p1 && s.x < aiMinX) aiMinX = s.x;

@@ -79,8 +79,13 @@ export class GameWorld {
     this.scene.add(ground);
     this.groundBody = new CANNON.Body({ mass: 0, shape: new CANNON.Plane() });
     // CANNON.Plane faces +z by default, which is up in our world. p_ground sim=2.
+    // Friction is stored as sqrt(catalogue value): cannon-es MULTIPLIES the two
+    // materials' frictions at a contact, while Havok combines them as the
+    // geometric mean — sqrt(a)*sqrt(b) = sqrt(a*b) restores Havok's rule.
+    // (Raw values would give e.g. piece-on-piece 0.6*0.6 = 0.36: everything
+    // slides around at half grip and the castle feels weightless.)
     this.groundBody.material = new CANNON.Material({
-      friction: 0.9,
+      friction: Math.sqrt(0.9),
       restitution: 0.1,
     });
     this.world.addBody(this.groundBody);
@@ -224,8 +229,9 @@ export class GameWorld {
     // The catalogue restitution is Havok's (which only bounced above a
     // velocity threshold); cannon-es applies it at any contact speed, so
     // resting stacks micro-bounce and wobble unless it's near zero.
+    // Friction is sqrt-encoded — see the ground material comment.
     body.material = new CANNON.Material({
-      friction: def.friction,
+      friction: Math.sqrt(def.friction),
       restitution: 0.05,
     });
     // Damping keeps impacts *localized*: a struck piece bleeds off velocity
