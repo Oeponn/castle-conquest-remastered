@@ -19,7 +19,7 @@ export interface GamePiece {
   isCannon: boolean;
 }
 
-const IMG = (n: string) => `/games/castle-conquest/images/${n}.png`;
+const IMG = (n: string) => `${import.meta.env.BASE_URL}games/castle-conquest/images/${n}.png`;
 
 export class GameWorld {
   scene = new THREE.Scene();

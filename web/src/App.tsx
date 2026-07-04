@@ -4,7 +4,7 @@ import { CASTLES } from "./game/castles";
 import { Hud } from "./ui/Hud";
 import { STAGE_W, STAGE_H } from "./game/constants";
 
-const IMG = (n: string) => `/games/castle-conquest/images/${n}.png`;
+const IMG = (n: string) => `${import.meta.env.BASE_URL}games/castle-conquest/images/${n}.png`;
 
 type Screen = "menu" | "instructions" | "castleSelect" | "castleSelectP2" | "game" | "tally" | "gameOver";
 

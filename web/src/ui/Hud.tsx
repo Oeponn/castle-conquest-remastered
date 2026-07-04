@@ -12,7 +12,7 @@ import { useRef } from "react";
 import { HudState } from "../game/engine";
 import { ACCURACY_MARKER_PERC } from "../game/constants";
 
-const IMG = (n: string) => `/games/castle-conquest/images/${n}.png`;
+const IMG = (n: string) => `${import.meta.env.BASE_URL}games/castle-conquest/images/${n}.png`;
 
 export function Hud(props: {
   hud: HudState;

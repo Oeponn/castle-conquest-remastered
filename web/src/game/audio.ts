@@ -2,7 +2,7 @@
 // sound channels 1-6 with per-channel volume (0-255); we approximate with
 // pooled HTMLAudio elements.
 
-const SND = (n: string) => `/games/castle-conquest/sounds/${n}`;
+const SND = (n: string) => `${import.meta.env.BASE_URL}games/castle-conquest/sounds/${n}`;
 
 const FILES: Record<string, string> = {
   boompoof: SND("boompoof_sound.wav"),
