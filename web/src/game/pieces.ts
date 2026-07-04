@@ -31,6 +31,7 @@ export interface PieceDef {
 // ball at ~210-240 u/s moves full-weight pieces fine.)
 // Masses now run ~25% above the original presets (30/55/10) so castles feel
 // a bit more solid against that launch speed.
+
 const WALL = { mass: 48, restitution: 1, friction: 0.6 };
 const HEAVY = { mass: 70, restitution: 0.5, friction: 0.4 };
 const LIGHT = { mass: 33, restitution: 1, friction: 0.6 };
