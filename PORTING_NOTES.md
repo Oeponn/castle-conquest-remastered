@@ -436,6 +436,16 @@ Headless-verified: a max-power shot with a 10%-of-track tap miss launches
 1.87° off-axis (was ~90°); balltest/hittest/flagtest all pass (the tests now
 park the sweep on the fixed notch for a perfect tap).
 
+## Tuned 2026-07-04: castle pieces ~25% heavier
+
+Feel tweak by request: the piece-mass presets in `web/src/game/pieces.ts` now
+run ~25% *above* the original simClass table — WALL 30→38, HEAVY 55→70,
+LIGHT 10→13 (the archway's inline 30→38 too) — so castles sit a bit more
+solidly against the recovered launch speed. The ball (22 kg), restitution,
+friction and damping are untouched; this is the first deliberate departure
+from the original's mass table rather than a compensation for a mistuned
+ball.
+
 ## Known approximations (worth revisiting)
 
 - **Geometry**: castle pieces are rebuilt primitives, not the original meshes
@@ -447,7 +457,8 @@ park the sweep on the fixed notch for a perfect tap).
   decodes the VWSC frame stream, the remaining ~1879 chunk entries — which
   hold the per-sprite behavior attachments — are a plausible place to dig
   these out someday.)
-- **Physics feel**: cannon-es with the original mass/friction table, gravity
+- **Physics feel**: cannon-es with the original friction table (piece masses
+  deliberately run ~25% heavy as of 2026-07-04 — see above), gravity
   and launch speed recovered from the source (see "the physics disconnect"
   above). Remaining engine-difference accommodations: piece restitution is
   near zero (cannon-es bounces at any contact speed, Havok only above a

@@ -24,14 +24,16 @@ export interface PieceDef {
   price: number;
 }
 
-// simClass presets, 1:1 with the original table: 1:{30, rest 1, fric 0.6}
+// simClass presets, from the original table: 1:{30, rest 1, fric 0.6}
 // 2:static 3:{55, rest 0.5, fric 0.4} 4:ball 5:{30, nonconvex} 6:{10}.
 // (An earlier pass ran these ~25% lighter to compensate for a mistuned,
 // too-slow ball; with the launch speed recovered from the original the 22 kg
 // ball at ~210-240 u/s moves full-weight pieces fine.)
-const WALL = { mass: 30, restitution: 1, friction: 0.6 };
-const HEAVY = { mass: 55, restitution: 0.5, friction: 0.4 };
-const LIGHT = { mass: 10, restitution: 1, friction: 0.6 };
+// Masses now run ~25% above the original presets (30/55/10) so castles feel
+// a bit more solid against that launch speed.
+const WALL = { mass: 48, restitution: 1, friction: 0.6 };
+const HEAVY = { mass: 70, restitution: 0.5, friction: 0.4 };
+const LIGHT = { mass: 33, restitution: 1, friction: 0.6 };
 
 export const PIECES: Record<string, PieceDef> = {
   wallA: {
@@ -89,7 +91,7 @@ export const PIECES: Record<string, PieceDef> = {
   archA: {
     kind: "arch",
     size: [5, 30, 10],
-    mass: 30,
+    mass: 38,
     restitution: 1,
     friction: 0.6,
     displayName: "Archway",
