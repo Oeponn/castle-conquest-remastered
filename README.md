@@ -40,23 +40,33 @@ port. If a shot feels slightly different from how you remember it, it's probably
 ## Recovering the 3D meshes
 
 The actual 3D castle meshes ship inside Shockwave's `.w3d` files in an Intel
-IFX compressed format. I was told by Opus that these were undecodable — lost
-forever, and that any castle geometry would have to be approximated by hand.
+IFX compressed format. Initially I thought these were undecodable, and that any castle geometry would have to be approximated by hand.
 
-That turned out to be wrong. Anthony Kleine's
+Thankfully I was wrong, even though I had already approximated everything by hand. Anthony Kleine's
 [Shockwave-3D-World-Converter](https://github.com/tomysshadow/Shockwave-3D-World-Converter)
-reads exactly this format. It's a Windows tool, so I ran it under Wine, pointed
-it at the extracted `castleConquest.w3d`, and exported the whole scene —
-models, normals, UVs, materials, textures — straight to Wavefront OBJ. The
+reads exactly this format. It's a Windows tool, so I ran it using wine, pointed
+it at the extracted `castleConquest.w3d`, and exported the whole scene!
+Wodels, normals, UVs, materials, textures — straight to Wavefront OBJ. The
 recovered geometry and textures are committed in
 [`assets/extracted/3d/`](./assets/extracted/3d/) (see commit
-[`9848502`](https://github.com/Oeponn/castle-conquest-remastered/commit/9848502db931238852b410805288c5c4806bee4c)).
+[`9848502`](https://github.com/Oeponn/castle-conquest-remastered/commit/9848502db931238852b410805288c5c4806bee4c)). It was like 2am and I was so excited lol.
 
 <p align="center">
   <img src="./docs/images/shockwave-convert-01.png" width="45%" alt="Shockwave 3D World Converter with castleConquest.w3d loaded, all export options checked" />
   &nbsp;
   <img src="./docs/images/shockwave-convert-02.png" width="45%" alt="Shockwave 3D World Converter mid-conversion" />
 </p>
+
+### Getting them into the game
+
+Recovering the OBJ was half of it; the meshes had to replace the
+hand-built primitives without breaking a physics engine that was tuned against
+those primitives. That whole pipeline lives in commit
+[`bc6bfdf`](https://github.com/Oeponn/castle-conquest-remastered/commit/bc6bfdf4d319063bfa72960d53e00022b785dee3):
+`tools/convert_3d_models.py` cleans the OBJ, converts the TIFF textures to PNG,
+and generates the mesh metadata the game reads at runtime; `models.ts` loads it
+once and hands out clones to both the live scene and the castle-select
+thumbnails. The game is now **model-1:1 with the original**.
 
 ## The technical stuff
 
@@ -71,8 +81,10 @@ Highlights if you don't want to read the whole thing:
   [ProjectorRays](https://github.com/ProjectorRays/ProjectorRays).
 - All original art, sound, and Lingo game logic (AI, scoring, castle
   layouts, shop prices) were extracted and ported 1:1.
-- 3D geometry and the Havok physics engine itself had to be reconstructed —
-  see the disclaimer above.
+- The original 3D castle meshes and textures were recovered from the Shockwave
+  `.w3d` and are in the game 1:1 — see "Recovering the 3D meshes" above. Only
+  the Havok physics engine had to be reconstructed (cannon-es); collision boxes
+  are the one geometry approximation that remains.
 - Built with Vite + React + TypeScript + Three.js, deployed to GitHub Pages
   via GitHub Actions.
 
