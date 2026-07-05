@@ -47,21 +47,17 @@ export function Hud(props: {
 
   return (
     <div className="screen" style={{ pointerEvents: "none" }}>
-      {/* aim by dragging on the viewport (mobile + mouse) */}
+      {/* aim by dragging on the viewport (mobile + mouse); geometry is driven
+          by the --vp-* CSS vars on .stage so it tracks the viewport rect */}
       <div
-        style={{ position: "absolute", left: 145, top: 80, width: 427, height: 305, pointerEvents: "auto" }}
+        className="aim-area"
         onPointerDown={aimStart}
         onPointerMove={aimMove}
         onPointerUp={aimEnd}
         onPointerCancel={aimEnd}
       />
       {aiming && (hud.playerTurn === 1 || hud.twoPlayer) && (
-        <img
-          className="crosshair"
-          src={IMG("crosshair")}
-          style={{ left: 145 + (427 - 36) / 2, top: 80 + (305 - 36) / 2 }}
-          alt=""
-        />
+        <img className="crosshair" src={IMG("crosshair")} alt="" />
       )}
 
       <div className="toolbar">

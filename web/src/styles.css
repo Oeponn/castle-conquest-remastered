@@ -33,6 +33,15 @@ body {
   background: #000;
   transform-origin: center center;
   image-rendering: auto;
+
+  /* Single source of truth for the 3D view rectangle. The viewport, the aim
+     drag overlay, and the crosshair all derive from these — move the view by
+     editing these four values and everything stays aligned. */
+  --vp-left: 170px;
+  --vp-top: 50px;
+  --vp-width: 436px;
+  --vp-height: 310px;
+  --crosshair-size: 36px;
 }
 
 .screen {
@@ -148,10 +157,19 @@ body {
 
 .viewport {
   position: absolute;
-  left: 145px;
-  top: 80px;
-  width: 427px;
-  height: 305px;
+  left: var(--vp-left);
+  top: var(--vp-top);
+  width: var(--vp-width);
+  height: var(--vp-height);
+}
+/* transparent overlay that captures aim drags; covers the exact view rect */
+.aim-area {
+  position: absolute;
+  left: var(--vp-left);
+  top: var(--vp-top);
+  width: var(--vp-width);
+  height: var(--vp-height);
+  pointer-events: auto;
 }
 .viewport canvas {
   width: 100%;
@@ -168,8 +186,11 @@ body {
 .crosshair {
   position: absolute;
   pointer-events: none;
-  left: 195px;
-  top: 140px;
+  width: var(--crosshair-size);
+  height: var(--crosshair-size);
+  /* centered in the view rect */
+  left: calc(var(--vp-left) + (var(--vp-width) - var(--crosshair-size)) / 2);
+  top: calc(var(--vp-top) + (var(--vp-height) - var(--crosshair-size)) / 2);
 }
 
 .toolbar {

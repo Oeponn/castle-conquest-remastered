@@ -187,6 +187,7 @@ export default function App() {
   return (
     <div className={`stage-wrap ${isTouch ? "touch" : ""}`}>
       <div className="stage" style={{ transform: `scale(${scale})` }}>
+        <img className="bg" src={IMG("main_23")} alt="" />
         {/* the engine canvas stays mounted once created */}
         <div
           className="viewport"
