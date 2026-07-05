@@ -6,9 +6,17 @@ import { loadModels } from "./game/models";
 import { Hud } from "./ui/Hud";
 import { STAGE_W, STAGE_H } from "./game/constants";
 
-const IMG = (n: string) => `${import.meta.env.BASE_URL}games/castle-conquest/images/${n}.png`;
+const IMG = (n: string) =>
+  `${import.meta.env.BASE_URL}games/castle-conquest/images/${n}.png`;
 
-type Screen = "menu" | "instructions" | "castleSelect" | "castleSelectP2" | "game" | "tally" | "gameOver";
+type Screen =
+  | "menu"
+  | "instructions"
+  | "castleSelect"
+  | "castleSelectP2"
+  | "game"
+  | "tally"
+  | "gameOver";
 
 // The original instructions text (cast member instructions_txt), updated only
 // where the controls differ in this port.
@@ -27,7 +35,9 @@ const INSTRUCTIONS: Array<{ h: string; lines: string[] }> = [
   },
   {
     h: "Camera Control",
-    lines: ["You can choose to look through different cameras in the game by pressing the numbers 0 - 9 on your keyboard."],
+    lines: [
+      "You can choose to look through different cameras in the game by pressing the numbers 0 - 9 on your keyboard.",
+    ],
   },
   {
     h: "Scoring Explained",
@@ -45,7 +55,10 @@ export default function App() {
   const [hud, setHud] = useState<HudState | null>(null);
   const [scale, setScale] = useState(1);
   const [isTouch, setIsTouch] = useState(false);
-  const [hoverCastle, setHoverCastle] = useState<{ name: string; price: string } | null>(null);
+  const [hoverCastle, setHoverCastle] = useState<{
+    name: string;
+    price: string;
+  } | null>(null);
   // The original meshes (models.obj) must be parsed before anything renders:
   // the engine and the castle-select thumbnails clone them synchronously.
   const [modelsReady, setModelsReady] = useState(false);
@@ -61,7 +74,9 @@ export default function App() {
 
   useEffect(() => {
     const onResize = () =>
-      setScale(Math.min(window.innerWidth / STAGE_W, window.innerHeight / STAGE_H));
+      setScale(
+        Math.min(window.innerWidth / STAGE_W, window.innerHeight / STAGE_H),
+      );
     onResize();
     window.addEventListener("resize", onResize);
     setIsTouch("ontouchstart" in window);
@@ -79,7 +94,8 @@ export default function App() {
       };
       eng.start();
       engineRef.current = eng;
-      if (import.meta.env.DEV) (window as unknown as { __engine?: GameEngine }).__engine = eng;
+      if (import.meta.env.DEV)
+        (window as unknown as { __engine?: GameEngine }).__engine = eng;
     }
     return engineRef.current;
   }, []);
@@ -99,8 +115,15 @@ export default function App() {
         g.firePressed();
       }
       const cams: Record<string, string> = {
-        "1": "front1", "2": "castle1", "3": "side1", "4": "top1",
-        "5": "castle2", "6": "front2", "7": "side2", "9": "start", "0": "aim",
+        "1": "front1",
+        "2": "castle1",
+        "3": "side1",
+        "4": "top1",
+        "5": "castle2",
+        "6": "front2",
+        "7": "side2",
+        "9": "start",
+        "0": "aim",
       };
       if (cams[e.key]) g.pickCam(cams[e.key]);
     };
@@ -150,7 +173,11 @@ export default function App() {
       <div className={`stage-wrap ${isTouch ? "touch" : ""}`}>
         <div className="stage" style={{ transform: `scale(${scale})` }}>
           <div className="screen">
-            <img className="bg" src={IMG("mainMenu_04")} alt="Castle Conquest loading" />
+            <img
+              className="bg"
+              src={IMG("mainMenu_04")}
+              alt="Castle Conquest loading"
+            />
           </div>
         </div>
       </div>
@@ -161,7 +188,10 @@ export default function App() {
     <div className={`stage-wrap ${isTouch ? "touch" : ""}`}>
       <div className="stage" style={{ transform: `scale(${scale})` }}>
         {/* the engine canvas stays mounted once created */}
-        <div className="viewport" style={{ visibility: screen === "game" ? "visible" : "hidden" }}>
+        <div
+          className="viewport"
+          style={{ visibility: screen === "game" ? "visible" : "hidden" }}
+        >
           <canvas ref={canvasRef} width={427} height={305} />
           <img className="frame" src={IMG("gameWorldOverlay")} alt="" />
         </div>
@@ -170,25 +200,57 @@ export default function App() {
           <Hud
             hud={hud}
             onFire={() => engineRef.current?.firePressed()}
-            onAim={(dx, dy) => engineRef.current?.setKeys({
-              left: dx < -2, right: dx > 2, up: dy < -2, down: dy > 2,
-            })}
-            onAimEnd={() => engineRef.current?.setKeys({ left: false, right: false, up: false, down: false })}
+            onAim={(dx, dy) =>
+              engineRef.current?.setKeys({
+                left: dx < -2,
+                right: dx > 2,
+                up: dy < -2,
+                down: dy > 2,
+              })
+            }
+            onAimEnd={() =>
+              engineRef.current?.setKeys({
+                left: false,
+                right: false,
+                up: false,
+                down: false,
+              })
+            }
             onToggleSound={() => engineRef.current?.toggleSound() ?? true}
           />
         )}
 
         {screen === "menu" && (
           <div className="screen">
-            <img className="bg" src={IMG("mainMenu_04")} alt="Castle Conquest main menu" />
+            <img
+              className="bg"
+              src={IMG("mainMenu_04")}
+              alt="Castle Conquest main menu"
+            />
             {/* invisible hotspots over the baked-in button art (boxes at
                 x 48-257, tops 148/207/265, 59px pitch) */}
-            <button className="menu-btn" style={{ top: 148 }} onClick={() => startGame(false)} aria-label="Start Game" />
-            <button className="menu-btn" style={{ top: 207 }} onClick={() => setScreen("instructions")} aria-label="Instructions" />
+            <button
+              className="menu-btn"
+              style={{ top: 148 }}
+              onClick={() => startGame(false)}
+              aria-label="Start Game"
+            />
+            <button
+              className="menu-btn"
+              style={{ top: 207 }}
+              onClick={() => setScreen("instructions")}
+              aria-label="Instructions"
+            />
             {/* extra slot below the baked-in boxes, drawn to match them */}
             <button
               className="menu-btn gold-text"
-              style={{ top: 324, fontSize: 17, fontFamily: "inherit", fontStyle: "italic", border: "2px solid #825f0e" }}
+              style={{
+                top: 324,
+                fontSize: 17,
+                fontFamily: "inherit",
+                fontStyle: "italic",
+                border: "2px solid #825f0e",
+              }}
               onClick={() => startGame(true)}
             >
               Two Player
@@ -209,15 +271,22 @@ export default function App() {
                 </div>
               ))}
             </div>
-            <button className="back-btn" onClick={() => setScreen("menu")}>Back</button>
+            <button className="back-btn" onClick={() => setScreen("menu")}>
+              Back
+            </button>
           </div>
         )}
 
         {(screen === "castleSelect" || screen === "castleSelectP2") && (
           <div className="screen">
             <img className="bg" src={IMG("main_23")} alt="" />
-            <div className="hud-text" style={{ left: 24, top: 16, fontSize: 20 }}>
-              {screen === "castleSelectP2" ? "Player 2: Select Your Castle" : "Select Your Castle"}
+            <div
+              className="hud-text"
+              style={{ left: 24, top: 16, fontSize: 20 }}
+            >
+              {screen === "castleSelectP2"
+                ? "Player 2: Select Your Castle"
+                : "Select Your Castle"}
             </div>
             <div className="hud-text" style={{ right: 24, top: 16 }}>
               Level {(engineRef.current?.roundCount ?? 3) + 1}
@@ -228,15 +297,24 @@ export default function App() {
             </div>
             <div className="castle-grid">
               {CASTLES.map((c) => {
-                const locked = c.price > gold && !(engineRef.current?.twoPlayer ?? false);
-                const priceText = locked ? `Unlocks at ${c.price} gold` : c.price > 0 ? `${c.price} gold` : "Free";
+                const locked =
+                  c.price > gold && !(engineRef.current?.twoPlayer ?? false);
+                const priceText = locked
+                  ? `Unlocks at ${c.price} gold`
+                  : c.price > 0
+                    ? `${c.price} gold`
+                    : "Free";
                 return (
                   <div
                     key={c.num}
                     className={`castle-card ${locked ? "locked" : ""}`}
-                    style={{ backgroundImage: `url(${renderCastleThumbnail(c.num)})` }}
+                    style={{
+                      backgroundImage: `url(${renderCastleThumbnail(c.num)})`,
+                    }}
                     onClick={() => !locked && pickCastle(c.num)}
-                    onMouseEnter={() => setHoverCastle({ name: c.name, price: priceText })}
+                    onMouseEnter={() =>
+                      setHoverCastle({ name: c.name, price: priceText })
+                    }
                     onMouseLeave={() => setHoverCastle(null)}
                   />
                 );
@@ -250,7 +328,9 @@ export default function App() {
                 </>
               )}
             </div>
-            <div className="hint">Castles unlock as you earn gold. Gold carries over between games.</div>
+            <div className="hint">
+              Castles unlock as you earn gold. Gold carries over between games.
+            </div>
           </div>
         )}
 
@@ -259,12 +339,29 @@ export default function App() {
             <img className="bg" src={IMG("main_23")} alt="" />
             <div className="tally-panel">
               <h2>Round Tally</h2>
-              <div className="tally-row"><span>Castle Damage</span><span>{hud.tally.castleDamage}</span></div>
-              <div className="tally-row"><span>Rubble Reward</span><span>{hud.tally.rubbleReward}</span></div>
-              <div className="tally-row"><span>Flag Protect Bonus</span><span>{hud.tally.flagProtect}</span></div>
-              <div className="tally-row"><span>Flag Capture Bonus</span><span>{hud.tally.flagDamage}</span></div>
-              <div className="tally-row tally-total"><span>Total</span><span>{hud.tally.total}</span></div>
-              <button onClick={() => setScreen("castleSelect")}>Next Round</button>
+              <div className="tally-row">
+                <span>Castle Damage</span>
+                <span>{hud.tally.castleDamage}</span>
+              </div>
+              <div className="tally-row">
+                <span>Rubble Reward</span>
+                <span>{hud.tally.rubbleReward}</span>
+              </div>
+              <div className="tally-row">
+                <span>Flag Protect Bonus</span>
+                <span>{hud.tally.flagProtect}</span>
+              </div>
+              <div className="tally-row">
+                <span>Flag Capture Bonus</span>
+                <span>{hud.tally.flagDamage}</span>
+              </div>
+              <div className="tally-row tally-total">
+                <span>Total</span>
+                <span>{hud.tally.total}</span>
+              </div>
+              <button onClick={() => setScreen("castleSelect")}>
+                Next Round
+              </button>
             </div>
           </div>
         )}
