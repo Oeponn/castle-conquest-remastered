@@ -1,9 +1,11 @@
 // Castle piece catalogue. Display names and shop prices are 1:1 from
 // gameClass (getWorldName / refund). Physics classes are from simClass's
-// sim-type table. Dimensions are reconstructed: the original meshes live in
-// the compressed Shockwave-3D world (no public decoder), but the layouts
-// place pieces on a strict 25-unit grid with 15-unit storeys, so each shape
-// is sized to fill its slot exactly like the original.
+// sim-type table. Since 2026-07-05 the rendered geometry is the ORIGINAL
+// meshes from the w3d (models.ts); the local bounding boxes that drive the
+// colliders live in the generated modelData.ts. `kind` only picks the
+// collider shape now (cylinder for the round towers, the slim flag box);
+// `size` is the old reconstructed-primitive guess, kept for reference and
+// as documentation of what the pre-mesh port shipped.
 
 export type PieceKind =
   | "box"
@@ -13,14 +15,10 @@ export type PieceKind =
   | "cannon"
   | "arch";
 
-// Pixel-sampled from an original Garrison castle-select screenshot (pale
-// lemon-gold, ~#ebdc50) — the reconstructed flag cloth was previously an
-// arbitrary red, then an over-saturated gold guess.
-export const FLAG_COLOR = 0xebd85a;
-
 export interface PieceDef {
   kind: PieceKind;
-  /** x (toward enemy), y (across), z (up) full extents */
+  /** LEGACY reconstructed extents (pre-mesh port) — colliders now derive
+   * from modelData.PIECE_BBOX; see world.ts pieceCollider. */
   size: [number, number, number];
   mass: number;
   restitution: number;
@@ -154,9 +152,3 @@ export const PIECES: Record<string, PieceDef> = {
   },
 };
 
-export function pieceBaseName(modelName: string): string {
-  for (const key of Object.keys(PIECES)) {
-    if (modelName.includes(key)) return key;
-  }
-  return "wallPieceA";
-}

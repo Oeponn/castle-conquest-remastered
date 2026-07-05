@@ -1,14 +1,20 @@
 // Castle-select preview thumbnails. The original picker screen (Director
-// score, unrecoverable) showed a small rendered snapshot of each castle's
-// actual layout on a green tile — rather than guess at static art, we render
-// the same piece data used in the real game (positions are 1:1 from the
-// decompiled Lingo castle strings, see castles.ts) from a fixed isometric
-// angle, so the thumbnails are geometrically faithful to the original.
+// score, sprite attachments not recovered) showed a small rendered snapshot
+// of each castle's actual layout on a green tile — we render the same piece
+// data used in the real game (positions 1:1 from the decompiled Lingo castle
+// strings) from a fixed isometric angle. Since 2026-07-05 the pieces are the
+// ORIGINAL meshes (textured brick, gold flags, real cannons) and the corner
+// trees are the original billboard texture, so the tiles now show the real
+// thing. Pieces are placed by their authored PIVOT (no size/2 — see
+// world.ts pivot note).
+//
+// NOTE: renderCastleThumbnail requires models.ts/loadModels() to have
+// resolved (App gates the UI on it).
 
 import * as THREE from "three";
-import { PIECES, FLAG_COLOR } from "./pieces";
 import { getCastleDataList } from "./castles";
-import { buildPieceMesh, PieceMaterials } from "./world";
+import { buildPieceMesh } from "./world";
+import { getModelTexture } from "./models";
 
 const W = 220;
 const H = 150;
@@ -16,7 +22,6 @@ const H = 150;
 // tiles are a saturated grass green (~#458635), not the muted teal guessed
 // at first.
 const GROUND_COLOR = 0x458635;
-const TREE_COLOR = 0x33482a;
 
 let renderer: THREE.WebGLRenderer | null = null;
 const cache = new Map<number, string>();
@@ -29,25 +34,22 @@ function getRenderer(): THREE.WebGLRenderer {
   return renderer;
 }
 
-function makeMaterials(): PieceMaterials {
-  return {
-    // Warm light gray, sampled from the same screenshot's castle walls
-    // (~#7d7469) — the original flat gray guess read too cool/blue.
-    stone: new THREE.MeshLambertMaterial({ color: 0x7d7469 }),
-    roof: new THREE.MeshLambertMaterial({ color: 0x8a4a2a }),
-    wood: new THREE.MeshLambertMaterial({ color: 0x6b4a2a }),
-    flag: new THREE.MeshLambertMaterial({ color: FLAG_COLOR, side: THREE.DoubleSide }),
-    cannon: new THREE.MeshLambertMaterial({ color: 0x333338 }),
-  };
-}
-
-/** Small pine-tree silhouette, matching the background scenery scattered
- * around the castle in the original picker screenshots. */
-function makeTree(scale: number): THREE.Object3D {
-  const mat = new THREE.MeshLambertMaterial({ color: TREE_COLOR });
-  const cone = new THREE.Mesh(new THREE.ConeGeometry(scale * 0.4, scale, 8), mat);
-  cone.position.z = scale / 2;
-  return cone;
+/** Billboard quad with the original tree texture (105x206 cutout), roughly
+ * the aspect/size of the authored tree quads (~17 wide x 23 tall units). */
+function makeTree(scale: number, faceDir: THREE.Vector3): THREE.Object3D {
+  const mat = new THREE.MeshLambertMaterial({
+    map: getModelTexture("treeTexture"),
+    alphaTest: 0.5,
+    side: THREE.DoubleSide,
+  });
+  const wByH = 105 / 206;
+  const quad = new THREE.Mesh(new THREE.PlaneGeometry(scale * wByH, scale), mat);
+  // PlaneGeometry faces +z; stand it up and yaw it toward the camera.
+  quad.rotation.set(Math.PI / 2, 0, Math.atan2(faceDir.y, faceDir.x) + Math.PI / 2, "ZXY");
+  quad.position.z = scale / 2;
+  const g = new THREE.Group();
+  g.add(quad);
+  return g;
 }
 
 export function renderCastleThumbnail(castleNum: number): string {
@@ -61,13 +63,10 @@ export function renderCastleThumbnail(castleNum: number): string {
   sun.position.set(150, -200, 260);
   scene.add(sun);
 
-  const mats = makeMaterials();
   const group = new THREE.Group();
   for (const pd of getCastleDataList(castleNum)) {
-    const def = PIECES[pd.name];
-    if (!def) continue;
-    const mesh = buildPieceMesh(def, pd.name, mats);
-    mesh.position.set(pd.x, pd.y, pd.z + def.size[2] / 2);
+    const mesh = buildPieceMesh(pd.name);
+    mesh.position.set(pd.x, pd.y, pd.z);
     mesh.rotation.z = (pd.rz * Math.PI) / 180;
     group.add(mesh);
   }
@@ -107,7 +106,7 @@ export function renderCastleThumbnail(castleNum: number): string {
   for (let i = 0; i < treeSpots.length; i++) {
     const [fx, fy] = treeSpots[i];
     const jitter = ((castleNum * 13 + i * 29) % 7) / 30 - 0.1;
-    const tree = makeTree(radius * (0.3 + 0.08 * ((castleNum + i) % 3)));
+    const tree = makeTree(radius * (0.5 + 0.1 * ((castleNum + i) % 3)), camDir);
     tree.position.copy(toGround(fx + jitter, fy));
     scene.add(tree);
   }
@@ -116,14 +115,5 @@ export function renderCastleThumbnail(castleNum: number): string {
   r.render(scene, camera);
   const url = r.domElement.toDataURL("image/png");
   cache.set(castleNum, url);
-
-  scene.traverse((obj) => {
-    if (obj instanceof THREE.Mesh) {
-      obj.geometry.dispose();
-      if (obj.material instanceof THREE.Material) obj.material.dispose();
-    }
-  });
-  for (const m of Object.values(mats)) m.dispose();
-
   return url;
 }

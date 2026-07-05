@@ -9,6 +9,7 @@
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
 import { GameWorld, GamePiece } from "./world";
+import { getModelMesh, getModelMeshOwnMaterial } from "./models";
 import { ParticleSystem } from "./particles";
 import { AudioBank } from "./audio";
 import { aiSetPower } from "./ai";
@@ -76,6 +77,7 @@ export class GameEngine {
   player2CastleData: PieceData[] = getCastleDataList(1);
 
   ball: THREE.Mesh;
+  ballShadow: THREE.Mesh;
   ballBody: CANNON.Body;
   ballThrown = false;
   ballInWorld = false;
@@ -130,11 +132,16 @@ export class GameEngine {
     this.camera.up.set(0, 0, 1);
     this.particles = new ParticleSystem(this.gw.scene);
 
-    const ballGeo = new THREE.SphereGeometry(1, 16, 12);
-    const ballMat = new THREE.MeshLambertMaterial({ color: 0x222222 });
-    this.ball = new THREE.Mesh(ballGeo, ballMat);
+    // The original ball master mesh (shiny black, radius 1.768) — throwBall
+    // scales it BALL_SCALE (3.4x) or BALL_SCALE_BIG (6x from cannonB).
+    this.ball = getModelMesh("ball");
     this.ball.visible = false;
     this.gw.scene.add(this.ball);
+    // ballShadowShape: the translucent blob gameClass drags under the ball
+    // (ballShadowFollow: x/y only — its z stays authored just above ground).
+    this.ballShadow = getModelMeshOwnMaterial("ballShadow");
+    this.ballShadow.visible = false;
+    this.gw.scene.add(this.ballShadow);
     this.ballBody = new CANNON.Body({ mass: C.BALL_MASS, shape: new CANNON.Sphere(C.BALL_RADIUS) });
     // friction sqrt-encoded (cannon-es multiplies material frictions; Havok
     // used the geometric mean — see the ground material comment in world.ts)
@@ -153,6 +160,23 @@ export class GameEngine {
     this.ballBody.addEventListener("collide", (ev: { body: CANNON.Body; contact: CANNON.ContactEquation }) => {
       this.onBallCollide(ev);
     });
+  }
+
+  /** gameClass.ballShadowFollow, 1:1 — the blob tracks the ball on x/y (its
+   * z stays at the authored height just above the ground plane), fades and
+   * shrinks as the ball climbs: blend = 60 + 20*zPerc, scale = 1.3 +
+   * 0.3*zPerc with zPerc = 1 - z/100... including the original's quirk that
+   * a ball ABOVE 100 units snaps zPerc back to 1 (full-dark, full-size). */
+  private ballShadowFollow() {
+    this.ballShadow.visible = this.ball.visible;
+    if (!this.ballShadow.visible) return;
+    this.ballShadow.position.x = this.ballBody.position.x;
+    this.ballShadow.position.y = this.ballBody.position.y;
+    let zPerc = 1.0 - this.ballBody.position.z / 100.0;
+    if (zPerc < 0) zPerc = 1;
+    (this.ballShadow.material as THREE.Material).opacity = 0.6 + 0.2 * zPerc;
+    const s = 1.3 + 0.3 * zPerc;
+    this.ballShadow.scale.set(s, s, 1);
   }
 
   // ---------- persistence (replaces the Flash SharedObject) ----------
@@ -400,8 +424,10 @@ export class GameEngine {
     const radius = big ? C.BALL_RADIUS_BIG : C.BALL_RADIUS;
     (this.ballBody.shapes[0] as CANNON.Sphere).radius = radius;
     this.ballBody.updateBoundingRadius();
-    this.ball.scale.setScalar(radius);
+    // scale the MODEL like throwBall does (the mesh has its true radius baked)
+    this.ball.scale.setScalar(big ? C.BALL_SCALE_BIG : C.BALL_SCALE);
     this.ball.visible = true;
+    this.ballShadow.visible = true;
 
     const cp = this.cannonPos(this.player1Turn ? 1 : 2);
     this.ballBody.position.set(cp.x, cp.y, cp.z + 8);
@@ -709,6 +735,7 @@ export class GameEngine {
       }
       this.gw.syncMeshes();
       this.ball.position.set(this.ballBody.position.x, this.ballBody.position.y, this.ballBody.position.z);
+      this.ballShadowFollow();
       this.particles.update(frame / 1000);
       this.updateCamera();
       this.renderer.render(this.gw.scene, this.camera);

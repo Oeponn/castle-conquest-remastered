@@ -77,4 +77,4 @@ is a pretty convenient skill.
 
 
 At minimum, if you're going to cheat in a game, you should understand
-_how_ you're cheating.
+_how_ you're cheating. I was big into hacking for an unfair advantage, so I'm hardly talking from a high horse. I even still write bots for games. But it does kind of take away the sense of achievement, so you may as well get something else out of it.

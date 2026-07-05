@@ -3,6 +3,8 @@
 // The original game loop ran one logic tick every 10 ms (drawSpeed = 10),
 // so per-tick values below assume a 100 Hz logic clock.
 
+import { BALL_MESH_RADIUS } from "./modelData";
+
 export const LOGIC_HZ = 100;
 export const LOGIC_DT_MS = 10;
 
@@ -65,8 +67,14 @@ export const TURN_MAX_WAIT_S = (90 * 18) / 60;
 export const SMOKE_TRAIL_S = 180 / 60; // smoke trail for first 180 ticks
 export const PIECE_SETTLED_THRESHOLD = 0.0025; // avg movement per check
 
-// Flag counts as down when tilted > 10 degrees (checkFlagsDown)
-export const FLAG_DOWN_TILT_DEG = 10;
+// Flag counts as down when tilted > 20 degrees on x or y (LIVE gameClass
+// checkFlagsDown line 917: `rotAbsX > 20 or rotAbsY > 20`; the old port
+// value 10 was misread). The enemy-side comparison in the original is
+// 180-|rot.x| because mirrored (scale.x=-1) models decompose with rot.x
+// near 180; our physics bodies are not mirrored, so plain |tilt| is the
+// equivalent measure on both sides. Note the authored -8° lean of enemy
+// rz=0 flags (makeCastlePiece) sits safely under this threshold.
+export const FLAG_DOWN_TILT_DEG = 20;
 // A piece is "damaged" for scoring when moved > 5 units (tallyScore)
 export const PIECE_DAMAGED_DIST = 5.0;
 
@@ -117,8 +125,16 @@ export const GRAVITY = -49;
 export const IMPULSE_SCALE = 2.234;
 
 export const BALL_MASS = 22; // simClass sim=4 preset, 1:1
-export const BALL_RADIUS = 3.4;
-export const BALL_RADIUS_BIG = 6;
+// throwBall scales the ball MODEL: `mBall.transform.scale = vector(3.4,..)`,
+// or 6x when firing from cannonB. The pre-mesh port misread those scale
+// factors as radii; the master ball mesh is radius 1.768 (modelData), so the
+// true ball is ~6 units (10.6 for the big cannon). Colliders match visuals.
+// export const BALL_SCALE = 3.4;
+export const BALL_SCALE = 1;
+// export const BALL_SCALE_BIG = 6;
+export const BALL_SCALE_BIG = 2;
+export const BALL_RADIUS = BALL_MESH_RADIUS * BALL_SCALE;
+export const BALL_RADIUS_BIG = BALL_MESH_RADIUS * BALL_SCALE_BIG;
 
 export const STAGE_W = 640;
 export const STAGE_H = 480;

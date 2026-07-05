@@ -3,7 +3,8 @@
 *A running log of how the original Shockwave game is being rebuilt for the browser.
 Written for both humans and future Claude sessions. Updated as work progresses.*
 
-Last updated: 2026-07-05 (the 3D meshes ARE decodable — w3d extracted, converter identified)
+Last updated: 2026-07-05 (ORIGINAL MESHES IN — full w3d→OBJ→web pipeline, true-mirror
+fix, flag threshold fix; the game is now model-1:1 with the original)
 
 ---
 
@@ -32,6 +33,9 @@ graphics, sounds, and game logic** extracted from the game file.
 | `tools/ProjectorRays/` | The Shockwave decompiler (patched to tolerate one bad sound chunk). **Not committed** — it's a clone of https://github.com/ProjectorRays/ProjectorRays (commit `6f9bceb`); to recreate it, clone that repo into `tools/ProjectorRays`, apply `tools/projectorrays-tolerate-bad-snd-chunk.patch` with `git apply`, then `make` |
 | `tools/projectorrays-tolerate-bad-snd-chunk.patch` | Our local patch to ProjectorRays (turns a fatal decompress error into a warning) |
 | `tools/extract_assets.py` | Script that converts the game's bitmaps/sounds to PNG/WAV |
+| `assets/extracted/3d/` | The carved `castleConquest.w3d` + the Shockwave 3D World Converter's OBJ/MTL/TIFF output (the ORIGINAL meshes & textures, decoded) |
+| `tools/convert_3d_models.py` | OBJ/TIFF → web assets: `web/public/.../models/models.obj` + `tex/*.png` + generated `web/src/game/modelData.ts` (see "ORIGINAL MESHES IN") |
+| `tools/check_collider_overlaps.py` | Exact spawn-overlap check of every castle layout against the world.ts colliders — run after any collider change (no output = safe) |
 | `tools/parse_score.py` | Parses the raw Director score chunk (`VWSC-6181.bin`) that ProjectorRays dumps but can't decode: prints every sprite channel's cast member + rect per frame (this is where the score-authored sprite positions live) |
 | `web/` | The new TypeScript browser game (Vite + React + Three.js) |
 | `PORTING_NOTES.md` | This file |
@@ -123,7 +127,7 @@ classes and what they do:
 | All 6 sounds (cannon boom, crank, rock hit, ground hit, win/lose jingles) | **Converted as-is** (PCM → WAV, MP3 kept as MP3) |
 | All game logic, AI, physics parameters, castle layouts, prices, scoring | **Ported 1:1 from the decompiled Lingo source** |
 | Text content (instructions, hints, button labels) | **Taken from the original** |
-| 3D castle-piece geometry | **Reconstructed** (currently) — but the originals ARE recoverable, see "2026-07-05: the meshes are decodable". The meshes live in the Shockwave 3D world (Intel IFX compressed bitstream); the pieces are simple shapes on a known 25-unit grid, rebuilt as Three.js primitives textured with the original `brick_bmp`/`skydome` art. |
+| 3D castle-piece geometry | **Converted as-is (2026-07-05)** — the ORIGINAL meshes, decoded from the w3d via the Shockwave 3D World Converter, with the original brick/cannon/drawbridge/ground textures, skydome photo sphere, tree billboards and ball shadow. See "ORIGINAL MESHES IN". Only *colliders* are approximations (COLLIDER_TRIM). |
 | Havok physics | **Replaced** with cannon-es using the original mass/friction/restitution table from `simClass`. |
 | Online castle save/challenge (dluxproductions.com, long dead) | Replaced with localStorage save. |
 
@@ -152,6 +156,10 @@ classes and what they do:
       **impact cutscene (the part that was broken on Mac)** → AI counter-attack →
       round win → tally screen with correct scoring → gold banked
 - [x] Mobile verified: portrait + landscape layout, touch FIRE button, drag-aim
+- [x] **Original 3D meshes decoded from the w3d and swapped in** (2026-07-05):
+      pieces, ball (+shadow), ground, skydome, trees; castle-select thumbnails
+      render them too. Enemy-castle mirroring and the flag-down threshold
+      corrected against the live Lingo in the process.
 - [ ] Deploy to Vercel (keep it password-protected/unlisted — Miniclip owns the art)
 - [ ] Wrap in a games-library home page when game #2 arrives
 
@@ -472,6 +480,137 @@ The other 24 XMED chunks are just a PFR font and styled-text members.
 Path to 1:1 geometry: run the converter on the w3d (Windows environment),
 then OBJ → glTF (or Three.js OBJLoader) and swap the primitives in
 `pieces.ts` for the real meshes, keeping the existing physics boxes.
+**DONE same day — see the next section.**
+
+## 2026-07-05 (later): ORIGINAL MESHES IN — the game is now model-1:1
+
+The user ran the Shockwave 3D World Converter under Wine; its output (OBJ +
+MTL + 7 TIFF textures) lives in `assets/extracted/3d/`. Everything below is
+implemented, headless-verified (flagtest/balltest/hittest) and building.
+
+### The pipeline (re-runnable end to end)
+
+```
+assets/decompiled/.../chunks/XMED-5891.bin      # ProjectorRays chunk dump
+  → tail -c +17 → assets/extracted/3d/castleConquest.w3d   (strip 16-byte "3DEM" wrapper)
+  → Shockwave 3D World Converter (Windows/Wine, uses Director's own decoder)
+  → assets/extracted/3d/castleConquest.{obj,MTL} + *.TIFF
+  → python3 tools/convert_3d_models.py          # idempotent; run from repo root
+      → web/public/games/castle-conquest/models/models.obj   (cleaned, renamed groups)
+      → web/public/games/castle-conquest/models/tex/*.png
+      → web/src/game/modelData.ts               (GENERATED: bboxes, materials, ball radius)
+```
+
+`web/src/game/models.ts` fetches models.obj once (OBJLoader), swaps in real
+materials, and hands out clones. `App.tsx` gates the whole UI on
+`loadModels()` (a splash of the menu art shows meanwhile) because the engine
+and thumbnails clone models synchronously.
+
+### What the OBJ told us (all verified, all now in the port)
+
+- **Coordinates are game world space** (z up, x toward the enemy). The 15
+  piece masters are parked at identity at the origin, so their vertex data
+  IS their pivot-space geometry. The ball parks at the player cannon
+  (recentered by the tool); ground/skydome/trees are world-space scenery.
+- **Pivots are NOT bbox centers** (wallA spans x 0..5 from its pivot;
+  towerA/towerTopA cylinders center at +2.5,+2.5; wallPieceA spans y 0..5;
+  supportA x −5..10...). The layout strings position pieces by pivot, so the
+  pre-mesh port's centered primitives had every such piece off by up to half
+  a wall thickness. `world.ts` now places by pivot: physics body at pivot +
+  R(yaw)·colliderCenter, mesh child hung at −colliderCenter.
+- **Real piece dims differ from the old guesses**: wallTops are 29.8 long ×
+  15 tall (guessed 25 × 8), towerTopB is 30×30 (guessed 16×16), drawbridge
+  is 35 tall (guessed 28), cannonA/B are much smaller than guessed —
+  cannon hitbox = instant win, so this matters. towerTopA is 15 tall with
+  the cone roof baked in (the old hand-added cone is gone).
+- **The ball**: master mesh radius 1.768; `throwBall` scales the MODEL 3.4×
+  (6× from cannonB) → true ball ≈ r6.0 / r10.6. The old port had misread the
+  scale factors as radii (3.4/6.0). `BALL_SCALE`/`BALL_RADIUS` in
+  constants.ts now derive from `BALL_MESH_RADIUS`.
+- **Real materials**: brick/cannon/drawbridge/ground textures, the real
+  flag gold `#BDB400` (shadergold Kd — replaces the sampled-screenshot
+  guess), shiny-black ball, photographic skydome (unlit: gameClass sets
+  `shader("blinn4").emissive = white`), 27 photographic tree billboards
+  (unlit too — Lambert crushed them to silhouettes), and the ball's
+  translucent shadow blob.
+- **New scenery the port never had**: the real textured ground slab, the
+  real r≈536 skydome (replaces the r=1500 sphere + 2D bitmap; scene fog
+  removed — the dome bakes its own horizon haze), the 27 trees, and the
+  ball shadow with gameClass.ballShadowFollow 1:1 (opacity 0.6+0.2·zPerc,
+  scale 1.3+0.3·zPerc, zPerc = 1−z/100 with the original's z>100 → zPerc=1
+  quirk).
+
+### Two live-Lingo discoveries the meshes forced (gameplay-relevant!)
+
+1. **Enemy castles mirror with `transform.scale.x = -1`** — a TRUE mirror
+   (castleBuilderClass.makeCastlePiece), not the port's old "rotate 180°"
+   hack. On centered primitives the hack was invisible; on pivot-offset
+   meshes it displaced differently-rotated pieces by different amounts —
+   an exact AABB sweep found **34 interpenetrating collider pairs** across
+   the mirrored castles, which cannon-es resolved violently on first wake:
+   one mid-power shot flattened 27/28 pieces and downed both flags. With
+   the true mirror (mesh group scale.x = side; collider center x mirrored;
+   three.js handles negative-determinant winding automatically): zero
+   enemy-side overlaps, graded damage restored.
+   Bonus quirk now 1:1: rz=0 flags sit at y+1 (both sides) and lean −8° on
+   x on the enemy side only (visible in flagtest as the stable −8.0
+   reading).
+2. **The flag-down threshold is 20°, not 10** (live checkFlagsDown line
+   917: `rotAbsX > 20 or rotAbsY > 20` — 10 was a misreading). The
+   original measures enemy flags as 180−|rot.x| because mirrored models
+   decompose with rot.x≈180; our bodies aren't mirrored so plain |tilt|
+   is equivalent. The −8° authored lean sits safely under 20°.
+
+### Deliberate non-1:1 (all collider-only; meshes render as authored)
+
+- **COLLIDER_TRIM in world.ts**: the original meshes are AUTHORED to
+  interpenetrate (wallTop rows 29.8 long at 25 pitch; 15.03–15.16-tall
+  storey pieces on 15-unit storeys; 35-tall drawbridge under the arch at
+  z30; flag poles embedded in tower-top roofs). Havok absorbed spawn
+  penetration; cannon-es explodes on wake. Colliders are trimmed to clear
+  (heights floored/capped, wallTop half-length 10, towerTops capped at 10
+  for the flag mounts, flag = slim 3×3×10.6 box at the real pole height).
+  `tools/check_collider_overlaps.py` (exact because all layout yaws are
+  multiples of 90°) verifies **zero overlapping pairs across all 12
+  castles** — run it after ANY collider change, and keep its TRIM table in
+  sync with world.ts COLLIDER_TRIM.
+- **Ground texture tiling**: the original tiling lived in the w3d shader's
+  texture transform, which the converter can't export. Remapped planar at
+  1 repeat/32 units (same px/unit as the wall bricks; reads as solid green
+  at gameplay distance, matching video footage). Revisit given better
+  reference.
+- The horizontal per-tree quads (`ptree0N`) exported white/untextured —
+  either invisible helpers or a canopy texture that didn't survive;
+  skipped. Cameras/lights export as tiny marker quads (orientation could
+  be recovered from their plane normals someday — e.g. to double-check the
+  cam_aim −4° anchor); port keeps its own lights.
+- `pplayPlane1/2` (invisible black planes just below ground, Havok-era
+  helpers) and `pisectPlane` (aim-ray helper) are skipped.
+
+### Verified & baselines moved
+
+flagtest: all castles stable at 0° (enemy rz0 flags at −8°). balltest: 87%
+player shot reaches enemy face (x=195.6), AI counters to player face
+(−198). hittest: a 50%-power frontal hit now moves **2** pieces (the old
+"12 of 28" baseline was measured against the scrambled-mirror castle with
+its overlap pop — treat 2 as the new graded baseline, but eyeball feel
+in-play; masses still run deliberately heavy per 2026-07-04). Production
+build passes; `npx tsc --noEmit` clean.
+
+### Gotchas for whoever touches this next
+
+- models.ts templates SHARE geometry/materials between the live scene and
+  the thumbnails — never `dispose()` them (the old thumbnails.ts did; that
+  code is gone, don't reintroduce it).
+- pieces.ts `size` is LEGACY (the old primitive guesses), kept only as
+  documentation; colliders come from modelData.PIECE_BBOX + COLLIDER_TRIM.
+  `kind` still picks collider shape (cylinder/flag/box).
+- modelData.ts is GENERATED — edit tools/convert_3d_models.py and re-run.
+- The castle-select thumbnails render the real meshes; they require models
+  loaded (App gates on it) and place pieces by PIVOT (no size/2).
+- Ball spawn (cannonPos + 8) still starts the ball overlapping its own
+  cannon collider slightly, same as ever — harmless in tests, but if
+  launch deflection ever shows up, look there.
 
 ## Tuned 2026-07-04: castle pieces ~25% heavier
 
@@ -485,10 +624,11 @@ ball.
 
 ## Known approximations (worth revisiting)
 
-- **Geometry**: castle pieces are rebuilt primitives, not the original meshes.
-  Proportions come from the 25-unit grid; the brick texture is original.
-  **No longer a dead end** — the w3d world has been carved out of the movie
-  and a converter exists; see "2026-07-05: the meshes are decodable".
+- ~~**Geometry**: castle pieces are rebuilt primitives~~ — **RESOLVED
+  2026-07-05**: the original meshes are decoded and in the game. Remaining
+  geometry approximations are collider-only (COLLIDER_TRIM in world.ts, the
+  ground texture tiling period, and the skipped horizontal tree quads) —
+  see "ORIGINAL MESHES IN".
 - **Castle names/unlock prices** on the select screen are invented — the real
   ones were Director score-sprite behavior parameters. Gating logic (locked
   until enough gold) matches the original. (Now that `tools/parse_score.py`

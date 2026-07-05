@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { GameEngine, HudState } from "./game/engine";
 import { CASTLES } from "./game/castles";
 import { renderCastleThumbnail } from "./game/thumbnails";
+import { loadModels } from "./game/models";
 import { Hud } from "./ui/Hud";
 import { STAGE_W, STAGE_H } from "./game/constants";
 
@@ -45,8 +46,18 @@ export default function App() {
   const [scale, setScale] = useState(1);
   const [isTouch, setIsTouch] = useState(false);
   const [hoverCastle, setHoverCastle] = useState<{ name: string; price: string } | null>(null);
+  // The original meshes (models.obj) must be parsed before anything renders:
+  // the engine and the castle-select thumbnails clone them synchronously.
+  const [modelsReady, setModelsReady] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const engineRef = useRef<GameEngine | null>(null);
+
+  useEffect(() => {
+    loadModels().then(
+      () => setModelsReady(true),
+      (e) => console.error("model load failed", e),
+    );
+  }, []);
 
   useEffect(() => {
     const onResize = () =>
@@ -130,6 +141,21 @@ export default function App() {
   };
 
   const gold = hud?.gold ?? engineRef.current?.player1Gold ?? 0;
+
+  // Everything below clones the loaded models synchronously (engine on
+  // canvas mount, thumbnails in the castle grid) — hold on a splash until
+  // models.obj is parsed. Must stay below all hook calls.
+  if (!modelsReady) {
+    return (
+      <div className={`stage-wrap ${isTouch ? "touch" : ""}`}>
+        <div className="stage" style={{ transform: `scale(${scale})` }}>
+          <div className="screen">
+            <img className="bg" src={IMG("mainMenu_04")} alt="Castle Conquest loading" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`stage-wrap ${isTouch ? "touch" : ""}`}>

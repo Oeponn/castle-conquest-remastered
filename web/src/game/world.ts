@@ -1,12 +1,22 @@
 // Builds the 3D scene: ground, sky, castle pieces (mesh + physics body).
 // Coordinate system matches the original Shockwave world: z is up,
 // player 1 attacks from negative x toward positive x.
+//
+// As of 2026-07-05 the visuals use the ORIGINAL meshes extracted from the
+// w3d (see models.ts / PORTING_NOTES.md). Key consequence: the castle layout
+// strings position pieces by their authored PIVOT, which is not the bbox
+// center (wallA spans x 0..5 from its pivot; towerA's cylinder is centered
+// at +2.5,+2.5). Physics bodies sit at the collider's center (proper center
+// of mass for cannon-es), and the visual mesh hangs off the body group at
+// minus that offset so the pivot lands exactly on the authored coordinate.
 
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
-import { FLAG_COLOR, PIECES, PieceDef, pieceBaseName } from "./pieces";
+import { PIECES, PieceDef } from "./pieces";
 import { PieceData } from "./castles";
 import { GRAVITY } from "./constants";
+import { PIECE_BBOX } from "./modelData";
+import { getModelMesh } from "./models";
 
 export interface GamePiece {
   name: string;
@@ -19,119 +29,91 @@ export interface GamePiece {
   isCannon: boolean;
 }
 
-const IMG = (n: string) => `${import.meta.env.BASE_URL}games/castle-conquest/images/${n}.png`;
-
-export interface PieceMaterials {
-  stone: THREE.Material;
-  roof: THREE.Material;
-  wood: THREE.Material;
-  flag: THREE.Material;
-  cannon: THREE.Material;
+/** Collider derived from the real mesh's local bbox.
+ *
+ * - The base is floored to z=0: pieces are authored floating ~0.5 above
+ *   their pivot; flooring keeps them resting exactly at the authored z
+ *   (same behavior the calibrated primitive port had).
+ * - towerTopA/towerTopB colliders are capped at 10 units tall even though
+ *   the real meshes are ~15 (towerTopA's top third is the cone roof):
+ *   layouts mount flags at the top's base z + 10, i.e. the flag pole is
+ *   authored EMBEDDED in the roof. A full-height collider would overlap the
+ *   flag body and blast it off on the first wake. The 10-unit collider is
+ *   exactly the tested pre-mesh setup: the flag body rests flush on it.
+ * - flagPoleC keeps the legacy slim 3x3x20 box (the real mesh is a 10.6-unit
+ *   pole + cloth): tall and thin is what makes tilt>10° detection behave,
+ *   and its base resting at the authored z is what keeps it mounted.
+ */
+interface ColliderSpec {
+  shape: CANNON.Shape;
+  /** collider center in piece-local (pivot) space */
+  center: THREE.Vector3;
 }
 
-/** Shared by GameWorld (live scene) and the castle-select thumbnail renderer. */
-export function buildPieceMesh(
-  def: PieceDef,
-  baseName: string,
-  mats: PieceMaterials,
-): THREE.Object3D {
-  const [sx, sy, sz] = def.size;
-  const g = new THREE.Group();
-  switch (def.kind) {
-    case "box": {
-      // The drawbridge is a wood plank in the original art (sampled
-      // ~#725034 from a picker screenshot); every other box piece is stone.
-      const m = new THREE.Mesh(
-        new THREE.BoxGeometry(sx, sy, sz),
-        baseName === "drawbridgeA" ? mats.wood : mats.stone,
-      );
-      g.add(m);
-      break;
-    }
-    case "cylinder": {
-      const m = new THREE.Mesh(
-        new THREE.CylinderGeometry(sx / 2, sx / 2, sz, 12),
-        baseName.includes("Top") ? mats.roof : mats.stone,
-      );
-      m.rotation.x = Math.PI / 2; // cylinder axis -> z
-      g.add(m);
-      if (baseName === "towerTopA") {
-        const cone = new THREE.Mesh(
-          new THREE.ConeGeometry(sx / 2 + 1, 8, 12),
-          mats.roof,
-        );
-        cone.rotation.x = Math.PI / 2;
-        cone.position.z = sz / 2 + 4;
-        g.add(cone);
-      }
-      break;
-    }
-    case "wedge": {
-      // right-angle wedge via half-extruded triangle
-      const shape = new THREE.Shape();
-      shape.moveTo(-sx / 2, 0);
-      shape.lineTo(sx / 2, 0);
-      shape.lineTo(-sx / 2, sz);
-      shape.closePath();
-      const geo = new THREE.ExtrudeGeometry(shape, {
-        depth: sy,
-        bevelEnabled: false,
-      });
-      const m = new THREE.Mesh(geo, mats.stone);
-      m.rotation.x = Math.PI / 2;
-      m.position.set(0, sy / 2, -sz / 2);
-      g.add(m);
-      break;
-    }
-    case "arch": {
-      const left = new THREE.Mesh(new THREE.BoxGeometry(sx, sy / 3, sz), mats.stone);
-      left.position.y = -sy / 3;
-      const right = left.clone();
-      right.position.y = sy / 3;
-      const top = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz / 2), mats.stone);
-      top.position.z = sz / 4;
-      g.add(left, right, top);
-      break;
-    }
-    case "cannon": {
-      const barrel = new THREE.Mesh(
-        new THREE.CylinderGeometry(sz * 0.22, sz * 0.3, sx, 12),
-        mats.cannon,
-      );
-      barrel.rotation.z = Math.PI / 2 - 0.35; // tilted up toward enemy (+x when rz=180 flips)
-      barrel.position.z = sz * 0.15;
-      const base = new THREE.Mesh(
-        new THREE.BoxGeometry(sx * 0.7, sy * 0.8, sz * 0.5),
-        mats.wood,
-      );
-      base.position.z = -sz * 0.25;
-      const wheelGeo = new THREE.CylinderGeometry(sz * 0.2, sz * 0.2, 1.5, 10);
-      for (const [wx, wy] of [
-        [-sx * 0.25, -sy * 0.4],
-        [-sx * 0.25, sy * 0.4],
-        [sx * 0.25, -sy * 0.4],
-        [sx * 0.25, sy * 0.4],
-      ]) {
-        const w = new THREE.Mesh(wheelGeo, mats.wood);
-        w.position.set(wx, wy, -sz * 0.4);
-        g.add(w);
-      }
-      g.add(barrel, base);
-      break;
-    }
-    case "flag": {
-      const pole = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.6, 0.6, sz, 6),
-        mats.wood,
-      );
-      pole.rotation.x = Math.PI / 2;
-      const cloth = new THREE.Mesh(new THREE.PlaneGeometry(8, 5), mats.flag);
-      cloth.rotation.y = Math.PI / 2;
-      cloth.position.set(0, 4, sz / 2 - 3);
-      g.add(pole, cloth);
-      break;
-    }
+/** Collider trims, in LOCAL piece space. The original meshes are authored to
+ * INTERPENETRATE in the layouts (verified against every castle string with
+ * an exact AABB sweep — all layout yaws are multiples of 90°):
+ *   - wallTopA/B are 29.8 long but placed at 25-unit pitch (crenellation
+ *     rows overlap ~4.8 into each other and into tower tops);
+ *   - storey pieces are 15.03-15.16 tall on exact 15-unit storeys;
+ *   - drawbridgeA is 35.2 tall while archA sits at z 30 above it;
+ *   - towerTopA/B mount flags at base+10 (pole embedded in the roof).
+ * Havok absorbed spawn penetration; cannon-es resolves it violently on the
+ * first wake (a single mid-power shot flattened 27/28 pieces before these
+ * trims). Meshes render the authored overlap; only colliders shrink. */
+const COLLIDER_TRIM: Record<string, { height?: number; halfY?: number }> = {
+  towerTopA: { height: 10 }, // flag mount (see pieceCollider doc above)
+  towerTopB: { height: 10, halfY: 12.45 }, // flag mount + 25-pitch rows
+  // wallTops need the harder trim: rows at 25-pitch AND flush against
+  // tower-top cylinders / wallPieceA gate columns (castles 3, 6, 8)
+  wallTopA: { height: 15, halfY: 10.0 },
+  wallTopB: { height: 15, halfY: 10.0 },
+  wallA: { height: 15 },
+  wallB: { height: 15 },
+  wallPieceA: { height: 15 }, // 15.16 tall; z15 storeys + archA at z30 above
+  drawbridgeA: { height: 29.9 }, // 35.2 tall; archA sits at z 30
+};
+
+export function pieceCollider(baseName: string, def: PieceDef): ColliderSpec {
+  if (def.kind === "flag") {
+    // Pole axis sits at local (+2.5, +2.5). Height = the REAL pole (10.6,
+    // pole embedded in the mount roof, cloth at the top) — the legacy
+    // 20-tall guess overlapped towerTopB side-mounted flags (castle 12).
+    return {
+      shape: new CANNON.Box(new CANNON.Vec3(1.5, 1.5, 5.3)),
+      center: new THREE.Vector3(2.5, 2.5, 5.3),
+    };
   }
+  const bb = PIECE_BBOX[baseName];
+  const [x0, y0] = bb.bboxMin;
+  const [x1, y1, z1] = bb.bboxMax;
+  const trim = COLLIDER_TRIM[baseName];
+  const height = trim?.height ?? z1; // base floored to z=0
+  const halfY = trim?.halfY ?? (y1 - y0) / 2;
+  const cx = (x0 + x1) / 2;
+  const cy = (y0 + y1) / 2;
+  if (def.kind === "cylinder") {
+    const r = (x1 - x0) / 2;
+    return {
+      shape: new CANNON.Cylinder(r, r, height, 12),
+      center: new THREE.Vector3(cx, cy, height / 2),
+    };
+  }
+  return {
+    shape: new CANNON.Box(new CANNON.Vec3((x1 - x0) / 2, halfY, height / 2)),
+    center: new THREE.Vector3(cx, cy, height / 2),
+  };
+}
+
+/** Body-space visual for a piece: the original mesh, hung so that the piece
+ * pivot sits at -center (i.e., at the authored coordinate once the body is
+ * placed at pivot + R(yaw)·center). Shared with the thumbnail renderer,
+ * which uses offset (0,0,0) and places pivots directly. */
+export function buildPieceMesh(baseName: string, offset?: THREE.Vector3): THREE.Object3D {
+  const g = new THREE.Group();
+  const m = getModelMesh(baseName);
+  if (offset) m.position.set(-offset.x, -offset.y, -offset.z);
+  g.add(m);
   return g;
 }
 
@@ -139,12 +121,6 @@ export class GameWorld {
   scene = new THREE.Scene();
   world = new CANNON.World();
   pieces: GamePiece[] = [];
-  brickTex: THREE.Texture;
-  stoneMat: THREE.MeshLambertMaterial;
-  roofMat: THREE.MeshLambertMaterial;
-  woodMat: THREE.MeshLambertMaterial;
-  flagMat: THREE.MeshLambertMaterial;
-  cannonMat: THREE.MeshLambertMaterial;
   groundBody!: CANNON.Body;
   private pieceCount = 0;
 
@@ -155,43 +131,18 @@ export class GameWorld {
     this.world.defaultContactMaterial.friction = 0.6;
     this.world.defaultContactMaterial.restitution = 0.15;
 
-    const loader = new THREE.TextureLoader();
-    this.brickTex = loader.load(IMG("brick_bmp"));
-    this.brickTex.wrapS = this.brickTex.wrapT = THREE.RepeatWrapping;
-    this.brickTex.colorSpace = THREE.SRGBColorSpace;
-
-    this.stoneMat = new THREE.MeshLambertMaterial({ map: this.brickTex });
-    this.roofMat = new THREE.MeshLambertMaterial({ color: 0x8a4a2a });
-    this.woodMat = new THREE.MeshLambertMaterial({ color: 0x6b4a2a });
-    this.flagMat = new THREE.MeshLambertMaterial({
-      color: FLAG_COLOR,
-      side: THREE.DoubleSide,
-    });
-    this.cannonMat = new THREE.MeshLambertMaterial({ color: 0x333338 });
-
-    // Sky: the original skydome bitmap mapped onto a backdrop dome
-    const skyTex = loader.load(IMG("skydome"));
-    skyTex.colorSpace = THREE.SRGBColorSpace;
-    const sky = new THREE.Mesh(
-      new THREE.SphereGeometry(1500, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2),
-      new THREE.MeshBasicMaterial({
-        map: skyTex,
-        side: THREE.BackSide,
-        depthWrite: false,
-      }),
-    );
-    sky.rotation.x = Math.PI / 2; // z-up
+    // Original scenery, world-space as authored: the textured ground slab,
+    // the skydome photo sphere (r~536, full-bright per gameClass which sets
+    // shader("blinn4").emissive to white), and the 27 tree billboards. The
+    // old port used a flat green plane, a giant r=1500 sphere with the 2D
+    // skydome bitmap, and no trees. No fog: the original had none, and the
+    // dome's baked horizon haze does that job.
+    const sky = getModelMesh("skydome");
+    sky.renderOrder = -1;
     this.scene.add(sky);
-    this.scene.fog = new THREE.Fog(0xbcc8d8, 700, 1500);
+    this.scene.add(getModelMesh("ground"));
+    this.scene.add(getModelMesh("trees"));
 
-    // Ground — sampled ~#458635 from an original castle-select screenshot
-    // (grass reads noticeably more saturated/green than the previous guess).
-    const groundMat = new THREE.MeshLambertMaterial({ color: 0x4c8034 });
-    const ground = new THREE.Mesh(
-      new THREE.PlaneGeometry(3000, 3000),
-      groundMat,
-    );
-    this.scene.add(ground);
     this.groundBody = new CANNON.Body({ mass: 0, shape: new CANNON.Plane() });
     // CANNON.Plane faces +z by default, which is up in our world. p_ground sim=2.
     // Friction is stored as sqrt(catalogue value): cannon-es MULTIPLIES the two
@@ -214,30 +165,9 @@ export class GameWorld {
     this.scene.add(sun);
   }
 
-  private buildMesh(def: PieceDef, baseName: string): THREE.Object3D {
-    return buildPieceMesh(def, baseName, {
-      stone: this.stoneMat,
-      roof: this.roofMat,
-      wood: this.woodMat,
-      flag: this.flagMat,
-      cannon: this.cannonMat,
-    });
-  }
-
-  private buildBody(def: PieceDef): CANNON.Body {
-    const [sx, sy, sz] = def.size;
+  private buildBody(def: PieceDef, spec: ColliderSpec): CANNON.Body {
     const body = new CANNON.Body({ mass: def.mass });
-    if (def.kind === "cylinder") {
-      body.addShape(
-        new CANNON.Cylinder(sx / 2, sx / 2, sz, 8),
-        new CANNON.Vec3(),
-        new CANNON.Quaternion().setFromEuler(Math.PI / 2, 0, 0),
-      );
-    } else if (def.kind === "flag") {
-      body.addShape(new CANNON.Box(new CANNON.Vec3(1.5, 1.5, sz / 2)));
-    } else {
-      body.addShape(new CANNON.Box(new CANNON.Vec3(sx / 2, sy / 2, sz / 2)));
-    }
+    body.addShape(spec.shape);
     // The catalogue restitution is Havok's (which only bounced above a
     // velocity threshold); cannon-es applies it at any contact speed, so
     // resting stacks micro-bounce and wobble unless it's near zero.
@@ -258,7 +188,21 @@ export class GameWorld {
     return body;
   }
 
-  /** castleBuilderClass.makeCastlePiece — z position is the piece's *base*. */
+  /** castleBuilderClass.makeCastlePiece — (x,y,z) is the authored PIVOT
+   * (z at the piece's base; x and rz arrive pre-multiplied by side, exactly
+   * like the original's makeCastle does). Mirroring is the original's
+   * `transform.scale.x = -1` — a TRUE geometric mirror about the pivot's
+   * local YZ plane, NOT a 180° yaw. (The pre-mesh port used a +180° yaw
+   * hack, invisible on centered primitives; with pivot-offset meshes it
+   * displaced differently-rotated pieces by different amounts, leaving 34
+   * interpenetrating collider pairs across the enemy castles — the cause of
+   * one shot flattening 27/28 pieces.) Original quirk kept 1:1: flags with
+   * rz=0 sit at y+1 (both sides) and lean -8° on x on the enemy side only
+   * (safe under the 20° flag-down threshold).
+   *
+   * The body is centered on the collider (pivot + rotated, mirrored collider
+   * center); the mesh child hangs at -center inside a group whose scale.x is
+   * the side (three.js handles negative-determinant winding automatically). */
   makeCastlePiece(
     pieceName: string,
     x: number,
@@ -270,23 +214,32 @@ export class GameWorld {
     this.pieceCount++;
     const def = PIECES[pieceName];
     const name = `p_clone_${pieceName}_${this.pieceCount}`;
-    const mesh = this.buildMesh(def, pieceName);
-    const body = this.buildBody(def);
-    const cz = z + def.size[2] / 2;
-    body.position.set(x, y, cz);
-    const yaw =
-      ((rz * Math.PI) / 180) * (side === -1 ? -1 : 1) +
-      (side === -1 ? Math.PI : 0);
-    body.quaternion.setFromEuler(0, 0, yaw);
+    const spec = pieceCollider(pieceName, def);
+    const mesh = buildPieceMesh(pieceName, spec.center);
+    mesh.scale.x = side;
+    const body = this.buildBody(def, spec);
+    let ty = y;
+    let rx = 0;
+    if (def.kind === "flag" && rz === 0) {
+      ty = y + 1;
+      rx = side === -1 ? (-8 * Math.PI) / 180 : 0;
+    }
+    const yaw = (rz * Math.PI) / 180;
+    body.quaternion.setFromEuler(rx, 0, yaw);
+    const centerWorld = body.quaternion.vmult(
+      new CANNON.Vec3(spec.center.x * side, spec.center.y, spec.center.z),
+    );
+    body.position.set(x + centerWorld.x, ty + centerWorld.y, z + centerWorld.z);
     mesh.position.copy(body.position as unknown as THREE.Vector3);
+    mesh.quaternion.copy(body.quaternion as unknown as THREE.Quaternion);
     this.scene.add(mesh);
     const piece: GamePiece = {
       name,
       baseName: pieceName,
       mesh,
       body,
-      defaultPos: new THREE.Vector3(x, y, cz),
-      lastPos: new THREE.Vector3(x, y, cz),
+      defaultPos: new THREE.Vector3().copy(body.position as unknown as THREE.Vector3),
+      lastPos: new THREE.Vector3().copy(body.position as unknown as THREE.Vector3),
       isFlag: pieceName.includes("flagPole"),
       isCannon: pieceName.includes("cannon"),
     };
