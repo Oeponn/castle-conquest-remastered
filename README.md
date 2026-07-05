@@ -33,6 +33,9 @@ smoke-trail duration, a turn timer) rather than from any physics constant
 that actually survived. It's close to what I PERSONALLY remember the game felt like, but it is a **reconstruction**, not a bit-for-bit
 port. If a shot feels slightly different from how you remember it, it's probably because its been abstracted through 17 years of memory haze.
 
+## A physics disclaimer
+The actual 3D castle meshes are stored in an undecodable Intel IFX compressed format. So the recreations are approximations.
+
 ## The technical stuff
 
 The full engineering log; decompiling the game, recovering the physics
