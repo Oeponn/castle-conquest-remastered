@@ -3,7 +3,7 @@
 *A running log of how the original Shockwave game is being rebuilt for the browser.
 Written for both humans and future Claude sessions. Updated as work progresses.*
 
-Last updated: 2026-07-03 (accuracy-marker fix; Director score chunk now parseable)
+Last updated: 2026-07-05 (the 3D meshes ARE decodable — w3d extracted, converter identified)
 
 ---
 
@@ -123,7 +123,7 @@ classes and what they do:
 | All 6 sounds (cannon boom, crank, rock hit, ground hit, win/lose jingles) | **Converted as-is** (PCM → WAV, MP3 kept as MP3) |
 | All game logic, AI, physics parameters, castle layouts, prices, scoring | **Ported 1:1 from the decompiled Lingo source** |
 | Text content (instructions, hints, button labels) | **Taken from the original** |
-| 3D castle-piece geometry | **Reconstructed.** The original meshes are inside the Shockwave 3D world in Intel IFX compressed-bitstream format (no public decoder exists). The pieces are simple shapes (boxes/cylinders/wedges) on a known 25-unit grid, rebuilt as Three.js primitives textured with the original `brick_bmp`/`skydome` art. |
+| 3D castle-piece geometry | **Reconstructed** (currently) — but the originals ARE recoverable, see "2026-07-05: the meshes are decodable". The meshes live in the Shockwave 3D world (Intel IFX compressed bitstream); the pieces are simple shapes on a known 25-unit grid, rebuilt as Three.js primitives textured with the original `brick_bmp`/`skydome` art. |
 | Havok physics | **Replaced** with cannon-es using the original mass/friction/restitution table from `simClass`. |
 | Online castle save/challenge (dluxproductions.com, long dead) | Replaced with localStorage save. |
 
@@ -436,6 +436,43 @@ Headless-verified: a max-power shot with a 10%-of-track tap miss launches
 1.87° off-axis (was ~90°); balltest/hittest/flagtest all pass (the tests now
 park the sweep on the fixed notch for a perfect tap).
 
+## 2026-07-05: the meshes are decodable — "no public decoder" was wrong
+
+The earlier claim that the Intel IFX bitstream is undecodable conflated two
+things. True: no standalone open-source decoder for the W3D geometry codec
+exists (the codec is proprietary; its direct descendant became the open
+U3D/ECMA-363 standard, but the bitstreams differ). Irrelevant: you don't
+need to reimplement the codec, because the *official* decoder still runs —
+and a free community tool wraps it:
+
+- **[Shockwave 3D World Converter](https://github.com/tomysshadow/Shockwave-3D-World-Converter)**
+  (Anthony Kleine / tomysshadow, v1.3.8, also on
+  [archive.org](https://archive.org/details/shockwave-3-d-world-converter-master)):
+  converts `.w3d` → OBJ + MTL + TIFF with normals, UVs and materials. It's a
+  Director 11.5 application, i.e. it uses Director's own Shockwave 3D engine
+  to decode — output is exactly what the original game rendered. Windows
+  only (try Wine/CrossOver, else a Windows VM). Known limitation: no bones —
+  irrelevant here, the castle pieces are static meshes.
+- Fallback if the converter chokes: open the w3d in a Director trial
+  (MX 2004 / 11.5) and dump geometry via Lingo — add the `#meshDeform`
+  modifier to each model, then read `model.meshDeform.mesh[n].vertexList` /
+  face lists and write OBJ by hand. Same decoder, more control.
+
+**The w3d itself is already extracted**: `assets/extracted/3d/castleConquest.w3d`
+(125,884 bytes). It's cast member chunk `XMED-5891.bin` minus its 16-byte
+`3DEM` wrapper (a standalone w3d starts with the `IFX` magic at offset 0).
+`strings` confirms everything is inside: every piece mesh
+(`p_towerA_0`, `p_towerTopA_0`, `p_archA_0`, `p_cannonA_0`, `p_cannonB_0`,
+`p_drawbridgeA_0`, `p_flagPoleC_0`, `p_ground`, `ball`, `ballShadow`…), all
+ten cameras (`cam_aimShape` et al. — their baked transforms could confirm
+the hand-recovered −4° aim anchor), plus leftover Maya export metadata
+carrying the `sim=N` physics presets (the world was authored in Maya).
+The other 24 XMED chunks are just a PFR font and styled-text members.
+
+Path to 1:1 geometry: run the converter on the w3d (Windows environment),
+then OBJ → glTF (or Three.js OBJLoader) and swap the primitives in
+`pieces.ts` for the real meshes, keeping the existing physics boxes.
+
 ## Tuned 2026-07-04: castle pieces ~25% heavier
 
 Feel tweak by request: the piece-mass presets in `web/src/game/pieces.ts` now
@@ -448,9 +485,10 @@ ball.
 
 ## Known approximations (worth revisiting)
 
-- **Geometry**: castle pieces are rebuilt primitives, not the original meshes
-  (those are locked in Intel-IFX compressed bitstreams inside the w3d).
+- **Geometry**: castle pieces are rebuilt primitives, not the original meshes.
   Proportions come from the 25-unit grid; the brick texture is original.
+  **No longer a dead end** — the w3d world has been carved out of the movie
+  and a converter exists; see "2026-07-05: the meshes are decodable".
 - **Castle names/unlock prices** on the select screen are invented — the real
   ones were Director score-sprite behavior parameters. Gating logic (locked
   until enough gold) matches the original. (Now that `tools/parse_score.py`
