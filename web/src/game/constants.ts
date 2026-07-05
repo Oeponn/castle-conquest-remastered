@@ -124,7 +124,7 @@ export const GRAVITY = -49;
 // the elevation up toward 30-45° and lob.
 export const IMPULSE_SCALE = 2.234;
 
-export const BALL_MASS = 22; // simClass sim=4 preset, 1:1
+export const BALL_MASS = 20; // simClass sim=4 preset, 1:1
 // throwBall scales the ball MODEL: `mBall.transform.scale = vector(3.4,..)`,
 // or 6x when firing from cannonB. The pre-mesh port misread those scale
 // factors as radii; the master ball mesh is radius 1.768 (modelData), so the
