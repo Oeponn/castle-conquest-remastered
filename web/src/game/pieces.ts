@@ -13,6 +13,11 @@ export type PieceKind =
   | "cannon"
   | "arch";
 
+// Pixel-sampled from an original Garrison castle-select screenshot (pale
+// lemon-gold, ~#ebdc50) — the reconstructed flag cloth was previously an
+// arbitrary red, then an over-saturated gold guess.
+export const FLAG_COLOR = 0xebd85a;
+
 export interface PieceDef {
   kind: PieceKind;
   /** x (toward enemy), y (across), z (up) full extents */

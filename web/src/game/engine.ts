@@ -259,21 +259,10 @@ export class GameEngine {
     this.movePowerMeter = false;
     this.powerPerc = 0;
     this.camState = "waiting";
-    // Establishing shot of the player's OWN castle (it sits behind the aim
-    // camera, at negative x, so without this the chosen castle is never seen
-    // and selecting a different one looks like it did nothing). After a beat,
-    // swing round to the normal aim view facing the enemy.
-    this.pickCam("castle1");
-    this.hint = "This is your castle — defend its flags!";
+    this.pickCam("aim");
+    this.hint = "Aim the cannon, then tap FIRE to start the power meter.";
     this.checkFlagsDown();
     this.pushHud(true);
-    window.setTimeout(() => {
-      if (this.myCam === "castle1" && this.state === "setPower") {
-        this.pickCam("aim");
-        this.hint = "Aim the cannon, then tap FIRE to start the power meter.";
-        this.pushHud(true);
-      }
-    }, 2200);
   }
 
   // ---------- aiming & camera ----------

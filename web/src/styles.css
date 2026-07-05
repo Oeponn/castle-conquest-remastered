@@ -32,14 +32,20 @@ body { font-family: Georgia, "Times New Roman", serif; touch-action: none; -webk
   display: grid; grid-template-columns: repeat(4, 120px); gap: 14px;
 }
 .castle-card {
+  position: relative;
   width: 120px; height: 74px; border: 2px solid #6a4a23; border-radius: 4px;
-  background: rgba(40, 24, 10, 0.85); color: #f5d76a; cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  font-size: 13px; text-align: center; gap: 4px;
+  background-color: #14200f; background-size: cover; background-position: center;
+  color: #f5d76a; cursor: pointer;
+  display: flex; align-items: flex-end; justify-content: center;
+  font-size: 12px; text-align: center; overflow: hidden;
 }
-.castle-card:hover:not(.locked) { border-color: #f5d76a; background: rgba(70, 44, 18, 0.9); }
-.castle-card.locked { color: #777; cursor: default; filter: grayscale(1); opacity: 0.7; }
-.castle-card .price { font-size: 11px; }
+.castle-card:hover:not(.locked) { border-color: #f5d76a; }
+.castle-card.locked { color: #aaa; cursor: default; filter: grayscale(1); opacity: 0.7; }
+.castle-card-label {
+  width: 100%; padding: 3px 2px; background: rgba(20, 12, 5, 0.75);
+  display: flex; flex-direction: column; gap: 1px;
+}
+.castle-card .price { font-size: 10px; }
 
 .viewport {
   position: absolute; left: 145px; top: 80px; width: 427px; height: 305px;

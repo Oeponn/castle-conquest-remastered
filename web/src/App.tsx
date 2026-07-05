@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GameEngine, HudState } from "./game/engine";
 import { CASTLES } from "./game/castles";
+import { renderCastleThumbnail } from "./game/thumbnails";
 import { Hud } from "./ui/Hud";
 import { STAGE_W, STAGE_H } from "./game/constants";
 
@@ -201,10 +202,13 @@ export default function App() {
                   <div
                     key={c.num}
                     className={`castle-card ${locked ? "locked" : ""}`}
+                    style={{ backgroundImage: `url(${renderCastleThumbnail(c.num)})` }}
                     onClick={() => !locked && pickCastle(c.num)}
                   >
-                    <div>{c.name}</div>
-                    <div className="price">{locked ? `Unlocks at ${c.price} gold` : c.price > 0 ? `${c.price} gold` : "Free"}</div>
+                    <div className="castle-card-label">
+                      <div>{c.name}</div>
+                      <div className="price">{locked ? `Unlocks at ${c.price} gold` : c.price > 0 ? `${c.price} gold` : "Free"}</div>
+                    </div>
                   </div>
                 );
               })}

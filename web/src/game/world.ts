@@ -4,7 +4,7 @@
 
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
-import { PIECES, PieceDef, pieceBaseName } from "./pieces";
+import { FLAG_COLOR, PIECES, PieceDef, pieceBaseName } from "./pieces";
 import { PieceData } from "./castles";
 import { GRAVITY } from "./constants";
 
@@ -20,6 +20,120 @@ export interface GamePiece {
 }
 
 const IMG = (n: string) => `${import.meta.env.BASE_URL}games/castle-conquest/images/${n}.png`;
+
+export interface PieceMaterials {
+  stone: THREE.Material;
+  roof: THREE.Material;
+  wood: THREE.Material;
+  flag: THREE.Material;
+  cannon: THREE.Material;
+}
+
+/** Shared by GameWorld (live scene) and the castle-select thumbnail renderer. */
+export function buildPieceMesh(
+  def: PieceDef,
+  baseName: string,
+  mats: PieceMaterials,
+): THREE.Object3D {
+  const [sx, sy, sz] = def.size;
+  const g = new THREE.Group();
+  switch (def.kind) {
+    case "box": {
+      // The drawbridge is a wood plank in the original art (sampled
+      // ~#725034 from a picker screenshot); every other box piece is stone.
+      const m = new THREE.Mesh(
+        new THREE.BoxGeometry(sx, sy, sz),
+        baseName === "drawbridgeA" ? mats.wood : mats.stone,
+      );
+      g.add(m);
+      break;
+    }
+    case "cylinder": {
+      const m = new THREE.Mesh(
+        new THREE.CylinderGeometry(sx / 2, sx / 2, sz, 12),
+        baseName.includes("Top") ? mats.roof : mats.stone,
+      );
+      m.rotation.x = Math.PI / 2; // cylinder axis -> z
+      g.add(m);
+      if (baseName === "towerTopA") {
+        const cone = new THREE.Mesh(
+          new THREE.ConeGeometry(sx / 2 + 1, 8, 12),
+          mats.roof,
+        );
+        cone.rotation.x = Math.PI / 2;
+        cone.position.z = sz / 2 + 4;
+        g.add(cone);
+      }
+      break;
+    }
+    case "wedge": {
+      // right-angle wedge via half-extruded triangle
+      const shape = new THREE.Shape();
+      shape.moveTo(-sx / 2, 0);
+      shape.lineTo(sx / 2, 0);
+      shape.lineTo(-sx / 2, sz);
+      shape.closePath();
+      const geo = new THREE.ExtrudeGeometry(shape, {
+        depth: sy,
+        bevelEnabled: false,
+      });
+      const m = new THREE.Mesh(geo, mats.stone);
+      m.rotation.x = Math.PI / 2;
+      m.position.set(0, sy / 2, -sz / 2);
+      g.add(m);
+      break;
+    }
+    case "arch": {
+      const left = new THREE.Mesh(new THREE.BoxGeometry(sx, sy / 3, sz), mats.stone);
+      left.position.y = -sy / 3;
+      const right = left.clone();
+      right.position.y = sy / 3;
+      const top = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz / 2), mats.stone);
+      top.position.z = sz / 4;
+      g.add(left, right, top);
+      break;
+    }
+    case "cannon": {
+      const barrel = new THREE.Mesh(
+        new THREE.CylinderGeometry(sz * 0.22, sz * 0.3, sx, 12),
+        mats.cannon,
+      );
+      barrel.rotation.z = Math.PI / 2 - 0.35; // tilted up toward enemy (+x when rz=180 flips)
+      barrel.position.z = sz * 0.15;
+      const base = new THREE.Mesh(
+        new THREE.BoxGeometry(sx * 0.7, sy * 0.8, sz * 0.5),
+        mats.wood,
+      );
+      base.position.z = -sz * 0.25;
+      const wheelGeo = new THREE.CylinderGeometry(sz * 0.2, sz * 0.2, 1.5, 10);
+      for (const [wx, wy] of [
+        [-sx * 0.25, -sy * 0.4],
+        [-sx * 0.25, sy * 0.4],
+        [sx * 0.25, -sy * 0.4],
+        [sx * 0.25, sy * 0.4],
+      ]) {
+        const w = new THREE.Mesh(wheelGeo, mats.wood);
+        w.position.set(wx, wy, -sz * 0.4);
+        g.add(w);
+      }
+      g.add(barrel, base);
+      break;
+    }
+    case "flag": {
+      const pole = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.6, 0.6, sz, 6),
+        mats.wood,
+      );
+      pole.rotation.x = Math.PI / 2;
+      const cloth = new THREE.Mesh(new THREE.PlaneGeometry(8, 5), mats.flag);
+      cloth.rotation.y = Math.PI / 2;
+      cloth.position.set(0, 4, sz / 2 - 3);
+      g.add(pole, cloth);
+      break;
+    }
+  }
+  return g;
+}
 
 export class GameWorld {
   scene = new THREE.Scene();
@@ -50,7 +164,7 @@ export class GameWorld {
     this.roofMat = new THREE.MeshLambertMaterial({ color: 0x8a4a2a });
     this.woodMat = new THREE.MeshLambertMaterial({ color: 0x6b4a2a });
     this.flagMat = new THREE.MeshLambertMaterial({
-      color: 0xcc1111,
+      color: FLAG_COLOR,
       side: THREE.DoubleSide,
     });
     this.cannonMat = new THREE.MeshLambertMaterial({ color: 0x333338 });
@@ -70,8 +184,9 @@ export class GameWorld {
     this.scene.add(sky);
     this.scene.fog = new THREE.Fog(0xbcc8d8, 700, 1500);
 
-    // Ground
-    const groundMat = new THREE.MeshLambertMaterial({ color: 0x5e7a3a });
+    // Ground — sampled ~#458635 from an original castle-select screenshot
+    // (grass reads noticeably more saturated/green than the previous guess).
+    const groundMat = new THREE.MeshLambertMaterial({ color: 0x4c8034 });
     const ground = new THREE.Mesh(
       new THREE.PlaneGeometry(3000, 3000),
       groundMat,
@@ -100,116 +215,13 @@ export class GameWorld {
   }
 
   private buildMesh(def: PieceDef, baseName: string): THREE.Object3D {
-    const [sx, sy, sz] = def.size;
-    const g = new THREE.Group();
-    switch (def.kind) {
-      case "box": {
-        const m = new THREE.Mesh(
-          new THREE.BoxGeometry(sx, sy, sz),
-          this.stoneMat,
-        );
-        g.add(m);
-        break;
-      }
-      case "cylinder": {
-        const m = new THREE.Mesh(
-          new THREE.CylinderGeometry(sx / 2, sx / 2, sz, 12),
-          baseName.includes("Top") ? this.roofMat : this.stoneMat,
-        );
-        m.rotation.x = Math.PI / 2; // cylinder axis -> z
-        g.add(m);
-        if (baseName === "towerTopA") {
-          const cone = new THREE.Mesh(
-            new THREE.ConeGeometry(sx / 2 + 1, 8, 12),
-            this.roofMat,
-          );
-          cone.rotation.x = Math.PI / 2;
-          cone.position.z = sz / 2 + 4;
-          g.add(cone);
-        }
-        break;
-      }
-      case "wedge": {
-        // right-angle wedge via half-extruded triangle
-        const shape = new THREE.Shape();
-        shape.moveTo(-sx / 2, 0);
-        shape.lineTo(sx / 2, 0);
-        shape.lineTo(-sx / 2, sz);
-        shape.closePath();
-        const geo = new THREE.ExtrudeGeometry(shape, {
-          depth: sy,
-          bevelEnabled: false,
-        });
-        const m = new THREE.Mesh(geo, this.stoneMat);
-        m.rotation.x = Math.PI / 2;
-        m.position.set(0, sy / 2, -sz / 2);
-        g.add(m);
-        break;
-      }
-      case "arch": {
-        const left = new THREE.Mesh(
-          new THREE.BoxGeometry(sx, sy / 3, sz),
-          this.stoneMat,
-        );
-        left.position.y = -sy / 3;
-        const right = left.clone();
-        right.position.y = sy / 3;
-        const top = new THREE.Mesh(
-          new THREE.BoxGeometry(sx, sy, sz / 2),
-          this.stoneMat,
-        );
-        top.position.z = sz / 4;
-        g.add(left, right, top);
-        break;
-      }
-      case "cannon": {
-        const barrel = new THREE.Mesh(
-          new THREE.CylinderGeometry(sz * 0.22, sz * 0.3, sx, 12),
-          this.cannonMat,
-        );
-        barrel.rotation.z = Math.PI / 2 - 0.35; // tilted up toward enemy (+x when rz=180 flips)
-        barrel.position.z = sz * 0.15;
-        const base = new THREE.Mesh(
-          new THREE.BoxGeometry(sx * 0.7, sy * 0.8, sz * 0.5),
-          this.woodMat,
-        );
-        base.position.z = -sz * 0.25;
-        const wheelGeo = new THREE.CylinderGeometry(
-          sz * 0.2,
-          sz * 0.2,
-          1.5,
-          10,
-        );
-        for (const [wx, wy] of [
-          [-sx * 0.25, -sy * 0.4],
-          [-sx * 0.25, sy * 0.4],
-          [sx * 0.25, -sy * 0.4],
-          [sx * 0.25, sy * 0.4],
-        ]) {
-          const w = new THREE.Mesh(wheelGeo, this.woodMat);
-          w.position.set(wx, wy, -sz * 0.4);
-          g.add(w);
-        }
-        g.add(barrel, base);
-        break;
-      }
-      case "flag": {
-        const pole = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.6, 0.6, sz, 6),
-          this.woodMat,
-        );
-        pole.rotation.x = Math.PI / 2;
-        const cloth = new THREE.Mesh(
-          new THREE.PlaneGeometry(8, 5),
-          this.flagMat,
-        );
-        cloth.rotation.y = Math.PI / 2;
-        cloth.position.set(0, 4, sz / 2 - 3);
-        g.add(pole, cloth);
-        break;
-      }
-    }
-    return g;
+    return buildPieceMesh(def, baseName, {
+      stone: this.stoneMat,
+      roof: this.roofMat,
+      wood: this.woodMat,
+      flag: this.flagMat,
+      cannon: this.cannonMat,
+    });
   }
 
   private buildBody(def: PieceDef): CANNON.Body {
