@@ -7,7 +7,7 @@ But before you do, I recommend reading paragraphs two and three at least.
 
 ## Why this game
 
-I remember this game on miniclip, or maybe one of the various flash games hosts that would have clones. 2flashgames. Newgrounds?
+I remember this game on miniclip, or maybe one of the various flash games hosts that would have clones. 2flashgames? Newgrounds?
 I have this memory... maybe around 2009, of playing it with my best friend, Anton, at his house on his parents' shitty laptop. His dad yelled at us occasionally to be quiet so he could listen to French radio. We were in New Zealand; he wasn't French, he just fancied himself a linguist. Apparently he also hated the sound of children having fun.
 
 
