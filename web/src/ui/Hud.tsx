@@ -12,7 +12,8 @@ import { useRef } from "react";
 import { HudState } from "../game/engine";
 import { ACCURACY_MARKER_PERC } from "../game/constants";
 
-const IMG = (n: string) => `${import.meta.env.BASE_URL}games/castle-conquest/images/${n}.png`;
+const IMG = (n: string) =>
+  `${import.meta.env.BASE_URL}games/castle-conquest/images/${n}.png`;
 
 export function Hud(props: {
   hud: HudState;
@@ -29,7 +30,10 @@ export function Hud(props: {
   const rotDial = hud.angleZ * -2.5;
   const angDial = hud.angleY * 1.7 - 25;
 
-  const aiming = hud.state === "setPower" || hud.state === "setAccuracy" || hud.state === "throwBall";
+  const aiming =
+    hud.state === "setPower" ||
+    hud.state === "setAccuracy" ||
+    hud.state === "throwBall";
 
   const aimStart = (e: React.PointerEvent) => {
     if (!aiming) return;
@@ -65,45 +69,75 @@ export function Hud(props: {
         <img
           src={IMG("sword_blade_01")}
           style={{
-            position: "absolute", left: 44, width: 20, height: 146,
-            top: 156 - hud.meterPerc * 145,
+            position: "absolute",
+            left: 44,
+            width: 20,
+            height: 160,
+            top: 0,
+            // top: 156 - hud.meterPerc * 145,
           }}
           alt=""
         />
+        <div
+          style={{
+            position: "absolute",
+            left: 44,
+            width: 20,
+            height: 146,
+            top: 156 - hud.meterPerc * 145,
+            background: "#ffdd00",
+          }}
+        />
         {/* accuracy sweep: the cyan bar (accuracyMeter_bmp, rgb 00DDFF) rises
             in the same slot; the third tap must hit the fixed marker notch */}
-        {hud.accuracyPerc !== undefined && (
-          <div
-            style={{
-              position: "absolute", left: 58, width: 5,
-              top: 156 - hud.accuracyPerc * 145,
-              height: Math.max(2, hud.accuracyPerc * 145), background: "#00ddff",
-            }}
-          />
-        )}
+        <div
+          style={{
+            position: "absolute",
+            left: 44,
+            width: 20,
+            top: 156 - (hud.accuracyPerc ?? 0) * 145,
+            height: Math.max(2, (hud.accuracyPerc ?? 0) * 145),
+            background: "#00ddff",
+          }}
+        />
         <img className="tb" src={IMG("launchControls_02")} alt="" />
         {/* the accuracy marker: a FIXED notch on the track (original sprite 32,
             an 18x4 bar 31px up the 146px container — never moved by code) */}
         {aiming && (
           <div
             style={{
-              position: "absolute", left: 45, width: 18, height: 4,
-              top: 154 - ACCURACY_MARKER_PERC * 145, background: "#ffdd00",
+              position: "absolute",
+              left: 45,
+              width: 18,
+              height: 4,
+              top: 154 - ACCURACY_MARKER_PERC * 145,
+              background: "#ffdd00",
             }}
           />
         )}
         {/* range arrows bracket the slot (slot center y = 84) */}
         <img
           src={IMG("powermeterArrows_01")}
-          style={{ position: "absolute", left: 17, top: 22, width: 27, height: 123 }}
+          style={{
+            position: "absolute",
+            left: 17,
+            top: 22,
+            width: 27,
+            height: 123,
+          }}
           alt=""
         />
         {/* rotation dial needle, pivots on the dial center */}
         <div
           className="dial"
           style={{
-            left: 37, top: 237, width: 30, height: 4, background: "#f5d76a",
-            transform: `rotate(${rotDial}deg)`, position: "absolute",
+            left: 37,
+            top: 237,
+            width: 30,
+            height: 4,
+            background: "#f5d76a",
+            transform: `rotate(${rotDial}deg)`,
+            position: "absolute",
           }}
         />
         {/* elevation needle pivots on the protractor vertex; drawn in CSS
@@ -111,21 +145,37 @@ export function Hud(props: {
         <div
           className="dial"
           style={{
-            left: 36, top: 307, width: 2, height: 29, background: "#f5d76a",
-            position: "absolute", transformOrigin: "50% 100%", transform: `rotate(${angDial}deg)`,
+            left: 36,
+            top: 307,
+            width: 2,
+            height: 29,
+            background: "#f5d76a",
+            position: "absolute",
+            transformOrigin: "50% 100%",
+            transform: `rotate(${angDial}deg)`,
           }}
         />
       </div>
 
-      <div className="hud-text" style={{ left: 150, top: 50 }}>Level {hud.level}</div>
-      <div className="hud-text" style={{ left: 260, top: 50 }}>{hud.flagsText}</div>
+      <div className="hud-text" style={{ left: 150, top: 50 }}>
+        Level {hud.level}
+      </div>
+      <div className="hud-text" style={{ left: 260, top: 50 }}>
+        {hud.flagsText}
+      </div>
       {!hud.twoPlayer ? (
         <>
-          <div className="hud-text" style={{ right: 150, top: 50 }}>Gold: {hud.gold}</div>
-          <div className="hud-text" style={{ right: 60, top: 50 }}>Score: {hud.score}</div>
+          <div className="hud-text" style={{ right: 150, top: 50 }}>
+            Gold: {hud.gold}
+          </div>
+          <div className="hud-text" style={{ right: 60, top: 50 }}>
+            Score: {hud.score}
+          </div>
         </>
       ) : (
-        <div className="hud-text" style={{ right: 80, top: 50 }}>Player {hud.playerTurn}</div>
+        <div className="hud-text" style={{ right: 80, top: 50 }}>
+          Player {hud.playerTurn}
+        </div>
       )}
 
       <div className="hint">{hud.hint}</div>
@@ -137,7 +187,10 @@ export function Hud(props: {
         onClick={() => (soundOnRef.current = props.onToggleSound())}
         aria-label="toggle sound"
       >
-        <img src={IMG(soundOnRef.current ? "soundOn_bmp" : "soundOff_bmp")} alt="" />
+        <img
+          src={IMG(soundOnRef.current ? "soundOn_bmp" : "soundOff_bmp")}
+          alt=""
+        />
       </button>
 
       <button
