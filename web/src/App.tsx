@@ -44,6 +44,7 @@ export default function App() {
   const [hud, setHud] = useState<HudState | null>(null);
   const [scale, setScale] = useState(1);
   const [isTouch, setIsTouch] = useState(false);
+  const [hoverCastle, setHoverCastle] = useState<{ name: string; price: string } | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const engineRef = useRef<GameEngine | null>(null);
 
@@ -193,25 +194,35 @@ export default function App() {
               {screen === "castleSelectP2" ? "Player 2: Select Your Castle" : "Select Your Castle"}
             </div>
             <div className="hud-text" style={{ right: 24, top: 16 }}>
-              Gold: {gold} &nbsp; Level {(engineRef.current?.roundCount ?? 3) + 1}
+              Level {(engineRef.current?.roundCount ?? 3) + 1}
+            </div>
+            <div className="gold-shield">
+              <div className="label">Gold</div>
+              <div className="value">{gold}</div>
             </div>
             <div className="castle-grid">
               {CASTLES.map((c) => {
                 const locked = c.price > gold && !(engineRef.current?.twoPlayer ?? false);
+                const priceText = locked ? `Unlocks at ${c.price} gold` : c.price > 0 ? `${c.price} gold` : "Free";
                 return (
                   <div
                     key={c.num}
                     className={`castle-card ${locked ? "locked" : ""}`}
                     style={{ backgroundImage: `url(${renderCastleThumbnail(c.num)})` }}
                     onClick={() => !locked && pickCastle(c.num)}
-                  >
-                    <div className="castle-card-label">
-                      <div>{c.name}</div>
-                      <div className="price">{locked ? `Unlocks at ${c.price} gold` : c.price > 0 ? `${c.price} gold` : "Free"}</div>
-                    </div>
-                  </div>
+                    onMouseEnter={() => setHoverCastle({ name: c.name, price: priceText })}
+                    onMouseLeave={() => setHoverCastle(null)}
+                  />
                 );
               })}
+            </div>
+            <div className="castle-name-bar">
+              {hoverCastle && (
+                <>
+                  <span>{hoverCastle.name}</span>
+                  <span className="price">{hoverCastle.price}</span>
+                </>
+              )}
             </div>
             <div className="hint">Castles unlock as you earn gold. Gold carries over between games.</div>
           </div>
