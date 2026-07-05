@@ -341,14 +341,19 @@ export class GameEngine {
         // original — there is no FOV cap.
         const lookPitch = ((-4 + 0.9 * (60 - this.ballAngleY)) * Math.PI) / 180;
         const back = new THREE.Vector3(-70 * dir, 0, 45);
-        back.applyAxisAngle(new THREE.Vector3(0, 0, 1), yaw * dir);
+        // The base vectors are already mirrored for player 2 via their *dir
+        // x-components, so the yaw rotation must NOT also multiply by dir —
+        // doing so double-mirrors the camera and makes it pan opposite to the
+        // ball (left/right felt reversed for player 2). Plain yaw mirrors the
+        // camera to match the ball; identical to before for player 1 (dir=1).
+        back.applyAxisAngle(new THREE.Vector3(0, 0, 1), yaw);
         this.camera.position.copy(cp).add(back);
         const ahead = new THREE.Vector3(
           400 * Math.cos(lookPitch) * dir,
           0,
           400 * Math.sin(lookPitch),
         );
-        ahead.applyAxisAngle(new THREE.Vector3(0, 0, 1), yaw * dir);
+        ahead.applyAxisAngle(new THREE.Vector3(0, 0, 1), yaw);
         this.camera.lookAt(this.camera.position.clone().add(ahead));
         break;
       }
@@ -503,13 +508,13 @@ export class GameEngine {
     this.ballBody.velocity.setZero();
     this.ballBody.angularVelocity.set(0, dir > 0 ? -1 : 1, 0);
 
-    // getThrowVectors: the zenith angle is ballAngleY + 15 for player 1 only —
-    // the AI (and player 2 in 2P) fires 15° steeper for the same dial, and the
-    // AI's distance->power table is calibrated on that 30° launch (see
-    // IMPULSE_SCALE).
+    // getThrowVectors: human shots add 15 to the zenith (a flatter, calibrated
+    // launch); only the AI fires the raw dial, because its distance->power
+    // table is calibrated on that steeper 30° launch (see IMPULSE_SCALE).
+    // Gating on isAi (not player1Turn) means human player 2 in 2P gets the
+    // same trajectory as player 1 instead of firing 15° too steep/high.
     const isAi = aiAngleDeg !== undefined;
-    const zenith =
-      ((this.ballAngleY + (this.player1Turn ? 15 : 0)) * Math.PI) / 180;
+    const zenith = ((this.ballAngleY + (isAi ? 0 : 15)) * Math.PI) / 180;
     let xSpeed = thrust * Math.sin(zenith);
     const zSpeed = thrust * Math.cos(zenith);
     const rotZ = isAi
@@ -680,7 +685,9 @@ export class GameEngine {
     this.ballThrown = false;
     this.camState = "waiting";
     this.particles.clear();
-    this.pickCam(this.player1Turn ? "aim" : "start");
+    // player 2 is a human in 2P mode, so give them the aim (cannon POV) cam
+    // too; only the single-player AI turn falls back to the "start" spectator.
+    this.pickCam(this.player1Turn || this.twoPlayer ? "aim" : "start");
     this.state = "setPower";
     if (!this.player1Turn && !this.twoPlayer) {
       // computer takes its shot after a beat
