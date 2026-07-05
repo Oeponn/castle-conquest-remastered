@@ -1,5 +1,7 @@
 # Castle Conquest, Remastered
 
+<img src="./docs/images/castle-conquest-thumbnail.png" width="100%" alt="Castle Conquest Remastered Demo Thumbnail" />
+
 Play it here: **https://oeponn.github.io/castle-conquest-remastered/**
 But before you do, at least read the first two paragraphs.
 
@@ -23,6 +25,9 @@ I only made this because the flashpoint archive version of it doesn't seem to wo
 I was able to fill some of the gaps in memory by watching this video:
 
 [![Castle Conquest gameplay](https://img.youtube.com/vi/73ZuIfE9_1k/hqdefault.jpg)](https://www.youtube.com/watch?v=73ZuIfE9_1k)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/73ZuIfE9_1k?si=g7vLIhhCRHSQtiRj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 
 Though, I have a distinct memory of my cannonballs being too slow to do significant damage, and it frustratingly bouncing off the enemy walls lol. I remember following the cannonball pov for ages, and being able to guide it slightly with left/right arrowkeys. Perhaps that video is sped up.
 
