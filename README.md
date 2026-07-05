@@ -20,7 +20,11 @@ amount of rebuilding it faithfully is going to un-patch that.
 
 I only made this because the flashpoint archive version of it doesn't seem to work at all, even with shockwave downloaded and updated.
 
-Not only that, the [version shown here](https://www.youtube.com/watch?v=73ZuIfE9_1k) seems to be a different version from the one I downloaded, and different to the one I remember playing. I have a distinct memory of my cannonballs being too slow to do significant damage, and it frustratingly bouncing off the enemy walls lol. I remember following the cannonball pov for ages, and being able to guide it slightly with left/right arrowkeys.
+I was able to fill some of the gaps in memory by watching this video:
+
+[![Castle Conquest gameplay](https://img.youtube.com/vi/73ZuIfE9_1k/hqdefault.jpg)](https://www.youtube.com/watch?v=73ZuIfE9_1k)
+
+Though, I have a distinct memory of my cannonballs being too slow to do significant damage, and it frustratingly bouncing off the enemy walls lol. I remember following the cannonball pov for ages, and being able to guide it slightly with left/right arrowkeys. Perhaps that video is sped up.
 
 ## A physics disclaimer
 
@@ -33,8 +37,26 @@ smoke-trail duration, a turn timer) rather than from any physics constant
 that actually survived. It's close to what I PERSONALLY remember the game felt like, but it is a **reconstruction**, not a bit-for-bit
 port. If a shot feels slightly different from how you remember it, it's probably because its been abstracted through 17 years of memory haze.
 
-## A physics disclaimer
-The actual 3D castle meshes are stored in an undecodable Intel IFX compressed format. So the recreations are approximations.
+## Recovering the 3D meshes
+
+The actual 3D castle meshes ship inside Shockwave's `.w3d` files in an Intel
+IFX compressed format. I was told by Opus that these were undecodable — lost
+forever, and that any castle geometry would have to be approximated by hand.
+
+That turned out to be wrong. Anthony Kleine's
+[Shockwave-3D-World-Converter](https://github.com/tomysshadow/Shockwave-3D-World-Converter)
+reads exactly this format. It's a Windows tool, so I ran it under Wine, pointed
+it at the extracted `castleConquest.w3d`, and exported the whole scene —
+models, normals, UVs, materials, textures — straight to Wavefront OBJ. The
+recovered geometry and textures are committed in
+[`assets/extracted/3d/`](./assets/extracted/3d/) (see commit
+[`9848502`](https://github.com/Oeponn/castle-conquest-remastered/commit/9848502db931238852b410805288c5c4806bee4c)).
+
+<p align="center">
+  <img src="./docs/images/shockwave-convert-01.png" width="45%" alt="Shockwave 3D World Converter with castleConquest.w3d loaded, all export options checked" />
+  &nbsp;
+  <img src="./docs/images/shockwave-convert-02.png" width="45%" alt="Shockwave 3D World Converter mid-conversion" />
+</p>
 
 ## The technical stuff
 
