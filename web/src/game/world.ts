@@ -48,6 +48,14 @@ interface ColliderSpec {
   shape: CANNON.Shape;
   /** collider center in piece-local (pivot) space */
   center: THREE.Vector3;
+  /** local orientation of the shape within the body. cannon-es cylinders are
+   * built along their local Y axis; our world is Z-up, so cylinder colliders
+   * must be rotated 90° about X to stand upright. Without it `height` becomes a
+   * horizontal dimension and the vertical extent collapses to the radius —
+   * which quietly balloons the trimmed flag-mount tops (height 10, radius 7.4)
+   * to 14.8 tall in Z, penetrating the tower below and the flag resting on top
+   * and launching both on the first wake. */
+  orientation?: CANNON.Quaternion;
 }
 
 /** Collider trims, in LOCAL piece space. The original meshes are authored to
@@ -94,9 +102,11 @@ export function pieceCollider(baseName: string, def: PieceDef): ColliderSpec {
   const cy = (y0 + y1) / 2;
   if (def.kind === "cylinder") {
     const r = (x1 - x0) / 2;
+    const orientation = new CANNON.Quaternion().setFromEuler(Math.PI / 2, 0, 0);
     return {
       shape: new CANNON.Cylinder(r, r, height, 12),
       center: new THREE.Vector3(cx, cy, height / 2),
+      orientation,
     };
   }
   return {
@@ -109,7 +119,10 @@ export function pieceCollider(baseName: string, def: PieceDef): ColliderSpec {
  * pivot sits at -center (i.e., at the authored coordinate once the body is
  * placed at pivot + R(yaw)·center). Shared with the thumbnail renderer,
  * which uses offset (0,0,0) and places pivots directly. */
-export function buildPieceMesh(baseName: string, offset?: THREE.Vector3): THREE.Object3D {
+export function buildPieceMesh(
+  baseName: string,
+  offset?: THREE.Vector3,
+): THREE.Object3D {
   const g = new THREE.Group();
   const m = getModelMesh(baseName);
   if (offset) m.position.set(-offset.x, -offset.y, -offset.z);
@@ -167,7 +180,9 @@ export class GameWorld {
 
   private buildBody(def: PieceDef, spec: ColliderSpec): CANNON.Body {
     const body = new CANNON.Body({ mass: def.mass });
-    body.addShape(spec.shape);
+    if (spec.orientation)
+      body.addShape(spec.shape, new CANNON.Vec3(), spec.orientation);
+    else body.addShape(spec.shape);
     // The catalogue restitution is Havok's (which only bounced above a
     // velocity threshold); cannon-es applies it at any contact speed, so
     // resting stacks micro-bounce and wobble unless it's near zero.
@@ -238,8 +253,12 @@ export class GameWorld {
       baseName: pieceName,
       mesh,
       body,
-      defaultPos: new THREE.Vector3().copy(body.position as unknown as THREE.Vector3),
-      lastPos: new THREE.Vector3().copy(body.position as unknown as THREE.Vector3),
+      defaultPos: new THREE.Vector3().copy(
+        body.position as unknown as THREE.Vector3,
+      ),
+      lastPos: new THREE.Vector3().copy(
+        body.position as unknown as THREE.Vector3,
+      ),
       isFlag: pieceName.includes("flagPole"),
       isCannon: pieceName.includes("cannon"),
     };

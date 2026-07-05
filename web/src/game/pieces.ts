@@ -151,4 +151,3 @@ export const PIECES: Record<string, PieceDef> = {
     price: 5000,
   },
 };
-
