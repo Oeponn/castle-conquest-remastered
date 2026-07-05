@@ -281,14 +281,6 @@ export default function App() {
         {(screen === "castleSelect" || screen === "castleSelectP2") && (
           <div className="screen">
             <img className="bg" src={IMG("main_23")} alt="" />
-            <div
-              className="hud-text"
-              style={{ left: 24, top: 16, fontSize: 20 }}
-            >
-              {screen === "castleSelectP2"
-                ? "Player 2: Select Your Castle"
-                : "Select Your Castle"}
-            </div>
             <div className="hud-text" style={{ right: 24, top: 16 }}>
               Level {(engineRef.current?.roundCount ?? 3) + 1}
             </div>
@@ -330,7 +322,10 @@ export default function App() {
               )}
             </div>
             <div className="hint">
-              Castles unlock as you earn gold. Gold carries over between games.
+              {hoverCastle === null &&
+                (screen === "castleSelectP2"
+                  ? "Player 2: Select Your Castle"
+                  : "Select Your Castle")}
             </div>
           </div>
         )}
