@@ -42,7 +42,13 @@ export interface HudState {
   angleZ: number;
   playerTurn: 1 | 2;
   twoPlayer: boolean;
-  tally?: { castleDamage: number; rubbleReward: number; flagProtect: number; flagDamage: number; total: number };
+  tally?: {
+    castleDamage: number;
+    rubbleReward: number;
+    flagProtect: number;
+    flagDamage: number;
+    total: number;
+  };
   roundWon?: boolean;
   roundMessage?: string;
 }
@@ -122,7 +128,8 @@ export class GameEngine {
   roundMessage = "";
   roundWon = false;
   tally: HudState["tally"];
-  onRoundFlow: ((next: "tally" | "castleSelect" | "gameOver") => void) | null = null;
+  onRoundFlow: ((next: "tally" | "castleSelect" | "gameOver") => void) | null =
+    null;
 
   constructor(canvas: HTMLCanvasElement) {
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -142,10 +149,16 @@ export class GameEngine {
     this.ballShadow = getModelMeshOwnMaterial("ballShadow");
     this.ballShadow.visible = false;
     this.gw.scene.add(this.ballShadow);
-    this.ballBody = new CANNON.Body({ mass: C.BALL_MASS, shape: new CANNON.Sphere(C.BALL_RADIUS) });
+    this.ballBody = new CANNON.Body({
+      mass: C.BALL_MASS,
+      shape: new CANNON.Sphere(C.BALL_RADIUS),
+    });
     // friction sqrt-encoded (cannon-es multiplies material frictions; Havok
     // used the geometric mean — see the ground material comment in world.ts)
-    this.ballBody.material = new CANNON.Material({ friction: Math.sqrt(0.8), restitution: 0.2 });
+    this.ballBody.material = new CANNON.Material({
+      friction: Math.sqrt(0.8),
+      restitution: 0.2,
+    });
     // The AI's distance->power table is exactly quadratic, i.e. drag-free
     // ballistics — cannon-es's default linearDamping (0.01) would shave a few
     // percent off every shot and drift the calibration. Angular damping does
@@ -157,9 +170,12 @@ export class GameEngine {
 
     this.player1Gold = this.loadGold();
 
-    this.ballBody.addEventListener("collide", (ev: { body: CANNON.Body; contact: CANNON.ContactEquation }) => {
-      this.onBallCollide(ev);
-    });
+    this.ballBody.addEventListener(
+      "collide",
+      (ev: { body: CANNON.Body; contact: CANNON.ContactEquation }) => {
+        this.onBallCollide(ev);
+      },
+    );
   }
 
   /** gameClass.ballShadowFollow, 1:1 — the blob tracks the ball on x/y (its
@@ -212,11 +228,13 @@ export class GameEngine {
     if (this.state === "setPower") {
       this.initPowerMeter();
       this.state = "setAccuracy";
-      this.hint = "Tap FIRE to set power level.";
+      this.hint = "Tap spacebar/FIRE to set power level.";
       this.pushHud(true);
     } else if (this.state === "setAccuracy") {
       const meterPerc = 1 - this.oscPerc;
-      this.thrust = C.MAX_POWER * meterPerc * C.THROW_METER_FRAC + C.MAX_POWER * C.THROW_BASE_FRAC;
+      this.thrust =
+        C.MAX_POWER * meterPerc * C.THROW_METER_FRAC +
+        C.MAX_POWER * C.THROW_BASE_FRAC;
       this.powerPerc = meterPerc;
       this.initPowerAccuracy();
       this.state = "throwBall";
@@ -227,7 +245,8 @@ export class GameEngine {
       // constant marker->track-top distance (gameClass throwControl; the
       // marker sprite is score-placed and never moved). Bounded [-0.27, +1].
       const cur = 1 - this.oscPerc;
-      const accuracy = (cur - C.ACCURACY_MARKER_PERC) / (1 - C.ACCURACY_MARKER_PERC);
+      const accuracy =
+        (cur - C.ACCURACY_MARKER_PERC) / (1 - C.ACCURACY_MARKER_PERC);
       this.movePowerMeter = false;
       this.throwBall(this.thrust, undefined, accuracy);
     } else if (this.state === "roundOver") {
@@ -284,7 +303,8 @@ export class GameEngine {
     this.powerPerc = 0;
     this.camState = "waiting";
     this.pickCam("aim");
-    this.hint = "Aim the cannon, then tap FIRE to start the power meter.";
+    this.hint =
+      "Aim the cannon, then tap spacebar/FIRE to start the power meter.";
     this.checkFlagsDown();
     this.pushHud(true);
   }
@@ -297,7 +317,11 @@ export class GameEngine {
   private cannonPos(player: 1 | 2): THREE.Vector3 {
     const c = player === 1 ? this.player1Cannon : this.player2Cannon;
     if (!c) return new THREE.Vector3(player === 1 ? -230 : 230, 0, 8);
-    return new THREE.Vector3(c.body.position.x, c.body.position.y, c.body.position.z);
+    return new THREE.Vector3(
+      c.body.position.x,
+      c.body.position.y,
+      c.body.position.z,
+    );
   }
 
   private updateCamera() {
@@ -351,12 +375,30 @@ export class GameEngine {
         this.camera.lookAt(0, 0, 20);
         break;
       }
-      case "side1": this.camera.position.set(-240, -260, 80); this.camera.lookAt(-240, 0, 20); break;
-      case "side2": this.camera.position.set(240, -260, 80); this.camera.lookAt(240, 0, 20); break;
-      case "top1": this.camera.position.set(-240, 0, 380); this.camera.lookAt(-240, 0, 0); break;
-      case "top2": this.camera.position.set(240, 0, 380); this.camera.lookAt(240, 0, 0); break;
-      case "front1": this.camera.position.set(-40, 0, 60); this.camera.lookAt(-240, 0, 25); break;
-      case "front2": this.camera.position.set(40, 0, 60); this.camera.lookAt(240, 0, 25); break;
+      case "side1":
+        this.camera.position.set(-240, -260, 80);
+        this.camera.lookAt(-240, 0, 20);
+        break;
+      case "side2":
+        this.camera.position.set(240, -260, 80);
+        this.camera.lookAt(240, 0, 20);
+        break;
+      case "top1":
+        this.camera.position.set(-240, 0, 380);
+        this.camera.lookAt(-240, 0, 0);
+        break;
+      case "top2":
+        this.camera.position.set(240, 0, 380);
+        this.camera.lookAt(240, 0, 0);
+        break;
+      case "front1":
+        this.camera.position.set(-40, 0, 60);
+        this.camera.lookAt(-240, 0, 25);
+        break;
+      case "front2":
+        this.camera.position.set(40, 0, 60);
+        this.camera.lookAt(240, 0, 25);
+        break;
     }
   }
 
@@ -368,19 +410,43 @@ export class GameEngine {
     // ballController runs while aiming and during the power sweep, but NOT
     // during the accuracy sweep (live gameClass gates on setPower/setAccuracy)
     if (this.state === "setPower" || this.state === "setAccuracy") {
-      if (this.keys.left) { this.aimVelX += C.AIM_SPEED_INC; cranking = true; }
-      if (this.keys.right) { this.aimVelX -= C.AIM_SPEED_INC; cranking = true; }
+      if (this.keys.left) {
+        this.aimVelX += C.AIM_SPEED_INC;
+        cranking = true;
+      }
+      if (this.keys.right) {
+        this.aimVelX -= C.AIM_SPEED_INC;
+        cranking = true;
+      }
       // up = aim higher: a steeper shot is a *lower* ballAngleY (launch
       // elevation = 75 - ballAngleY), and ballAngleY += -aimVelY below.
-      if (this.keys.up) { this.aimVelY += C.AIM_SPEED_INC; cranking = true; }
-      if (this.keys.down) { this.aimVelY -= C.AIM_SPEED_INC; cranking = true; }
+      if (this.keys.up) {
+        this.aimVelY += C.AIM_SPEED_INC;
+        cranking = true;
+      }
+      if (this.keys.down) {
+        this.aimVelY -= C.AIM_SPEED_INC;
+        cranking = true;
+      }
 
       this.ballAngleZ += this.aimVelX;
       this.ballAngleY -= this.aimVelY;
-      if (this.ballAngleZ > C.BALL_ANGLE_Z_MAX) { this.ballAngleZ = C.BALL_ANGLE_Z_MAX; this.aimVelX *= -0.5; }
-      if (this.ballAngleZ < C.BALL_ANGLE_Z_MIN) { this.ballAngleZ = C.BALL_ANGLE_Z_MIN; this.aimVelX *= -0.5; }
-      if (this.ballAngleY < C.BALL_ANGLE_Y_MIN) { this.ballAngleY = C.BALL_ANGLE_Y_MIN; this.aimVelY *= -0.5; }
-      if (this.ballAngleY > C.BALL_ANGLE_Y_MAX) { this.ballAngleY = C.BALL_ANGLE_Y_MAX; this.aimVelY *= -0.5; }
+      if (this.ballAngleZ > C.BALL_ANGLE_Z_MAX) {
+        this.ballAngleZ = C.BALL_ANGLE_Z_MAX;
+        this.aimVelX *= -0.5;
+      }
+      if (this.ballAngleZ < C.BALL_ANGLE_Z_MIN) {
+        this.ballAngleZ = C.BALL_ANGLE_Z_MIN;
+        this.aimVelX *= -0.5;
+      }
+      if (this.ballAngleY < C.BALL_ANGLE_Y_MIN) {
+        this.ballAngleY = C.BALL_ANGLE_Y_MIN;
+        this.aimVelY *= -0.5;
+      }
+      if (this.ballAngleY > C.BALL_ANGLE_Y_MAX) {
+        this.ballAngleY = C.BALL_ANGLE_Y_MAX;
+        this.aimVelY *= -0.5;
+      }
       this.aimVelX *= C.AIM_FRICTION;
       this.aimVelY *= C.AIM_FRICTION;
 
@@ -401,7 +467,8 @@ export class GameEngine {
   private initPowerAccuracy() {
     let mult = (1 - this.oscPerc) * C.ACCURACY_SPEED_FRAC;
     if (mult < C.ACCURACY_SPEED_MIN) mult = C.ACCURACY_SPEED_MIN;
-    this.oscSpeed = Math.abs(this.oscSpeed) * mult * (this.meterDir < 0 ? -1 : 1);
+    this.oscSpeed =
+      Math.abs(this.oscSpeed) * mult * (this.meterDir < 0 ? -1 : 1);
   }
 
   private oscillatePowerTick() {
@@ -420,7 +487,9 @@ export class GameEngine {
     this.audio.stopCrank();
     this.lastThrust = thrust;
     const dir = this.player1Turn ? 1 : -1;
-    const big = (this.player1Turn ? this.player1Cannon : this.player2Cannon)?.baseName === "cannonB";
+    const big =
+      (this.player1Turn ? this.player1Cannon : this.player2Cannon)?.baseName ===
+      "cannonB";
     const radius = big ? C.BALL_RADIUS_BIG : C.BALL_RADIUS;
     (this.ballBody.shapes[0] as CANNON.Sphere).radius = radius;
     this.ballBody.updateBoundingRadius();
@@ -439,10 +508,13 @@ export class GameEngine {
     // AI's distance->power table is calibrated on that 30° launch (see
     // IMPULSE_SCALE).
     const isAi = aiAngleDeg !== undefined;
-    const zenith = ((this.ballAngleY + (this.player1Turn ? 15 : 0)) * Math.PI) / 180;
+    const zenith =
+      ((this.ballAngleY + (this.player1Turn ? 15 : 0)) * Math.PI) / 180;
     let xSpeed = thrust * Math.sin(zenith);
     const zSpeed = thrust * Math.cos(zenith);
-    const rotZ = isAi ? (aiAngleDeg * Math.PI) / 180 : (this.ballAngleZ * Math.PI) / 180;
+    const rotZ = isAi
+      ? (aiAngleDeg * Math.PI) / 180
+      : (this.ballAngleZ * Math.PI) / 180;
     let ySpeed = xSpeed * Math.sin(rotZ);
     xSpeed = xSpeed * Math.cos(rotZ);
 
@@ -473,19 +545,28 @@ export class GameEngine {
     this.pushHud(true);
   }
 
-  private onBallCollide(ev: { body: CANNON.Body; contact: CANNON.ContactEquation }) {
+  private onBallCollide(ev: {
+    body: CANNON.Body;
+    contact: CANNON.ContactEquation;
+  }) {
     if (!this.ballThrown) return;
     if (ev.body === this.gw.groundBody) {
       this.audio.play("groundHit", 20);
       this.particles.makeSmokePoof(this.ball.position.clone(), 0.8);
       return;
     }
-    const targetList = this.player1Turn ? this.player2Pieces : this.player1Pieces;
+    const targetList = this.player1Turn
+      ? this.player2Pieces
+      : this.player1Pieces;
     const hitPiece = targetList.find((p) => p.body === ev.body);
     if (hitPiece) {
       const relVel = Math.abs(ev.contact.getImpactVelocityAlongNormal());
       const velPerc = Math.min(1, relVel / 50);
-      this.particles.makeAsplode(this.ball.position.clone(), velPerc, this.player1Turn ? 1 : -1);
+      this.particles.makeAsplode(
+        this.ball.position.clone(),
+        velPerc,
+        this.player1Turn ? 1 : -1,
+      );
       this.audio.play("rockHit", velPerc * 255);
       if (hitPiece.isCannon) {
         this.gameWon = true; // detectWin: cannon hit = instant round win
@@ -507,8 +588,14 @@ export class GameEngine {
     // mid-flight nudge with left/right (ballController while ballThrown)
     if (this.player1Turn || this.twoPlayer) {
       const f = 600;
-      if (this.keys.left) this.ballBody.applyForce(new CANNON.Vec3(0, f * (this.player1Turn ? 1 : -1), 0));
-      if (this.keys.right) this.ballBody.applyForce(new CANNON.Vec3(0, -f * (this.player1Turn ? 1 : -1), 0));
+      if (this.keys.left)
+        this.ballBody.applyForce(
+          new CANNON.Vec3(0, f * (this.player1Turn ? 1 : -1), 0),
+        );
+      if (this.keys.right)
+        this.ballBody.applyForce(
+          new CANNON.Vec3(0, -f * (this.player1Turn ? 1 : -1), 0),
+        );
     }
 
     this.ballInPlayCamControl();
@@ -518,7 +605,11 @@ export class GameEngine {
       this.smokeAnimCycle = (this.smokeAnimCycle % 5) + 1;
       if (this.smokeAnimCycle === 5) {
         const opacity = 1.0 - this.throwTimeS / C.SMOKE_TRAIL_S;
-        this.particles.makeSmoke(this.ball.position.clone(), opacity, this.player1Turn ? 1 : -1);
+        this.particles.makeSmoke(
+          this.ball.position.clone(),
+          opacity,
+          this.player1Turn ? 1 : -1,
+        );
       }
     }
 
@@ -540,7 +631,8 @@ export class GameEngine {
     } else if (this.camState === "started") {
       if (ballDist > -C.BALL_CAM_STOP_DIST) {
         // original: only the player's own shots get the ball-chase cam
-        if ((this.player1Turn || this.twoPlayer) && this.myCam !== "ball") this.pickCam("ball");
+        if ((this.player1Turn || this.twoPlayer) && this.myCam !== "ball")
+          this.pickCam("ball");
       } else {
         this.pickCam(this.player1Turn ? "castle2" : "castle1");
         this.camState = "stopped";
@@ -553,7 +645,11 @@ export class GameEngine {
     const list = this.player1Turn ? this.player2Pieces : this.player1Pieces;
     let sum = 0;
     for (const p of list) {
-      const np = new THREE.Vector3(p.body.position.x, p.body.position.y, p.body.position.z);
+      const np = new THREE.Vector3(
+        p.body.position.x,
+        p.body.position.y,
+        p.body.position.z,
+      );
       sum += np.distanceTo(p.lastPos);
       p.lastPos.copy(np);
     }
@@ -589,10 +685,12 @@ export class GameEngine {
     if (!this.player1Turn && !this.twoPlayer) {
       // computer takes its shot after a beat
       const shot = aiSetPower(
-        this.roundCount, this.turnCount, C.MAX_POWER,
+        this.roundCount,
+        this.turnCount,
+        C.MAX_POWER,
         this.cannonPos(2).add(new THREE.Vector3(0, 0, 8)),
         this.player1Pieces,
-        (p) => this.gw.tiltDegrees(p)
+        (p) => this.gw.tiltDegrees(p),
       );
       this.hint = "- Computer Player Turn -";
       this.pendingAiShot = { power: shot.power };
@@ -604,8 +702,8 @@ export class GameEngine {
       }, 1200);
     } else {
       this.hint = this.twoPlayer
-        ? `Player ${this.player1Turn ? 1 : 2}: aim, then tap FIRE to start the power meter.`
-        : "Aim the cannon, then tap FIRE to start the power meter.";
+        ? `Player ${this.player1Turn ? 1 : 2}: aim, then tap spacebar/FIRE to start the power meter.`
+        : "Aim the cannon, then tap spacebar/FIRE to start the power meter.";
     }
     this.pushHud(true);
   }
@@ -614,25 +712,33 @@ export class GameEngine {
   private switchTurns() {
     this.player1Turn = !this.player1Turn;
     const addList = this.player1Turn ? this.player2Pieces : this.player1Pieces;
-    const removeList = this.player1Turn ? this.player1Pieces : this.player2Pieces;
+    const removeList = this.player1Turn
+      ? this.player1Pieces
+      : this.player2Pieces;
     if (this.player1Turn) this.turnCount++;
     for (const p of removeList) this.gw.removeFromSim(p);
     for (const p of addList) {
       if (!p.isCannon) this.gw.addToSim(p);
     }
     // refresh movement baselines so the settle check starts clean
-    for (const p of addList) p.lastPos.set(p.body.position.x, p.body.position.y, p.body.position.z);
+    for (const p of addList)
+      p.lastPos.set(p.body.position.x, p.body.position.y, p.body.position.z);
   }
 
   /** checkFlagsDown — flag is captured when tilted > 10 deg */
   private checkFlagsDown(): boolean {
     const list = this.player1Turn ? this.player2Pieces : this.player1Pieces;
-    let flags = 0, down = 0;
+    let flags = 0,
+      down = 0;
     for (const p of list) {
       if (!p.isFlag) continue;
       flags++;
       const t = this.gw.tiltDegrees(p);
-      if (Math.abs(t.x) > C.FLAG_DOWN_TILT_DEG || Math.abs(t.y) > C.FLAG_DOWN_TILT_DEG) down++;
+      if (
+        Math.abs(t.x) > C.FLAG_DOWN_TILT_DEG ||
+        Math.abs(t.y) > C.FLAG_DOWN_TILT_DEG
+      )
+        down++;
     }
     if (this.player1Turn) this.flagsText = `Flags ${down}/${flags}`;
     return flags > 0 && down >= flags;
@@ -645,7 +751,11 @@ export class GameEngine {
     this.roundWon = this.player1Turn;
     if (this.player1Turn) {
       if (this.gameWon && this.player2Cannon) {
-        this.particles.makeBoom(new THREE.Vector3().copy(this.player2Cannon.body.position as unknown as THREE.Vector3));
+        this.particles.makeBoom(
+          new THREE.Vector3().copy(
+            this.player2Cannon.body.position as unknown as THREE.Vector3,
+          ),
+        );
       }
       this.audio.play("hitGreat");
       this.roundMessage = this.twoPlayer
@@ -655,7 +765,11 @@ export class GameEngine {
           : "YOU WON! All Enemy Flags Captured!";
     } else {
       if (this.gameWon && this.player1Cannon) {
-        this.particles.makeBoom(new THREE.Vector3().copy(this.player1Cannon.body.position as unknown as THREE.Vector3));
+        this.particles.makeBoom(
+          new THREE.Vector3().copy(
+            this.player1Cannon.body.position as unknown as THREE.Vector3,
+          ),
+        );
       }
       this.audio.play(this.twoPlayer ? "hitGreat" : "hitBad");
       this.roundMessage = this.twoPlayer
@@ -664,7 +778,7 @@ export class GameEngine {
           ? "YOU LOST! Player Cannon Destroyed!"
           : "YOU LOST! All Player Flags Captured!";
     }
-    this.hint = this.roundMessage + " — press FIRE to continue";
+    this.hint = this.roundMessage + " — press spacebar/FIRE to continue";
     void won;
     this.removeBallFromSim();
     this.pushHud(true);
@@ -685,23 +799,36 @@ export class GameEngine {
 
   /** tallyScore — points from enemy damage + own flags protected */
   private tallyScore() {
-    let dmg = 0, enemyFlags = 0;
+    let dmg = 0,
+      enemyFlags = 0;
     this.player2Pieces.forEach((p, i) => {
-      const np = new THREE.Vector3(p.body.position.x, p.body.position.y, p.body.position.z);
+      const np = new THREE.Vector3(
+        p.body.position.x,
+        p.body.position.y,
+        p.body.position.z,
+      );
       if (np.distanceTo(this.p2Default[i]) > C.PIECE_DAMAGED_DIST) dmg++;
       if (p.isFlag) enemyFlags++;
     });
-    const dmgPerc = Math.floor((100 * dmg) / Math.max(1, this.player2Pieces.length));
+    const dmgPerc = Math.floor(
+      (100 * dmg) / Math.max(1, this.player2Pieces.length),
+    );
     const castleDamage = dmg * C.SCORE_PER_DAMAGED_PIECE;
     const flagDamage = enemyFlags * C.SCORE_PER_FLAG_CAPTURED;
     const rubbleReward = Math.max(0, C.DAMAGE_GOAL - dmgPerc);
 
-    let myFlags = 0, myFlagsDamaged = 0;
+    let myFlags = 0,
+      myFlagsDamaged = 0;
     this.player1Pieces.forEach((p, i) => {
       if (!p.isFlag) return;
       myFlags++;
-      const np = new THREE.Vector3(p.body.position.x, p.body.position.y, p.body.position.z);
-      if (np.distanceTo(this.p1Default[i]) > C.PIECE_DAMAGED_DIST) myFlagsDamaged++;
+      const np = new THREE.Vector3(
+        p.body.position.x,
+        p.body.position.y,
+        p.body.position.z,
+      );
+      if (np.distanceTo(this.p1Default[i]) > C.PIECE_DAMAGED_DIST)
+        myFlagsDamaged++;
     });
     const flagProtect = (myFlags - myFlagsDamaged) * C.SCORE_PER_FLAG_PROTECTED;
     const total = castleDamage + rubbleReward + flagProtect + flagDamage;
@@ -734,7 +861,11 @@ export class GameEngine {
         ticks++;
       }
       this.gw.syncMeshes();
-      this.ball.position.set(this.ballBody.position.x, this.ballBody.position.y, this.ballBody.position.z);
+      this.ball.position.set(
+        this.ballBody.position.x,
+        this.ballBody.position.y,
+        this.ballBody.position.z,
+      );
       this.ballShadowFollow();
       this.particles.update(frame / 1000);
       this.updateCamera();
@@ -785,7 +916,8 @@ export class GameEngine {
       // during the power sweep the meter tracks the oscillator; during the
       // accuracy sweep it freezes at the set power and the accuracy bar
       // takes over
-      meterPerc: this.state === "setAccuracy" ? 1 - this.oscPerc : this.powerPerc,
+      meterPerc:
+        this.state === "setAccuracy" ? 1 - this.oscPerc : this.powerPerc,
       accuracyPerc: this.state === "throwBall" ? 1 - this.oscPerc : undefined,
       angleY: this.ballAngleY,
       angleZ: this.ballAngleZ,

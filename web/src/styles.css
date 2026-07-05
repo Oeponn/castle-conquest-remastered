@@ -235,14 +235,14 @@ body {
 }
 .hint {
   position: absolute;
-  left: 50%;
-  bottom: 36px;
-  transform: translateX(-50%);
-  width: 480px;
+  left: 175px;
+  top: 383px;
+  width: 425px;
   text-align: center;
   color: #ffe9a0;
   text-shadow: 1px 1px 2px #000;
-  font-size: 14px;
+  font-size: 9px;
+  padding: 0 40px;
 }
 
 .fire-btn {
