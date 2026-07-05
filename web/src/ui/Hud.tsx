@@ -111,7 +111,7 @@ export function Hud(props: {
               width: 18,
               height: 4,
               top: 154 - ACCURACY_MARKER_PERC * 145,
-              background: "#ffdd00",
+              background: "#a81200",
             }}
           />
         )}
