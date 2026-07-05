@@ -287,6 +287,9 @@ export default function App() {
             <div className="gold-shield">
               <div className="label">Gold</div>
               <div className="value">{gold}</div>
+              <br />
+              <div className="label">Score</div>
+              <div className="value">{0}</div>
             </div>
             <div className="castle-grid">
               {CASTLES.map((c) => {

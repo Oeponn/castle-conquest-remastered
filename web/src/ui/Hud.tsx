@@ -165,11 +165,11 @@ export function Hud(props: {
       </div>
       {!hud.twoPlayer ? (
         <>
-          <div className="hud-text" style={{ right: 150, top: 50 }}>
-            Gold: {hud.gold}
-          </div>
-          <div className="hud-text" style={{ right: 60, top: 50 }}>
-            Score: {hud.score}
+          <div className="gold-shield">
+            <div className="label">Gold</div>
+            <div className="value">{hud.gold}</div>
+            <div className="label">Score</div>
+            <div className="value">{hud.score}</div>
           </div>
         </>
       ) : (
