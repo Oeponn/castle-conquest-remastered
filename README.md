@@ -1,9 +1,9 @@
-# Castle Conquest, Remastered
+# Castle Conquest Remastered
 
 <img src="./docs/images/castle-conquest-thumbnail.png" width="100%" alt="Castle Conquest Remastered Demo Thumbnail" />
 
 Play it here: **https://oeponn.github.io/castle-conquest-remastered/**
-But before you do, at least read the first two paragraphs.
+But before you do, I recommend reading paragraphs two and three at least.
 
 ## Why this game
 
