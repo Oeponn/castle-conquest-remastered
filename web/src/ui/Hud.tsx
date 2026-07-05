@@ -8,7 +8,7 @@
 // up BEHIND the art and shows through it (original Director z-order). Dial
 // circle center (52,239); protractor vertex (37,336).
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { HudState } from "../game/engine";
 import { ACCURACY_MARKER_PERC } from "../game/constants";
 
@@ -21,10 +21,12 @@ export function Hud(props: {
   onAim: (dx: number, dy: number) => void;
   onAimEnd: () => void;
   onToggleSound: () => boolean;
+  onRestart: () => void;
 }) {
   const { hud } = props;
   const dragRef = useRef<{ x: number; y: number } | null>(null);
   const soundOnRef = useRef(true);
+  const [confirmRestart, setConfirmRestart] = useState(false);
 
   // original: rotationDial.rotation = angleZ * -2.5 ; angleDial = angleY*1.7 - 25
   const rotDial = hud.angleZ * -2.5;
@@ -160,9 +162,13 @@ export function Hud(props: {
       <div className="hud-text" style={{ left: 265, bottom: 38 }}>
         {hud.flagsText}
       </div>
-      {/* <div className="hud-text" style={{ left: 360, bottom: 38 }}>
+      <div
+        className="hud-text"
+        style={{ left: 360, bottom: 38, pointerEvents: "auto", cursor: "pointer" }}
+        onClick={() => setConfirmRestart(true)}
+      >
         Restart
-      </div> */}
+      </div>
       <div className="hud-text" style={{ left: 460, bottom: 38 }}>
         Level {hud.level}
       </div>
@@ -206,6 +212,27 @@ export function Hud(props: {
       >
         FIRE
       </button>
+
+      {confirmRestart && (
+        <div
+          className="panel restart-confirm"
+          style={{ pointerEvents: "auto" }}
+        >
+          <h2>Restart Level {hud.level}?</h2>
+          <p>Your progress on this level will be lost.</p>
+          <div className="restart-confirm-buttons">
+            <button
+              onClick={() => {
+                setConfirmRestart(false);
+                props.onRestart();
+              }}
+            >
+              Restart
+            </button>
+            <button onClick={() => setConfirmRestart(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

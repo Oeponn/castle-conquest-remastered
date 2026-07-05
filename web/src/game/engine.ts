@@ -332,6 +332,14 @@ export class GameEngine {
     this.pushHud(true);
   }
 
+  /** restartRound — rebuild the current level from scratch (same castles,
+      same level number). nextRoundInit increments roundCount, so step back
+      one first; gold/score only change at tally so mid-round they're intact. */
+  restartRound() {
+    this.roundCount--;
+    this.nextRoundInit();
+  }
+
   // ---------- aiming & camera ----------
   pickCam(name: string) {
     this.myCam = name;

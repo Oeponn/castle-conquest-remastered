@@ -218,6 +218,7 @@ export default function App() {
               })
             }
             onToggleSound={() => engineRef.current?.toggleSound() ?? true}
+            onRestart={() => engineRef.current?.restartRound()}
           />
         )}
 

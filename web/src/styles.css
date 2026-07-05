@@ -315,6 +315,23 @@ body {
   cursor: pointer;
 }
 
+/* restart confirmation: shorter, vertically centred panel over the game */
+.restart-confirm {
+  top: 130px;
+  height: auto;
+  min-height: 0;
+}
+.restart-confirm p {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #ffe9a0;
+}
+.restart-confirm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
 .instructions-body {
   position: absolute;
   left: 175px;
