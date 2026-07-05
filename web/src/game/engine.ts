@@ -86,6 +86,13 @@ export class GameEngine {
   ballShadow: THREE.Mesh;
   ballBody: CANNON.Body;
   ballThrown = false;
+  // Visual-only forward roll for the airborne ball, accumulated from its
+  // velocity each frame. Driving the mesh from the physics quaternion instead
+  // would show almost no spin (angularDamping is 0.8 to keep landed balls from
+  // rolling forever), so we spin the mesh independently while it flies.
+  ballSpin = new THREE.Quaternion();
+  private _spinAxis = new THREE.Vector3();
+  private _spinDelta = new THREE.Quaternion();
   ballInWorld = false;
   lastThrust = 0; // read by the headless test harness
 
@@ -193,6 +200,22 @@ export class GameEngine {
     (this.ballShadow.material as THREE.Material).opacity = 0.6 + 0.2 * zPerc;
     const s = 1.3 + 0.3 * zPerc;
     this.ballShadow.scale.set(s, s, 1);
+  }
+
+  /** Visual top-spin: roll the airborne ball forward about the horizontal axis
+   *  perpendicular to its travel, at a rate that tracks its speed. Purely
+   *  cosmetic — physics (and thus aim/landing) are untouched. */
+  private spinBall(dt: number) {
+    if (!this.ballThrown) return;
+    const v = this.ballBody.velocity;
+    const speed = Math.hypot(v.x, v.y);
+    if (speed < 1) return;
+    // axis = up × travel dir → forward roll (top of the ball leads the flight)
+    this._spinAxis.set(-v.y, v.x, 0).normalize();
+    const angle = Math.min(speed * 0.06, 16) * dt;
+    this._spinDelta.setFromAxisAngle(this._spinAxis, angle);
+    this.ballSpin.premultiply(this._spinDelta);
+    this.ball.quaternion.copy(this.ballSpin);
   }
 
   // ---------- persistence (replaces the Flash SharedObject) ----------
@@ -500,6 +523,8 @@ export class GameEngine {
     this.ballBody.updateBoundingRadius();
     // scale the MODEL like throwBall does (the mesh has its true radius baked)
     this.ball.scale.setScalar(big ? C.BALL_SCALE_BIG : C.BALL_SCALE);
+    this.ballSpin.identity();
+    this.ball.quaternion.identity();
     this.ball.visible = true;
     this.ballShadow.visible = true;
 
@@ -873,6 +898,7 @@ export class GameEngine {
         this.ballBody.position.y,
         this.ballBody.position.z,
       );
+      this.spinBall(frame / 1000);
       this.ballShadowFollow();
       this.particles.update(frame / 1000);
       this.updateCamera();

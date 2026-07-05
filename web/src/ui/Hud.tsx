@@ -157,11 +157,14 @@ export function Hud(props: {
         />
       </div>
 
-      <div className="hud-text" style={{ left: 150, top: 50 }}>
-        Level {hud.level}
-      </div>
-      <div className="hud-text" style={{ left: 260, top: 50 }}>
+      <div className="hud-text" style={{ left: 265, bottom: 38 }}>
         {hud.flagsText}
+      </div>
+      {/* <div className="hud-text" style={{ left: 360, bottom: 38 }}>
+        Restart
+      </div> */}
+      <div className="hud-text" style={{ left: 460, bottom: 38 }}>
+        Level {hud.level}
       </div>
       {!hud.twoPlayer ? (
         <>
