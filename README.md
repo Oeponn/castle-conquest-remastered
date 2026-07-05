@@ -13,7 +13,7 @@ I have this memory, maybe around 2009, of playing it with my best friend, Anton,
 
 ## Rose-tinted glasses
 
-Before you try this game out, let's be honest with ourselves for a second: this was a free 2003 Shockwave
+Before you try this out, let's think it through before you destroy your sense of nostalgia derived from a childlike sense of wonder: this was a free 2003 Shockwave
 game. The physics were janky even in 2003, the
 "3D" is a dozen boxes and cylinders on a grid, and the enemy AI aims at a random
 flag and shrugs. If you played this as a kid, your
