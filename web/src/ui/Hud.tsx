@@ -123,7 +123,7 @@ export function Hud(props: {
           style={{
             position: "absolute",
             left: 17,
-            top: 22,
+            top: 6,
             width: 27,
             height: 123,
           }}
@@ -134,7 +134,7 @@ export function Hud(props: {
             position: "absolute",
             left: 0,
             width: 40,
-            top: 50,
+            top: 34,
             fontSize: 9,
             textAlign: "center",
             color: "#f5d76a",
@@ -147,7 +147,7 @@ export function Hud(props: {
             position: "absolute",
             left: 0,
             width: 40,
-            top: 100,
+            top: 84,
             fontSize: 9,
             textAlign: "center",
             color: "#f5d76a",
