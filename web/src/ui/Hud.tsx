@@ -129,6 +129,32 @@ export function Hud(props: {
           }}
           alt=""
         />
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            width: 40,
+            top: 50,
+            fontSize: 9,
+            textAlign: "center",
+            color: "#f5d76a",
+          }}
+        >
+          Full Power
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            width: 40,
+            top: 100,
+            fontSize: 9,
+            textAlign: "center",
+            color: "#f5d76a",
+          }}
+        >
+          Aim Marker
+        </div>
         {/* rotation dial needle, pivots on the dial center */}
         <div
           className="dial"
@@ -164,7 +190,12 @@ export function Hud(props: {
       </div>
       <div
         className="hud-text"
-        style={{ left: 360, bottom: 38, pointerEvents: "auto", cursor: "pointer" }}
+        style={{
+          left: 360,
+          bottom: 38,
+          pointerEvents: "auto",
+          cursor: "pointer",
+        }}
         onClick={() => setConfirmRestart(true)}
       >
         Restart
