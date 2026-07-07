@@ -50,10 +50,75 @@ const INSTRUCTIONS: Array<{ h: string; lines: string[] }> = [
   },
 ];
 
+// Credit shown in the letterbox bands around the scaled stage. Positioned
+// into whichever band (below or beside the stage) actually exists at the
+// current window ratio; never overlaps or shifts the game itself.
+function RemasterCredit({
+  scale,
+  win,
+}: {
+  scale: number;
+  win: { w: number; h: number };
+}) {
+  const scaledW = STAGE_W * scale;
+  const scaledH = STAGE_H * scale;
+  const bandBottom = (win.h - scaledH) / 2;
+  const bandSide = (win.w - scaledW) / 2;
+
+  let style: React.CSSProperties | null = null;
+  if (bandBottom >= bandSide && bandBottom >= 56) {
+    style = {
+      left: 0,
+      right: 0,
+      top: `calc(50% + ${scaledH / 2}px)`,
+      height: bandBottom,
+    };
+  } else if (bandSide > bandBottom && bandSide >= 150) {
+    style = {
+      left: `calc(50% + ${scaledW / 2}px)`,
+      width: bandSide,
+      top: 0,
+      bottom: 0,
+    };
+  }
+  if (!style) return null;
+
+  return (
+    <div className="remaster-credit" style={style}>
+      <div>
+        Remastered by{" "}
+        <a
+          href="https://github.com/Oeponn/"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          github.com/Oeponn
+        </a>
+      </div>
+      <div className="sub">
+        Check out{" "}
+        <a
+          href="https://github.com/Oeponn/castle-conquest-remastered"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          the GitHub repo
+        </a>{" "}
+        to see how this game was migrated from Flash/Shockwave to a browser
+        game.
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [screen, setScreen] = useState<Screen>("menu");
   const [hud, setHud] = useState<HudState | null>(null);
   const [scale, setScale] = useState(1);
+  const [win, setWin] = useState({
+    w: window.innerWidth,
+    h: window.innerHeight,
+  });
   const [isTouch, setIsTouch] = useState(false);
   const [hoverCastle, setHoverCastle] = useState<{
     name: string;
@@ -73,10 +138,12 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const onResize = () =>
+    const onResize = () => {
       setScale(
         Math.min(window.innerWidth / STAGE_W, window.innerHeight / STAGE_H),
       );
+      setWin({ w: window.innerWidth, h: window.innerHeight });
+    };
     onResize();
     window.addEventListener("resize", onResize);
     setIsTouch("ontouchstart" in window);
@@ -180,6 +247,7 @@ export default function App() {
             />
           </div>
         </div>
+        <RemasterCredit scale={scale} win={win} />
       </div>
     );
   }
@@ -378,6 +446,7 @@ export default function App() {
           </div>
         )}
       </div>
+      <RemasterCredit scale={scale} win={win} />
     </div>
   );
 }
