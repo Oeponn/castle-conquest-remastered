@@ -3,53 +3,48 @@
 <img src="./docs/images/castle-conquest-thumbnail.png" width="100%" alt="Castle Conquest Remastered Demo Thumbnail" />
 
 Play it here: **https://oeponn.github.io/castle-conquest-remastered/**
-But before you do, I recommend reading paragraphs two and three at least.
+But before you do, I recommend reading paragraphs two and three at least, because I like to yap.
 
-## Why this game
+## Why this game?
 
 I remember this game on miniclip, or maybe one of the various flash games hosts that would have clones. 2flashgames? Newgrounds?
-I have this memory... maybe around 2009, of playing it with my best friend, Anton, at his house on his parents' shitty laptop. His dad yelled at us occasionally to be quiet so he could listen to French radio. We were in New Zealand; he wasn't French, he just fancied himself a linguist. Apparently he also hated the sound of children having fun.
+
+I have this memory... maybe around 2009, of playing it with my best friend's (Anton) house on his parents' shitty laptop. His dad yelled at us occasionally to be quiet so he could listen to French radio. We were in New Zealand, and he wasn't French. I think he just fancied himself a linguist. Apparently he also hated the sound of children having fun.
 
 
 ## Rose-tinted glasses
 
-Before you try this out, let's think it through before you destroy your sense of nostalgia derived from a childlike sense of wonder: this was a free 2003 Shockwave
-game. The physics were janky even in 2003, the
-"3D" is a dozen boxes and cylinders on a grid, and the enemy AI aims at a random
-flag and shrugs. If you played this as a kid, your
-brain had probably patched over every rough edge with nostalgia, and no
-amount of rebuilding it faithfully is going to un-patch that.
+Before you try this out, let's think it through before you destroy your sense of nostalgia from when you still had a childlike sense of wonder. This was a free 2006 Shockwave
+game. Your brain has probably been eroded by the attention economy to the extent that this game will feel like it's in slow motion. Maybe I'm projecting. 
 
-I only made this because the flashpoint archive version of it doesn't seem to work at all, even with shockwave downloaded and updated.
+All I'm saying is, if you played this as a kid, your brain had probably patched over rough edges. I didn't rebuild this game for the gaming experience, but for the memories attached to it.
+
+I only made this because the [flashpoint archive version](https://flashpointproject.github.io/flashpoint-database/search/#f42bb47b-105c-3696-fe03-eb52e8d67589) of it doesn't seem to work at all for me, even with shockwave downloaded and updated.
 
 I was able to fill some of the gaps in memory by watching this video:
 
 <!-- [![Castle Conquest gameplay](https://img.youtube.com/vi/73ZuIfE9_1k/hqdefault.jpg)](https://www.youtube.com/watch?v=73ZuIfE9_1k) -->
 [![Castle Conquest gameplay](./docs/images/castle-conquest-video-thumbnail.jpg)](https://www.youtube.com/watch?v=73ZuIfE9_1k)
 
-Though, I have a distinct memory of my cannonballs being too slow to do significant damage, and it frustratingly bouncing off the enemy walls lol. I remember following the cannonball pov for ages, and being able to guide it slightly with left/right arrowkeys. Perhaps that video is sped up.
+Though, I have a distinct memory of my cannonballs being too slow to do significant damage, and it frustratingly bouncing off the enemy walls lol. I remember following the cannonball POV for ages, and being able to guide it slightly with left/right arrowkeys. Perhaps that video is sped up. I also thought the flags were red so clearly I'm not 100% reliable.
 
 ## A physics disclaimer
 
-The original ran on Shockwave's Havok physics plugin, which no longer exists
-in any usable form. There's no emulator, no decoder, nothing to point a
-modern browser at. Getting the new physics engine (cannon-es) to _feel_ like
-the original meant reverse-engineering gravity, launch speed, and impact
+The original ran on Shockwave's Havok physics plugin, which has been [permanently deprecated for modern browser](https://helpx.adobe.com/enterprise/kb/eol-adobe-flash-shockwave-player.html). There's no emulator, no decoder, no nothin. Getting the new physics engine (cannon-es) to _feel_ like
+the original meant reverse-engineering based off how I remember the launch speed, and impact
 behavior from gameplay clues in the decompiled script (an AI aim table, a
 smoke-trail duration, a turn timer) rather than from any physics constant
-that actually survived. It's close to what I PERSONALLY remember the game felt like, but it is a **reconstruction**, not a bit-for-bit
-port. If a shot feels slightly different from how you remember it, it's probably because its been abstracted through 17 years of memory haze.
+that actually survived.  If a shot feels slightly different from how you remember it, it's probably because its been abstracted through 17 years of memory haze.
 
 ## Recovering the 3D meshes
 
-The actual 3D castle meshes ship inside Shockwave's `.w3d` files in an Intel
+The actual 3D castle meshes were inside Shockwave's `.w3d` files in an Intel
 IFX compressed format. Initially I thought these were undecodable, and that any castle geometry would have to be approximated by hand.
 
-Thankfully I was wrong, even though I had already approximated everything by hand. Anthony Kleine's
+Thankfully I was wrong, even though I had already drafted up the 3D models by the time I found out. Anthony Kleine's
 [Shockwave-3D-World-Converter](https://github.com/tomysshadow/Shockwave-3D-World-Converter)
-reads exactly this format. It's a Windows tool, so I ran it using wine, pointed
-it at the extracted `castleConquest.w3d`, and exported the whole scene!
-Wodels, normals, UVs, materials, textures — straight to Wavefront OBJ. The
+reads exactly this format. It's a Windows tool, so I ran it using wine, put `castleConquest.w3d` through, and exported the whole scene!
+Models, normals, UVs, materials, textures straight to Wavefront OBJ. The
 recovered geometry and textures are committed in
 [`assets/extracted/3d/`](./assets/extracted/3d/) (see commit
 [`9848502`](https://github.com/Oeponn/castle-conquest-remastered/commit/9848502db931238852b410805288c5c4806bee4c)). It was like 2am and I was so excited lol.
@@ -62,34 +57,14 @@ recovered geometry and textures are committed in
 
 ### Getting them into the game
 
-Recovering the OBJ was half of it; the meshes had to replace the
-hand-built primitives without breaking a physics engine that was tuned against
-those primitives. That whole pipeline lives in commit
+Recovering the OBJ was a good start; the meshes had to replace the
+hand-built models without breaking the physics. The commit
 [`bc6bfdf`](https://github.com/Oeponn/castle-conquest-remastered/commit/bc6bfdf4d319063bfa72960d53e00022b785dee3):
 `tools/convert_3d_models.py` cleans the OBJ, converts the TIFF textures to PNG,
-and generates the mesh metadata the game reads at runtime; `models.ts` loads it
-once and hands out clones to both the live scene and the castle-select
-thumbnails. The game is now **model-1:1 with the original**.
-
+and generates the mesh data the game reads at runtime. This is when the game started looking like the original.
 ## The technical stuff
 
-The full engineering log; decompiling the game, recovering the physics
-constants, fixing the aim math, chasing down deploy failures, is in
-[`PORTING_NOTES.md`](./PORTING_NOTES.md). It's written to be read by a human
-or by a coding agent, so it's long and blunt
-about what was guessed, what was recovered, and what's still approximate.
-Highlights if you don't want to read the whole thing:
-
-- The game was Shockwave (Havok 3D), not Flash — decompiled with a patched
-  [ProjectorRays](https://github.com/ProjectorRays/ProjectorRays).
-- All original art, sound, and Lingo game logic (AI, scoring, castle
-  layouts, shop prices) were extracted and ported 1:1.
-- The original 3D castle meshes and textures were recovered from the Shockwave
-  `.w3d` and are in the game 1:1 — see "Recovering the 3D meshes" above. Only
-  the Havok physics engine had to be reconstructed (cannon-es); collision boxes
-  are the one geometry approximation that remains.
-- Built with Vite + React + TypeScript + Three.js, deployed to GitHub Pages
-  via GitHub Actions.
+I then did a bunch of manual nudging and the pieces were mostly together. Lost the fonts though. Added a two player though!
 
 ## Changing your gold (a.k.a. cheating)
 
@@ -107,11 +82,10 @@ localStorage.setItem("cstlcnqst20", JSON.stringify({ gold: 999999 }));
 
 Then reload the page.
 
-If you don't already know how to do this: **learn it**. Not because this
-particular hack matters. It's a browser game about knocking over toy
-castles. But because "open DevTools and poke at the page's stored state"
-is a pretty convenient skill. 
+If you don't already know how to do this, it's nice to know. Not because this
+particular hack matters here, it is a pretty convenient skill in general. 
 
 
-At minimum, if you're going to cheat in a game, you should understand
-_how_ you're cheating. I was big into hacking for an unfair advantage, so I'm hardly talking from a high horse. I even still write bots for games. But it does kind of take away the sense of achievement, so you may as well get something else out of it.
+At a minimum, if you're going to cheat in a game, you should understand
+_how_ you're cheating imo. I was big into hacking for unfair advantages when I was younger, so I'm hardly talking from a high horse. 
+I even still write bots for games. But it does kind of take away the sense of achievement, so you may as well get something else out of it.
